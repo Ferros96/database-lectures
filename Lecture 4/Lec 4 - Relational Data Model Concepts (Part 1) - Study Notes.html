@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 4 Notes</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>/* ===========================================
+   THEME TOKENS (light + dark)
+   =========================================== */
+:root {
+  --bg: #F5F7FA; --card: #FFFFFF; --line: #D9E1EA; --line2: #E8EDF3; --zebra: #F8FAFC;
+  --text: #0F172A; --muted: #475569; --sub: #64748B; --strong: #334155;
+  --teal: #0D9488; --teal-d: #0F766E; --teal-l: #5EEAD4; --teal-t: #E8F7F4; --teal-b: #A7E8DD;
+  --slate-t: #EEF2F6; --slate-ic: #334155; --amber: #F59E0B; --amber-t: #FEF3C7; --amber-b: #FCD34D; --amber-d: #92400E;
+  --ink: #0B1220; --ink2: #131C2E; --edge: #2A3650; --dot: #D5DDE7;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --shadow: 0 10px 30px -22px rgba(15, 23, 42, .45);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+    --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+    --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+    --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+    --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+  --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+  --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+  --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+  --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { font-family: var(--font-body); color: var(--text); background: var(--bg); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px); background-size: 24px 24px; }
+.mono { font-family: var(--font-mono); }
+b { font-weight: 600; }
+.ic { display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 1em; height: 1em; }
+
+/* ===========================================
+   HERO
+   =========================================== */
+.hero { background-color: #0B1220; color: #fff;
+  background-image: radial-gradient(ellipse 60% 80% at 90% 0%, rgba(13,148,136,.4), transparent 60%), linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: auto, 36px 36px, 36px 36px; }
+.hero-in { max-width: 1240px; margin: 0 auto; padding: 56px 24px 52px; }
+.hero .over { font-size: 13px; color: #94A3B8; letter-spacing: .08em; text-transform: uppercase; }
+.hero .lecno { font-size: 15px; font-weight: 700; color: #5EEAD4; margin-top: 40px; letter-spacing: .06em; }
+.hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 6vw, 64px); line-height: 1.04; letter-spacing: -0.02em; margin-top: 10px; max-width: 900px; }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); color: #CBD5E1; margin-top: 16px; max-width: 760px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px var(--font-body); color: #0B1220; background: #5EEAD4; border: 0; border-radius: 999px; padding: 11px 20px; text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: #E2E8F0; border: 1.5px solid #334155; }
+.btn:hover { filter: brightness(1.08); }
+
+/* ===========================================
+   LAYOUT: sticky "schema browser" contents + notes column
+   =========================================== */
+.layout { max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; }
+.toc { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px; font-size: 14px; box-shadow: var(--shadow); }
+.toc-h { color: var(--teal); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.toc ul { list-style: none; }
+.toc > ul > li { margin-top: 6px; }
+.toc a { color: var(--strong); text-decoration: none; display: block; padding: 4px 8px; border-radius: 8px; line-height: 1.35; }
+.toc a:hover, .toc a.on { background: var(--teal-t); color: var(--teal-d); }
+.toc > ul > li > a { font-weight: 600; }
+.toc > ul > li > a .mono { color: var(--teal); font-size: 12px; margin-right: 8px; }
+.toc ul ul { margin-left: 14px; border-left: 1px solid var(--line); padding-left: 4px; }
+.toc ul ul a { color: var(--sub); font-size: 13px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 16px 64px; }
+  .toc { position: static; max-height: none; }
+  .toc ul ul { display: none; }
+}
+
+/* ===========================================
+   SECTIONS + BLOCKS
+   =========================================== */
+.nsec { margin-bottom: 48px; }
+.nsec-h { display: flex; gap: 18px; align-items: center; padding: 6px 0 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.nsec-h > .mono { font-size: 34px; font-weight: 700; color: var(--teal); line-height: 1; min-width: 56px; }
+.nsec-h h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.1; letter-spacing: -0.01em; }
+.nsec-h p { color: var(--sub); }
+.blk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px 28px; margin-bottom: 22px; box-shadow: var(--shadow); }
+.blk > h3 { font-family: var(--font-display); font-weight: 700; font-size: 23px; line-height: 1.2; margin-bottom: 18px; }
+.nbody { display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 600px) { .blk { padding: 20px 16px; border-radius: 14px; } }
+.intro { color: var(--muted); }
+.caption, figcaption { font-size: 14px; font-style: italic; color: var(--sub); }
+
+.callout { display: flex; gap: 12px; align-items: center; background: var(--amber-t); border: 1px solid var(--amber-b); color: var(--amber-d); font-weight: 600; border-radius: 12px; padding: 12px 16px; }
+.callout .ic { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 14px; }
+
+/* cards */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.card-h { display: flex; align-items: center; gap: 12px; background: var(--teal-t); border-bottom: 1px solid var(--line); padding: 12px 16px; }
+.card-h .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.card-h h4 { font-size: 17px; font-weight: 600; line-height: 1.25; }
+.card-h .num { margin-left: auto; font-family: var(--font-mono); font-weight: 700; color: var(--teal); font-size: 13px; }
+.card-b { padding: 14px 16px 16px; color: var(--muted); }
+.card-b ul { list-style: none; display: grid; gap: 8px; }
+.card-b li { padding-left: 20px; position: relative; }
+.card-b li::before { content: "▸"; position: absolute; left: 0; color: var(--teal); font-family: var(--font-mono); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.cards.tiles .card-h { border-bottom: 0; height: 100%; }
+.compare, .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare .vs { display: none; }
+.compare > .card:first-child .card-h, .split > .card:first-child .card-h { background: var(--slate-t); }
+.compare > .card:first-child .card-h .ic, .split > .card:first-child .card-h .ic { background: var(--slate-ic); }
+@media (max-width: 700px) { .compare, .split { grid-template-columns: 1fr; } }
+
+/* definition */
+.def { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; }
+.defcard { background: #0B1220; color: #fff; border-radius: 14px; padding: 22px 24px;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; }
+.defcard .lab { font-size: 12px; letter-spacing: .2em; color: #5EEAD4; font-weight: 700; }
+.defcard .term { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 8px 0 10px; line-height: 1.1; }
+.defcard .term.mono { font-family: var(--font-mono); color: #FCD34D; font-size: 22px; }
+.defcard p { color: #CBD5E1; font-size: 17px; }
+.defside { display: flex; flex-direction: column; gap: 10px; }
+.defside h4 { font-weight: 600; }
+.dpt { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.dpt .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.dpt span { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+@media (max-width: 700px) { .def { grid-template-columns: 1fr; } }
+
+/* rows */
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.row { display: grid; grid-template-columns: 38px 220px 1fr; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.row .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--teal); color: #fff; font-size: 18px; }
+.row h4 { font-weight: 600; line-height: 1.3; }
+.row p { color: var(--muted); }
+@media (max-width: 700px) { .row { grid-template-columns: 38px 1fr; } .row p { grid-column: 1 / -1; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: s; }
+.step { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.step .sn { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; }
+.step:last-child .sn { background: #1E293B; }
+.step h4 { font-weight: 600; margin: 10px 0 4px; line-height: 1.3; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* tables */
+.tbl { overflow-x: auto; max-width: 100%; }
+.tname { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); margin-bottom: 6px; }
+.tbl table { border-collapse: separate; border-spacing: 0; width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.tbl th { background: #131C2E; color: #E2E8F0; font-family: var(--font-mono); font-weight: 600; font-size: 12.5px; text-align: left; padding: 8px 12px; white-space: nowrap; }
+.tbl td { padding: 7px 12px; border-top: 1px solid var(--line2); white-space: nowrap; }
+.tbl tbody tr:nth-child(even) td { background: var(--zebra); }
+.tbl.wide td { white-space: normal; }
+.tbl td.key { font-weight: 600; color: var(--teal-d); }
+td.null, span.null { color: #94A3B8; font-style: italic; font-family: var(--font-mono); font-size: .9em; }
+.tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+.tables .tcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.agenda-t td.id { color: var(--teal); font-weight: 700; width: 56px; }
+
+/* media */
+.media { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+@media (max-width: 800px) { .media { grid-template-columns: 1fr; } }
+figure.fig { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+figure.fig figcaption { align-self: flex-end; color: #64748B; }
+figure.fig img { border-radius: 6px; }
+figure.mini { margin-top: 12px; background: #fff; border-radius: 10px; padding: 8px; text-align: center; }
+figure.mini img { max-height: 260px; }
+svg.diagram { width: 100%; height: auto; }
+.points { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.points li { display: flex; gap: 12px; align-items: flex-start; color: var(--strong); }
+.points .pn { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--teal-t); border: 1px solid var(--teal-b); color: var(--teal-d); display: grid; place-items: center; font-family: var(--font-mono); font-size: 13px; font-weight: 700; margin-top: 1px; }
+.points.plain .ic { color: var(--teal); margin-top: 5px; }
+.points b { display: block; color: var(--text); }
+.points span { display: block; color: var(--muted); }
+
+/* SVG diagram (figure stays light in both themes) */
+svg.diagram text { font-family: var(--font-body); }
+svg.diagram rect.group { fill: #F1F5F9; stroke: #CBD5E1; stroke-width: 1.5; }
+svg.diagram rect.group2 { fill: #E8F7F4; stroke: #99F6E4; stroke-width: 1.5; }
+svg.diagram .glabel { font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .group-t { fill: #64748B; } svg.diagram .group2-t { fill: #0F766E; }
+svg.diagram rect.box { fill: #fff; stroke: #94A3B8; stroke-width: 1.5; }
+svg.diagram rect.accent { fill: #0D9488; } svg.diagram rect.accent2 { fill: #131C2E; }
+svg.diagram .t-box { fill: #0F172A; } svg.diagram .t-accent, svg.diagram .t-accent2 { fill: #fff; font-weight: 600; }
+svg.diagram .cyl { fill: #CCFBF1; stroke: #0D9488; stroke-width: 1.5; } svg.diagram .cyl-top { fill: #E6FFFA; stroke: #0D9488; stroke-width: 1.5; }
+svg.diagram .t-cyl { fill: #0F766E; font-weight: 600; }
+svg.diagram .t-plain { fill: #64748B; font-weight: 600; }
+svg.diagram .t-label { fill: #0F766E; font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .t-note { fill: #64748B; font-style: italic; }
+svg.diagram .de { stroke: #334155; stroke-width: 2.2; }
+svg.diagram .arrowhead { fill: #334155; }
+
+/* schema */
+figure.schema { align-items: stretch; gap: 12px; }
+.srel .cells { display: flex; flex-wrap: wrap; }
+.srel .cells span { border: 1px solid #94A3B8; padding: 4px 10px; font-size: 14px; margin: 0 -1px -1px 0; color: #0F172A; background: #fff; }
+.srel .cells span:first-child { background: #E8F7F4; }
+.srel .tname { color: #0F766E; }
+
+/* spectrum */
+.axis { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+.axis i { flex: 1; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #0D9488, #131C2E); }
+.bands { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.band { border-radius: 14px; padding: 18px 20px; color: #fff; }
+.band.b0 { background: #0D9488; } .band.b1 { background: #115E59; } .band.b2 { background: #131C2E; border: 1px solid #26334A; }
+.band .tag { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #CCFBF1; text-transform: uppercase; }
+.band h4 { font-family: var(--font-display); font-size: 20px; margin: 6px 0; }
+.band p { color: #E2E8F0; font-size: 15.5px; }
+
+/* relation anatomy */
+.relation { display: flex; flex-direction: column; gap: 10px; }
+.relname { color: var(--sub); } .relname b { color: var(--teal-d); }
+.relgrid { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: end; }
+.tuplab { height: 190px; display: flex; align-items: center; justify-content: flex-end; border-right: 4px solid var(--amber); padding-right: 10px; }
+.tuplab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: #B45309; text-align: right; }
+.relwrap { min-width: 0; }
+.attlab { border-top: 4px solid var(--teal); text-align: right; padding-top: 2px; margin-bottom: 6px; }
+.attlab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); }
+@media (max-width: 600px) { .relgrid { grid-template-columns: 1fr; } .tuplab { display: none; } }
+
+/* terms */
+.terms { display: flex; flex-direction: column; gap: 10px; }
+.terms .th, .term-row { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; }
+.terms .th { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+.terms .th span:last-child { color: var(--teal-d); }
+.ta { background: var(--slate-t); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.tb { background: #0D9488; color: #fff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.arrow { padding: 0 8px; } .arrow i { display: block; height: 3px; background: var(--teal); border-radius: 3px; position: relative; }
+.arrow i::after { content: ""; position: absolute; right: -3px; top: -6px; border: 7.5px solid transparent; border-left-color: var(--teal); border-right: 0; }
+
+/* stat */
+.stat { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 18px; }
+.bignum { background: #0B1220; color: #fff; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.bignum .mono { color: #5EEAD4; align-self: flex-start; }
+.bignum .count { font-family: var(--font-display); font-weight: 800; font-size: 110px; line-height: 1; color: #5EEAD4; }
+.bignum p { color: #CBD5E1; font-size: 15px; }
+.statside { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.codeblk .lab { font-size: 12px; font-weight: 700; color: var(--teal-d); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+pre { font-family: var(--font-mono); white-space: pre-wrap; word-break: break-word; }
+.codeblk pre { background: #131C2E; color: #94A3B8; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+.codeblk .v { color: #FCD34D; font-weight: 700; } .codeblk .a { color: #E2E8F0; } .codeblk .k { color: #5EEAD4; }
+@media (max-width: 600px) { .stat { grid-template-columns: 1fr; } }
+
+/* ordering */
+.opoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.opt { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 10px 14px; }
+
+/* agenda */
+.agenda { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.sql { background: #0B1220; border-radius: 12px; overflow: hidden; }
+.sql-bar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; background: #111A2C; }
+.sql-bar i { width: 9px; height: 9px; border-radius: 50%; background: #F87171; } .sql-bar i:nth-child(2) { background: #FBBF24; } .sql-bar i:nth-child(3) { background: #34D399; }
+.sql-bar span { margin-left: 6px; font-family: var(--font-mono); color: #64748B; font-size: 12px; }
+.sql pre { padding: 14px 16px; font-size: 14px; color: #E2E8F0; }
+.sql .k { color: #5EEAD4; font-weight: 700; } .sql .v { color: #FCD34D; } .sql .c { color: #64748B; }
+.caret { display: inline-block; width: 8px; height: 16px; background: #5EEAD4; vertical-align: middle; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sql-res { font-family: var(--font-mono); font-size: 12px; color: #34D399; padding: 8px 16px 12px; border-top: 1px solid #2A3650; }
+@media (max-width: 800px) { .agenda { grid-template-columns: 1fr; } }
+
+/* takeaways + review */
+.takeaways { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.takeaways li { display: flex; gap: 16px; align-items: center; background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.takeaways .mono { color: #5EEAD4; font-weight: 700; }
+.qa { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.qa summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; gap: 12px; align-items: baseline; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary .mono { color: var(--teal); font-size: 13px; }
+.qa summary::after { content: "+"; margin-left: auto; font-family: var(--font-mono); color: var(--teal); font-size: 20px; line-height: 1; }
+.qa[open] summary::after { content: "−"; }
+.qa p { padding: 0 18px 16px 52px; color: var(--muted); }
+.nfoot { color: var(--sub); font-size: 12px; margin-top: 40px; }
+
+/* gentle reveal on scroll */
+.blk { transition: opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1); }
+.js .blk:not(.in) { opacity: 0; transform: translateY(14px); }
+@media (prefers-reduced-motion: reduce) { .js .blk:not(.in) { opacity: 1; transform: none; } * { scroll-behavior: auto !important; } }
+
+@media print {
+  body { background: #fff; } .toc, .hero-actions { display: none; } .layout { display: block; }
+  .blk { break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+  .qa { break-inside: avoid; } .qa p { display: block; }
+}
+/* keep grids from growing past narrow screens */
+.agenda > *, .media > *, .def > *, .compare > *, .split > *, .tables > * { min-width: 0; }
+.agenda-t td { white-space: normal; }
+@media (max-width: 800px) { .agenda, .media { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .compare, .split, .def { grid-template-columns: minmax(0, 1fr); } }
+img { max-width: 100%; height: auto; }
+.tables { display: flex; flex-wrap: wrap; }
+.tables .tcol { flex: 1 1 auto; }
+</style></head>
+<body>
+<header class="hero"><div class="hero-in">
+  <div class="mono over">62153 · Introduction to Database Systems · Mohamed Al-Kumati</div>
+  <div class="mono lecno">LECTURE_04 · PART 1 · STUDY NOTES</div>
+  <h1>The Relational Data Model Concepts</h1><p>Relations, domains, attributes and tuples, and the characteristics of relations</p>
+  <div class="hero-actions"><a class="btn" href="Lec 4 - Relational Data Model Concepts (Part 1) - Slides.html">▶ Open the slides</a><button class="btn ghost" id="themeBtn" type="button">◐ Theme</button></div>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="Contents"><div class="mono toc-h">-- contents</div><ul><li><a href="#overview"><span class="mono">00</span>Overview</a>
+    <ul></ul></li><li><a href="#the-relational-data-model"><span class="mono">01</span>The relational data model</a>
+    <ul><li><a href="#the-relational-data-model-the-database-as-a-collection-of-relations">The database as a collection of relations</a></li><li><a href="#the-relational-data-model-anatomy-of-a-relation">Anatomy of a relation</a></li><li><a href="#the-relational-data-model-relational-model-terminology">Relational model terminology</a></li><li><a href="#the-relational-data-model-what-is-a-relation-schema">What is a relation schema?</a></li><li><a href="#the-relational-data-model-relation-degree">Relation degree</a></li><li><a href="#the-relational-data-model-what-is-a-domain">What is a domain?</a></li><li><a href="#the-relational-data-model-data-type-and-relation-state">Data type and relation state</a></li></ul></li><li><a href="#characteristics-of-relations"><span class="mono">02</span>Characteristics of relations</a>
+    <ul><li><a href="#characteristics-of-relations-ordering-of-tuples-is-not-important">Ordering of tuples is not important</a></li><li><a href="#characteristics-of-relations-atomic-values-and-nulls">Atomic values and nulls</a></li></ul></li><li><a href="#takeaways"><span class="mono">✓</span>Key takeaways</a></li><li><a href="#review"><span class="mono">?</span>Check yourself</a></li></ul></nav>
+<main class="notes">
+<section class="nsec" id="overview"><div class="nsec-h"><span class="mono">--</span><div><h2>Overview</h2></div></div><article class="blk t-agenda" id="overview-objectives"><h3>Objectives</h3><div class="nbody"><div class="agenda">
+  <div class="tbl rv" style="--d:0"><table class="agenda-t"><thead><tr><th>id</th><th>topic</th></tr></thead><tbody>
+  <tr style="--r:0"><td class="mono id">01</td><td>Introduce the concepts of the relational data model</td></tr><tr style="--r:1"><td class="mono id">02</td><td>Introduce the characteristics of relations</td></tr><tr style="--r:2"><td class="mono id">03</td><td>Introduce relational model constraints</td></tr><tr style="--r:3"><td class="mono id">04</td><td>Introduce update operations on the relational model</td></tr></tbody></table></div>
+  <div class="sql rv" style="--d:1"><div class="sql-bar"><i></i><i></i><i></i><span>query.sql</span></div>
+  <pre><code><span class="c">-- this lecture</span>
+<span class="k">SELECT</span> id, topic
+<span class="k">FROM</span>   <span class="v">lecture_04</span>
+<span class="k">ORDER BY</span> id;<span class="caret"></span></code></pre>
+  <div class="sql-res">✓ 4 rows returned</div></div></div></div></article></section>
+<section class="nsec" id="the-relational-data-model"><div class="nsec-h"><span class="mono">01</span><div><h2>The relational data model</h2><p>Relations, domains, attributes and tuples</p></div></div><article class="blk t-schema" id="the-relational-data-model-the-database-as-a-collection-of-relations"><h3>The database as a collection of relations</h3><div class="nbody"><div class="media"><figure class="rv fig schema" style="--d:0"><div class="rv srel" style="--d:1"><div class="tname">STUDENT</div><div class="cells"><span class="pk">Name</span><span>Student_number</span><span>Class</span><span>Major</span></div></div><div class="rv srel" style="--d:2"><div class="tname">COURSE</div><div class="cells"><span class="pk">Course_name</span><span>Course_number</span><span>Credit_hours</span><span>Department</span></div></div><div class="rv srel" style="--d:3"><div class="tname">PREREQUISITE</div><div class="cells"><span class="pk">Course_number</span><span>Prerequisite_number</span></div></div><div class="rv srel" style="--d:4"><div class="tname">SECTION</div><div class="cells"><span class="pk">Section_identifier</span><span>Course_number</span><span>Semester</span><span>Year</span><span>Instructor</span></div></div><div class="rv srel" style="--d:5"><div class="tname">GRADE_REPORT</div><div class="cells"><span class="pk">Student_number</span><span>Section_identifier</span><span>Grade</span></div></div><figcaption>The University schema: each relation looks like a table of values</figcaption></figure><ol class="points"><li class="rv" style="--d:6"><span class="pn">1</span><div>The relational model represents the database as a collection of relations.</div></li><li class="rv" style="--d:7"><span class="pn">2</span><div>Each relation looks like a table of values.</div></li></ol></div></div></article>
+<article class="blk t-relation" id="the-relational-data-model-anatomy-of-a-relation"><h3>Anatomy of a relation</h3><div class="nbody"><div class="relation"><div class="rv relname" style="--d:0"><span>Relation name</span> <b class="mono">STUDENT</b></div>
+  <div class="relgrid"><div class="rv tuplab" style="--d:1"><span>Tuples<br>(rows)</span></div><div class="relwrap"><div class="rv attlab" style="--d:2"><span>Attributes (column headers)</span></div><div class="rv tbl" style="--d:3">
+    <table><thead><tr><th>Name</th><th>Ssn</th><th>Home_phone</th><th>Address</th><th>Office_phone</th><th>Age</th><th>Gpa</th></tr></thead>
+    <tbody><tr style="--r:0"><td>Benjamin Bayer</td><td>305-61-2435</td><td>(817)373-1616</td><td>2918 Bluebonnet Lane</td><td class="null">NULL</td><td>19</td><td>3.21</td></tr><tr style="--r:1"><td>Chung-cha Kim</td><td>381-62-1245</td><td>(817)375-4409</td><td>125 Kirby Road</td><td class="null">NULL</td><td>18</td><td>2.89</td></tr><tr style="--r:2"><td>Dick Davidson</td><td>422-11-2320</td><td class="null">NULL</td><td>3452 Elgin Road</td><td>(817)749-1253</td><td>25</td><td>3.53</td></tr><tr style="--r:3"><td>Rohan Panchal</td><td>489-22-1100</td><td>(817)376-9821</td><td>265 Lark Lane</td><td>(817)749-6492</td><td>28</td><td>3.93</td></tr><tr style="--r:4"><td>Barbara Benson</td><td>533-69-1238</td><td>(817)839-8461</td><td>7384 Fontana Lane</td><td class="null">NULL</td><td>19</td><td>3.25</td></tr></tbody></table></div></div></div>
+  <p class="rv intro" style="--d:4">Each column’s values come from a <b>domain</b>. <span class="null">NULL</span> marks a value that is unknown.</p></div></div></article>
+<article class="blk t-terms" id="the-relational-data-model-relational-model-terminology"><h3>Relational model terminology</h3><div class="nbody"><div class="terms"><div class="th mono rv" style="--d:0"><span>informal</span><span></span><span>formal (relational model)</span></div>
+  <div class="rv term-row" style="--d:1"><div class="ta">Row</div><div class="arrow"><i></i></div><div class="tb">Tuple</div></div><div class="rv term-row" style="--d:2"><div class="ta">Column header</div><div class="arrow"><i></i></div><div class="tb">Attribute</div></div><div class="rv term-row" style="--d:3"><div class="ta">Table</div><div class="arrow"><i></i></div><div class="tb">Relation</div></div><div class="rv term-row" style="--d:4"><div class="ta">Data type of the values in a column</div><div class="arrow"><i></i></div><div class="tb">Domain (of possible values)</div></div></div></div></article>
+<article class="blk t-def" id="the-relational-data-model-what-is-a-relation-schema"><h3>What is a relation schema?</h3><div class="nbody"><div class="def"><div class="rv defcard" style="--d:0"><div class="mono lab">DEFINITION</div><div class="term mono">R (A1, A2, …, An)</div><p>A relation schema is made up of a relation name R and a list of attributes A1, A2, …, An.</p></div>
+  <div class="defside"><h4 class="rv" style="--d:1">Reading it</h4>
+  <div class="rv dpt" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z"></path></svg></span><div><b>R</b> <span>The relation name, e.g. STUDENT.</span></div></div><div class="rv dpt" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64V160h160v256zm224 0H288V160h160v256z"></path></svg></span><div><b>A1 … An</b> <span>The attributes, e.g. Name, SSN, Age.</span></div></div>
+  </div></div></div></article>
+<article class="blk t-stat" id="the-relational-data-model-relation-degree"><h3>Relation degree</h3><div class="nbody"><div class="stat"><div class="rv bignum" style="--d:0"><div class="mono">n =</div><div class="count" data-to="7">7</div><p>attributes = degree 7</p></div>
+  <div class="statside"><p class="rv lead" style="--d:1">The degree of a relation is the number of attributes n of its relation schema.</p><div class="rv codeblk" style="--d:2"><div class="mono lab">Relation schema of degree 7</div><pre><code><span class="v">STUDENT</span> (<span class="a">Name</span>, <span class="a">SSN</span>, <span class="a">HomePhone</span>, <span class="a">Address</span>, <span class="a">Office_Phone</span>, <span class="a">Age</span>, <span class="a">GPA</span>)</code></pre></div><div class="rv codeblk" style="--d:3"><div class="mono lab">Sometimes written with data types</div><pre><code><span class="v">STUDENT</span> (<span class="a">Name</span>: <span class="k">string</span>, <span class="a">SSN</span>: <span class="k">string</span>, <span class="a">HomePhone</span>: <span class="k">string</span>, <span class="a">Address</span>: <span class="k">string</span>, <span class="a">Office_Phone</span>: <span class="k">string</span>, <span class="a">Age</span>: <span class="k">integer</span>, <span class="a">GPA</span>: <span class="k">real</span>)</code></pre></div></div></div></div></article>
+<article class="blk t-cards" id="the-relational-data-model-what-is-a-domain"><h3>What is a domain?</h3><div class="nbody"><p class="rv intro" style="--d:0">A domain D is a set of atomic values. Examples:</p><div class="cards" style="--cols:3"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"></path></svg></span><h4>Phone_numbers</h4></div>
+    <div class="card-b"><p>The set of 7-digit phone numbers valid in a particular area code.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M528 32H48C21.5 32 0 53.5 0 80v16h576V80c0-26.5-21.5-48-48-48zM0 432c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V128H0v304zm352-232c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zm0 64c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zm0 64c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zM176 192c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zM67.1 396.2C75.5 370.5 99.6 352 128 352h8.2c12.3 5.1 25.7 8 39.8 8s27.6-2.9 39.8-8h8.2c28.4 0 52.5 18.5 60.9 44.2 3.2 9.9-5.2 19.8-15.6 19.8H82.7c-10.4 0-18.8-10-15.6-19.8z"></path></svg></span><h4>Social_security_numbers</h4></div>
+    <div class="card-b"><p>The set of valid 9-digit social security numbers.</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></span><h4>Names</h4></div>
+    <div class="card-b"><p>The set of names of persons.</p></div>
+    
+  </div><div class="rv card" style="--d:4">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M332.8 320h38.4c6.4 0 12.8-6.4 12.8-12.8V172.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v134.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V76.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v230.4c0 6.4 6.4 12.8 12.8 12.8zm-288 0h38.4c6.4 0 12.8-6.4 12.8-12.8v-70.4c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v70.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V108.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v198.4c0 6.4 6.4 12.8 12.8 12.8zM496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg></span><h4>Grade_point_averages</h4></div>
+    <div class="card-b"><p>Possible computed GPAs; each a real (floating point) number between 0 and 4.</p></div>
+    
+  </div><div class="rv card" style="--d:5">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z"></path></svg></span><h4>Employee_ages</h4></div>
+    <div class="card-b"><p>Possible ages of a company’s employees; each between 15 and 80 years old.</p></div>
+    
+  </div><div class="rv card" style="--d:6">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M622.34 153.2L343.4 67.5c-15.2-4.67-31.6-4.67-46.79 0L17.66 153.2c-23.54 7.23-23.54 38.36 0 45.59l48.63 14.94c-10.67 13.19-17.23 29.28-17.88 46.9C38.78 266.15 32 276.11 32 288c0 10.78 5.68 19.85 13.86 25.65L20.33 428.53C18.11 438.52 25.71 448 35.94 448h56.11c10.24 0 17.84-9.48 15.62-19.47L82.14 313.65C90.32 307.85 96 298.78 96 288c0-11.57-6.47-21.25-15.66-26.87.76-15.02 8.44-28.3 20.69-36.72L296.6 284.5c9.06 2.78 26.44 6.25 46.79 0l278.95-85.7c23.55-7.24 23.55-38.36 0-45.6zM352.79 315.09c-28.53 8.76-52.84 3.92-65.59 0l-145.02-44.55L128 384c0 35.35 85.96 64 192 64s192-28.65 192-64l-14.18-113.47-145.03 44.56z"></path></svg></span><h4>Academic_department_names</h4></div>
+    <div class="card-b"><p>Such as Computer Science, Economics and Physics in a university.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-split" id="the-relational-data-model-data-type-and-relation-state"><h3>Data type and relation state</h3><div class="nbody"><div class="split"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M440.667 182.109l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l14.623-81.891C377.123 38.754 371.468 32 363.997 32h-40.632a12 12 0 0 0-11.813 9.891L296.175 128H197.54l14.623-81.891C213.477 38.754 207.822 32 200.35 32h-40.632a12 12 0 0 0-11.813 9.891L132.528 128H53.432a12 12 0 0 0-11.813 9.891l-7.143 40C33.163 185.246 38.818 192 46.289 192h74.81L98.242 320H19.146a12 12 0 0 0-11.813 9.891l-7.143 40C-1.123 377.246 4.532 384 12.003 384h74.81L72.19 465.891C70.877 473.246 76.532 480 84.003 480h40.632a12 12 0 0 0 11.813-9.891L151.826 384h98.634l-14.623 81.891C234.523 473.246 240.178 480 247.65 480h40.632a12 12 0 0 0 11.813-9.891L315.472 384h79.096a12 12 0 0 0 11.813-9.891l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l22.857-128h79.096a12 12 0 0 0 11.813-9.891zM261.889 320h-98.634l22.857-128h98.634l-22.857 128z"></path></svg></span><h4>Data type (format)</h4></div>
+    <div class="card-b"><p>Specified for each domain. Example: Phone_numbers can be declared as a character string of the form ddd-dddd, where each d is a numeric (decimal) digit.</p></div>
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg></span><h4>Relation state r(R)</h4></div>
+    <div class="card-b"><p>A relation state r of the relation schema R(A1, A2, …, An), denoted r(R), is a set of n-tuples r = {t1, t2, …, tm}.</p></div>
+    
+  </div></div></div></article></section>
+<section class="nsec" id="characteristics-of-relations"><div class="nsec-h"><span class="mono">02</span><div><h2>Characteristics of relations</h2><p>Ordering, atomic values and nulls</p></div></div><article class="blk t-ordering" id="characteristics-of-relations-ordering-of-tuples-is-not-important"><h3>Ordering of tuples is not important</h3><div class="nbody"><div class="opoints"><div class="rv opt" style="--d:0">A relation is defined as a set of tuples.</div><div class="rv opt" style="--d:1">Tuples in a relation do not have any particular order.</div><div class="rv opt" style="--d:2">Tuple ordering is not part of a relation definition.</div></div>
+  <div class="shuffle"><div class="rv tbl" style="--d:3"><div class="tname">STUDENT  -- same tuples, new order</div>
+    <table><thead><tr><th>Name</th><th>Ssn</th><th>Home_phone</th><th>Address</th><th>Office_phone</th><th>Age</th><th>Gpa</th></tr></thead>
+    <tbody><tr style="--r:0;--k:2"><td>Dick Davidson</td><td>422-11-2320</td><td class="null">NULL</td><td>3452 Elgin Road</td><td>(817)749-1253</td><td>25</td><td>3.53</td></tr><tr style="--r:1;--k:3"><td>Barbara Benson</td><td>533-69-1238</td><td>(817)839-8461</td><td>7384 Fontana Lane</td><td class="null">NULL</td><td>19</td><td>3.25</td></tr><tr style="--r:2;--k:1"><td>Rohan Panchal</td><td>489-22-1100</td><td>(817)376-9821</td><td>265 Lark Lane</td><td>(817)749-6492</td><td>28</td><td>3.93</td></tr><tr style="--r:3;--k:-2"><td>Chung-cha Kim</td><td>381-62-1245</td><td>(817)375-4409</td><td>125 Kirby Road</td><td class="null">NULL</td><td>18</td><td>2.89</td></tr><tr style="--r:4;--k:-4"><td>Benjamin Bayer</td><td>305-61-2435</td><td>(817)373-1616</td><td>2918 Bluebonnet Lane</td><td class="null">NULL</td><td>19</td><td>3.21</td></tr></tbody></table></div></div>
+  <p class="rv caption" style="--d:4">The same STUDENT relation with its tuples in a different order</p></div></article>
+<article class="blk t-list" id="characteristics-of-relations-atomic-values-and-nulls"><h3>Atomic values and nulls</h3><div class="nbody"><div class="rows"><div class="rv row" style="--d:0"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"></path></svg></span><h4>Atomic values</h4><p>Each value in a tuple is an atomic value.</p></div><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"></path></svg></span><h4>No composite or multi-valued attributes</h4><p>Multi-valued attributes must be represented by separate relations; composite attributes are represented only by their simple component attributes.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg></span><h4>Nulls</h4><p>The values of some attributes within a particular tuple may be unknown (shown as NULL, e.g. a missing Office_phone).</p></div></div></div></article></section>
+<section class="nsec" id="takeaways"><div class="nsec-h"><span class="mono">✓</span><div><h2>Key takeaways</h2></div></div>
+<ol class="takeaways"><li><span class="mono">01</span><p>The relational model represents a database as a collection of relations (tables).</p></li><li><span class="mono">02</span><p>Tuple = row, attribute = column header, relation = table, domain = set of allowed atomic values.</p></li><li><span class="mono">03</span><p>A relation schema R(A1, …, An) has degree n; a relation state r(R) is a set of n-tuples.</p></li><li><span class="mono">04</span><p>Tuple order does not matter; values are atomic and may be NULL when unknown.</p></li></ol></section>
+<section class="nsec" id="review"><div class="nsec-h"><span class="mono">?</span><div><h2>Check yourself</h2><p>Try to answer, then tap a question to reveal the answer.</p></div></div>
+<details class="qa"><summary><span class="mono">Q1</span>What is the formal name for a row? For a column header?</summary><p>A row is a tuple; a column header is an attribute.</p></details><details class="qa"><summary><span class="mono">Q2</span>What is the degree of STUDENT (Name, SSN, HomePhone, Address, Office_Phone, Age, GPA)?</summary><p>7, the number of attributes.</p></details><details class="qa"><summary><span class="mono">Q3</span>What is a domain?</summary><p>A set of atomic values, with a data type or format specified for it.</p></details><details class="qa"><summary><span class="mono">Q4</span>If two relation states hold the same tuples in a different order, are they different?</summary><p>No. A relation is a set of tuples, so ordering is not part of its definition.</p></details><details class="qa"><summary><span class="mono">Q5</span>How is a multi-valued attribute represented in the relational model?</summary><p>By a separate relation, since every value in a tuple must be atomic.</p></details></section>
+<footer class="nfoot mono">-- based on the lecture slides for 62153 by Mohamed Al-Kumati · Elmasri &amp; Navathe, Fundamentals of Database Systems</footer>
+</main></div>
+<script>/* Theme toggle (remembered per browser), scroll reveal, and contents highlighting */
+(function () {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('db-notes-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('db-notes-theme', root.dataset.theme); } catch (e) {}
+  });
+  const blocks = document.querySelectorAll('.blk');
+  if ('IntersectionObserver' in window) {
+    root.classList.add('js');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    blocks.forEach((b) => io.observe(b));
+    const links = [...document.querySelectorAll('.toc > ul > li > a')];
+    const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+    const so = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { links.forEach((l) => l.classList.remove('on')); const a = map.get(e.target.id); if (a) a.classList.add('on'); }
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.nsec').forEach((s) => so.observe(s));
+  }
+  window.addEventListener('beforeprint', () => document.querySelectorAll('.qa').forEach((d) => (d.open = true)));
+})();
+</script>
+</body></html>

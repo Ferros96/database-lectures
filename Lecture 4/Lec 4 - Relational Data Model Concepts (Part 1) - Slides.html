@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 4 Slides</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>/* ===========================================
+   THEME TOKENS: change these to restyle every slide
+   =========================================== */
+:root {
+  --ink: #0B1220; --ink2: #131C2E; --panel: #172033; --edge: #2A3650;
+  --bg: #F5F7FA; --card: #FFFFFF; --line: #D9E1EA; --line2: #E8EDF3;
+  --text: #0F172A; --muted: #475569; --sub: #64748B;
+  --teal: #0D9488; --teal-d: #0F766E; --teal-l: #5EEAD4; --teal-t: #E8F7F4;
+  --slate-t: #EEF2F6; --amber: #F59E0B; --amber-t: #FEF3C7; --amber-d: #92400E;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --stage-bg: #070B14;
+  --slide-bg: var(--bg);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   =========================================== */
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--stage-bg, #000); }
+.deck-viewport { position: fixed; inset: 0; overflow: hidden; background: var(--stage-bg, #000); }
+.deck-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; transform-origin: 0 0; background: var(--slide-bg, #fff); }
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden; display: block; visibility: hidden; opacity: 0; pointer-events: none; background: var(--slide-bg, #fff); transition: opacity .35s ease; }
+.slide.active, .slide.visible { visibility: visible; opacity: 1; pointer-events: auto; z-index: 1; }
+img, video, canvas, svg { max-width: 100%; max-height: 100%; }
+.deck-controls { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 1000; }
+@media print {
+  html, body { width: 1920px; height: auto; overflow: visible; background: #fff; }
+  .deck-viewport { position: static; overflow: visible; background: #fff; }
+  .deck-stage { position: static; width: auto; height: auto; transform: none !important; background: none; }
+  .slide { position: relative; display: block !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; width: 1920px; height: 1080px; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .deck-controls, .progress, .edit-toggle, .edit-hotzone, .overview { display: none !important; }
+  .rv, tbody tr, .dn, .de { opacity: 1 !important; transform: none !important; animation: none !important; stroke-dashoffset: 0 !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-delay: 0s !important; transition-duration: 0.2s !important; }
+}
+
+/* ===========================================
+   TYPOGRAPHY + SHARED BITS
+   =========================================== */
+body { font-family: var(--font-body); color: var(--text); -webkit-font-smoothing: antialiased; }
+.mono { font-family: var(--font-mono); }
+.ic { display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 1em; height: 1em; }
+b { font-weight: 600; }
+
+/* ===========================================
+   REVEAL ANIMATIONS (staggered by --d on the active slide)
+   =========================================== */
+.rv { opacity: 0; transform: translateY(26px); }
+.slide.visible .rv { animation: rise .75s var(--ease) forwards; animation-delay: calc(var(--d) * 85ms + 120ms); }
+@keyframes rise { to { opacity: 1; transform: none; } }
+tbody tr { opacity: 0; }
+.slide.visible tbody tr { animation: rowin .5s var(--ease) forwards; animation-delay: calc(var(--r) * 75ms + 650ms); }
+@keyframes rowin { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+
+/* ===========================================
+   LIGHT CONTENT SLIDE FRAME
+   =========================================== */
+.slide.light {
+  background-color: var(--bg);
+  background-image: radial-gradient(circle, #D5DDE7 1.4px, transparent 1.6px);
+  background-size: 32px 32px;
+}
+.shead { position: absolute; top: 64px; left: 96px; right: 96px; }
+.kicker { font-size: 20px; font-weight: 700; color: var(--teal); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px; }
+.shead h2 { font-family: var(--font-display); font-weight: 700; font-size: 60px; line-height: 1.08; letter-spacing: -0.015em; color: var(--text); }
+.sbody { position: absolute; top: 240px; bottom: 112px; left: 96px; right: 96px; display: flex; flex-direction: column; justify-content: center; gap: 30px; }
+.sfoot { position: absolute; left: 96px; right: 96px; bottom: 40px; display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 16px; color: #94A3B8; letter-spacing: .03em; }
+.intro { font-size: 27px; line-height: 1.45; color: var(--muted); max-width: 1640px; }
+.caption { font-size: 19px; font-style: italic; color: var(--sub); }
+
+/* --- callout --- */
+.callout { display: flex; align-items: center; gap: 20px; background: var(--amber-t); border: 1.5px solid #FCD34D; border-radius: 16px; padding: 20px 28px; font-size: 25px; font-weight: 600; color: var(--amber-d); }
+.callout .ic { width: 46px; height: 46px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 22px; }
+
+/* --- cards: the "table" card with a header row --- */
+.card { background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; box-shadow: 0 10px 30px -18px rgba(15, 23, 42, .35); overflow: hidden; display: flex; flex-direction: column; }
+.card-h { display: flex; align-items: center; gap: 18px; background: var(--teal-t); border-bottom: 1.5px solid var(--line); padding: 20px 26px; }
+.card-h .ic { width: 54px; height: 54px; border-radius: 13px; background: var(--teal); color: #fff; font-size: 26px; }
+.card-h h4 { font-family: var(--font-display); font-weight: 700; font-size: 29px; line-height: 1.15; }
+.card-h .num { margin-left: auto; font-family: var(--font-mono); font-weight: 700; font-size: 20px; color: var(--teal); }
+.card-b { padding: 22px 28px 28px; flex: 1; }
+.card-b p, .card-b li { font-size: 27px; line-height: 1.45; color: var(--muted); }
+.card-b ul { list-style: none; display: grid; gap: 16px; }
+.card-b li { padding-left: 30px; position: relative; }
+.card-b li::before { content: "▸"; position: absolute; left: 0; color: var(--teal); font-family: var(--font-mono); }
+.cards { display: flex; flex-wrap: wrap; justify-content: center; gap: 32px; }
+.cards > .card { width: calc((100% - (var(--cols) - 1) * 32px) / var(--cols)); }
+.cards.tiles .card-h { flex-direction: column; text-align: center; border-bottom: 0; padding: 44px 24px 40px; gap: 22px; height: 100%; justify-content: center; }
+.cards.tiles .card-h .ic { width: 84px; height: 84px; font-size: 40px; border-radius: 20px; }
+.cards.tiles .card-h .num { margin: 0; order: -1; }
+.cards.tiles .card-h h4 { font-size: 28px; }
+.t-cards .cards[style*="--cols:2"] .card-b p { font-size: 26px; }
+
+/* --- compare / split --- */
+.compare { display: grid; grid-template-columns: 1fr 76px 1fr; gap: 20px; align-items: stretch; }
+.compare .vs { align-self: center; width: 76px; height: 76px; border-radius: 50%; background: var(--ink); color: var(--teal-l); display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; font-size: 24px; }
+.compare > .card:first-child .card-h, .split > .card:first-child .card-h { background: var(--slate-t); }
+.compare > .card:first-child .card-h .ic, .split > .card:first-child .card-h .ic { background: #334155; }
+.compare .card-b li { font-size: 28px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.split .card-b p { font-size: 31px; line-height: 1.5; color: #334155; }
+.split .card-h h4 { font-size: 32px; }
+
+/* --- definition --- */
+.def { display: grid; grid-template-columns: 760px 1fr; gap: 56px; align-items: stretch; }
+.defcard { background: var(--ink); border-radius: 22px; padding: 48px 52px; color: #fff; box-shadow: 0 24px 50px -28px rgba(11, 18, 32, .8); position: relative; overflow: hidden;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 40px 40px; }
+.defcard .lab { font-size: 18px; letter-spacing: .2em; color: var(--teal-l); font-weight: 700; }
+.defcard .term { font-family: var(--font-display); font-weight: 800; font-size: 60px; line-height: 1.05; margin: 22px 0 26px; }
+.defcard .term.mono { font-family: var(--font-mono); font-size: 50px; color: #FCD34D; }
+.defcard p { font-size: 31px; line-height: 1.45; color: #CBD5E1; }
+.defside { display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+.defside h4 { font-size: 28px; font-weight: 600; color: var(--text); }
+.dpt { display: flex; align-items: center; gap: 24px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 22px 28px; box-shadow: 0 10px 30px -20px rgba(15,23,42,.35); }
+.dpt .ic { width: 58px; height: 58px; border-radius: 14px; background: var(--teal); color: #fff; font-size: 27px; }
+.dpt b { display: block; font-size: 28px; color: var(--text); font-family: var(--font-display); }
+.dpt span { font-size: 26px; color: var(--muted); line-height: 1.4; }
+.chips { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chip { background: var(--teal-t); border: 1.5px solid #A7E8DD; border-radius: 14px; padding: 18px 24px; font-size: 26px; }
+.chip::before { content: "▸ "; color: var(--teal); font-family: var(--font-mono); }
+
+/* --- list rows --- */
+.rows { display: flex; flex-direction: column; gap: 22px; }
+.row { display: grid; grid-template-columns: 64px 400px 1fr; align-items: center; gap: 28px; background: var(--card); border: 1.5px solid var(--line); border-radius: 16px; padding: 24px 32px; box-shadow: 0 10px 30px -20px rgba(15,23,42,.35); }
+.row .ic { width: 64px; height: 64px; border-radius: 15px; background: var(--teal); color: #fff; font-size: 30px; }
+.row h4 { font-family: var(--font-display); font-size: 29px; font-weight: 700; line-height: 1.15; }
+.row p { font-size: 27px; line-height: 1.45; color: var(--muted); border-left: 2px solid var(--line2); padding-left: 28px; }
+
+/* --- steps --- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 56px; }
+.step { position: relative; background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 36px 32px; box-shadow: 0 10px 30px -20px rgba(15,23,42,.35); }
+.step:not(:last-child)::after { content: "→"; position: absolute; right: -46px; top: 52px; font-size: 36px; color: var(--teal); font-weight: 700; }
+.step .sn { width: 76px; height: 76px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; font-size: 32px; }
+.step:last-child .sn { background: var(--ink); }
+.step h4 { font-family: var(--font-display); font-size: 32px; font-weight: 700; line-height: 1.15; margin: 26px 0 14px; }
+.step p { font-size: 26px; line-height: 1.45; color: var(--muted); }
+
+/* --- data tables --- */
+.tbl { min-width: 0; }
+.tname { font-family: var(--font-mono); font-weight: 700; font-size: 21px; color: var(--teal-d); margin-bottom: 10px; letter-spacing: .02em; }
+.tbl table { border-collapse: separate; border-spacing: 0; width: 100%; background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px -22px rgba(15,23,42,.4); }
+.tbl th { background: var(--ink2); color: #E2E8F0; font-family: var(--font-mono); font-weight: 600; font-size: 18px; text-align: left; padding: 13px 16px; white-space: nowrap; }
+.tbl td { font-size: 22px; padding: 10px 16px; border-top: 1px solid var(--line2); white-space: nowrap; }
+.tbl tbody tr:nth-child(even) td { background: #F8FAFC; }
+td.null, span.null { color: #94A3B8; font-style: italic; font-family: var(--font-mono); font-size: .9em; }
+.tables { display: flex; gap: 48px; align-items: flex-start; }
+.tables .tcol { display: flex; flex-direction: column; gap: 34px; }
+.tables.uniA .tcol:first-child { flex: 0 0 640px; }
+.tables.uniA .tcol:last-child, .tables.uniB .tcol:last-child { flex: 1; }
+.tables.uniB .tcol:first-child { flex: 0 0 1000px; }
+.tables .tbl td { font-size: 26px; padding: 12px 20px; }
+.tables .tbl th { font-size: 19px; padding: 14px 20px; }
+.tbl.wide table.dm td { font-size: 27px; padding: 17px 26px; white-space: normal; }
+.tbl.wide table.dm th { font-size: 20px; padding: 16px 26px; }
+.tbl.wide td.key { font-weight: 600; color: var(--teal-d); width: 340px; }
+
+/* --- diagram / image / schema with points --- */
+.media { display: grid; grid-template-columns: minmax(0, auto) minmax(540px, 1fr); gap: 56px; align-items: center; }
+figure.fig { background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 28px; box-shadow: 0 10px 30px -20px rgba(15,23,42,.35); display: flex; flex-direction: column; align-items: center; }
+figure.fig img { width: 1040px; max-width: 100%; height: 600px; object-fit: contain; border-radius: 8px; }
+figure.fig svg.diagram { height: 620px; width: auto; max-width: 1080px; }
+figcaption { align-self: flex-end; font-size: 18px; font-style: italic; color: var(--sub); margin-top: 14px; }
+.points { list-style: none; display: flex; flex-direction: column; gap: 30px; }
+.points li { display: flex; gap: 22px; align-items: flex-start; font-size: 27px; line-height: 1.45; color: #334155; }
+.points .pn { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--teal-t); border: 1.5px solid #A7E8DD; color: var(--teal-d); display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; font-size: 21px; }
+.points.plain .ic { color: var(--teal); font-size: 26px; margin-top: 6px; }
+.points b { display: block; font-size: 28px; color: var(--text); font-family: var(--font-display); }
+.points span { display: block; color: var(--muted); }
+
+/* SVG diagram styling + line-draw animation */
+svg.diagram text { font-family: var(--font-body); }
+svg.diagram rect.group { fill: #F1F5F9; stroke: #CBD5E1; stroke-width: 1.5; }
+svg.diagram rect.group2 { fill: var(--teal-t); stroke: #99F6E4; stroke-width: 1.5; }
+svg.diagram .glabel { font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .group-t { fill: var(--sub); } svg.diagram .group2-t { fill: var(--teal-d); }
+svg.diagram rect.box { fill: #fff; stroke: #94A3B8; stroke-width: 1.5; }
+svg.diagram rect.accent { fill: var(--teal); } svg.diagram rect.accent2 { fill: var(--ink2); }
+svg.diagram .t-box { fill: var(--text); } svg.diagram .t-accent, svg.diagram .t-accent2 { fill: #fff; font-weight: 600; }
+svg.diagram .cyl, svg.diagram .cyl-top { fill: #CCFBF1; stroke: var(--teal); stroke-width: 1.5; }
+svg.diagram .cyl-top { fill: #E6FFFA; }
+svg.diagram .t-cyl { fill: var(--teal-d); font-weight: 600; }
+svg.diagram .t-plain { fill: var(--sub); font-weight: 600; }
+svg.diagram .t-label { fill: var(--teal-d); font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .t-note { fill: var(--sub); font-style: italic; }
+svg.diagram .de { stroke: #334155; stroke-width: 2.2; fill: none; stroke-dasharray: 1; stroke-dashoffset: 0; }
+svg.diagram .arrowhead { fill: #334155; }
+.slide .dn { opacity: 0; }
+.slide.visible .dn { animation: fadein .5s ease forwards; animation-delay: calc(var(--n) * 70ms + 350ms); }
+.slide .de { opacity: 0; }
+.slide.visible .de { animation: draw .7s var(--ease) forwards; animation-delay: calc(var(--e) * 120ms + 1000ms); }
+@keyframes fadein { to { opacity: 1; } }
+@keyframes draw { from { opacity: 1; stroke-dashoffset: 1; } to { opacity: 1; stroke-dashoffset: 0; } }
+
+/* schema diagram */
+figure.schema { align-items: stretch; gap: 22px; padding: 34px 40px; }
+.srel .tname { margin-bottom: 8px; }
+.srel .cells { display: flex; flex-wrap: wrap; }
+.srel .cells span { border: 1.5px solid #94A3B8; background: #fff; padding: 10px 20px; font-size: 24px; margin-left: -1.5px; }
+.srel .cells span:first-child { margin-left: 0; background: var(--teal-t); }
+
+/* --- spectrum --- */
+.spectrum { display: flex; flex-direction: column; gap: 22px; }
+.axis { display: flex; align-items: center; gap: 20px; font-family: var(--font-mono); font-size: 19px; color: var(--sub); }
+.axis i { flex: 1; height: 4px; border-radius: 4px; background: linear-gradient(90deg, var(--teal), var(--ink2)); position: relative; }
+.axis i::before, .axis i::after { content: ""; position: absolute; top: -8px; border: 10px solid transparent; }
+.axis i::before { left: -14px; border-right-color: var(--teal); }
+.axis i::after { right: -14px; border-left-color: var(--ink2); }
+.bands { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.band { border-radius: 22px; padding: 40px 38px; color: #fff; min-height: 470px; box-shadow: 0 24px 50px -30px rgba(11,18,32,.8); }
+.band.b0 { background: var(--teal); } .band.b1 { background: #115E59; } .band.b2 { background: var(--ink2); }
+.band .tag { font-size: 18px; font-weight: 700; letter-spacing: .14em; color: #CCFBF1; text-transform: uppercase; }
+.band h4 { font-family: var(--font-display); font-weight: 700; font-size: 40px; line-height: 1.1; margin: 22px 0 22px; }
+.band p { font-size: 26px; line-height: 1.5; color: #E2E8F0; }
+
+/* --- relation anatomy --- */
+.relation { display: flex; flex-direction: column; gap: 22px; }
+.relname { font-size: 26px; color: var(--sub); }
+.relname b { color: var(--teal-d); font-size: 30px; margin-left: 10px; }
+.relgrid { display: grid; grid-template-columns: 170px 1fr; gap: 24px; align-items: end; }
+.tuplab { height: 330px; display: flex; align-items: center; justify-content: flex-end; border-right: 5px solid var(--amber); padding-right: 18px; border-radius: 4px; }
+.tuplab span { font-family: var(--font-mono); font-weight: 700; font-size: 22px; color: #B45309; text-align: right; }
+.attlab { border-top: 5px solid var(--teal); border-radius: 4px; text-align: right; padding-top: 6px; margin-bottom: 12px; }
+.attlab span { font-family: var(--font-mono); font-weight: 700; font-size: 22px; color: var(--teal-d); }
+.relation .tbl td { font-size: 24px; padding: 13px 18px; }
+.relation .tbl tbody tr td { height: 66px; }
+
+/* --- terminology mapping --- */
+.terms { display: flex; flex-direction: column; gap: 24px; }
+.terms .th { display: grid; grid-template-columns: 1fr 180px 1fr; font-size: 19px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sub); }
+.terms .th span:last-child { color: var(--teal-d); }
+.term-row { display: grid; grid-template-columns: 1fr 180px 1fr; align-items: center; }
+.ta { background: var(--slate-t); border: 1.5px solid var(--line); border-radius: 16px; padding: 26px 32px; font-size: 29px; color: #334155; }
+.tb { background: var(--teal); color: #fff; border-radius: 16px; padding: 26px 32px; font-family: var(--font-display); font-weight: 700; font-size: 34px; box-shadow: 0 14px 30px -18px rgba(13,148,136,.8); }
+.arrow { padding: 0 24px; }
+.arrow i { display: block; height: 4px; background: var(--teal); width: 0; position: relative; border-radius: 4px; }
+.arrow i::after { content: ""; position: absolute; right: -4px; top: -9px; border: 11px solid transparent; border-left-color: var(--teal); border-right: 0; }
+.slide.visible .arrow i { animation: grow .6s var(--ease) forwards; animation-delay: 1s; }
+@keyframes grow { to { width: 100%; } }
+
+/* --- stat --- */
+.stat { display: grid; grid-template-columns: 520px 1fr; gap: 64px; align-items: stretch; }
+.bignum { background: var(--ink); border-radius: 24px; padding: 40px; color: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 40px 40px; }
+.bignum .mono { font-size: 28px; color: var(--teal-l); align-self: flex-start; }
+.bignum .count { font-family: var(--font-display); font-weight: 800; font-size: 300px; line-height: 1; color: var(--teal-l); }
+.bignum p { font-size: 30px; color: #CBD5E1; }
+.statside { display: flex; flex-direction: column; gap: 30px; justify-content: center; }
+.statside .lead { font-size: 32px; line-height: 1.4; }
+.codeblk .lab { font-size: 18px; font-weight: 700; color: var(--teal-d); margin-bottom: 10px; letter-spacing: .06em; text-transform: uppercase; }
+pre { font-family: var(--font-mono); white-space: pre-wrap; }
+.codeblk pre { background: var(--ink2); color: #94A3B8; border-radius: 16px; padding: 26px 32px; font-size: 24px; line-height: 1.55; }
+.codeblk .v { color: #FCD34D; font-weight: 700; } .codeblk .a { color: #E2E8F0; } .codeblk .k { color: var(--teal-l); }
+
+/* --- ordering --- */
+.opoints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.opt { background: var(--teal-t); border: 1.5px solid #A7E8DD; border-radius: 16px; padding: 24px 28px; font-size: 25px; line-height: 1.4; }
+.shuffle .tbl td { font-size: 23px; padding: 12px 18px; }
+.slide.visible .shuffle tbody tr { opacity: 1; animation: shuf 1s var(--ease) both; animation-delay: calc(1.6s + var(--r) * 50ms); }
+@keyframes shuf { from { transform: translateY(calc(var(--k) * 100%)); background: #FFF7E0; } to { transform: none; } }
+
+/* --- agenda --- */
+.agenda { display: grid; grid-template-columns: 1fr 660px; gap: 64px; align-items: start; }
+.agenda-t td { font-size: 29px; padding: 15px 24px; white-space: normal; }
+.agenda-t th { font-size: 20px; padding: 14px 24px; }
+.agenda-t td.id { color: var(--teal); font-weight: 700; width: 96px; font-size: 24px; }
+.sql { background: var(--ink); border-radius: 20px; overflow: hidden; box-shadow: 0 24px 50px -28px rgba(11,18,32,.8); }
+.sql-bar { display: flex; gap: 10px; align-items: center; padding: 16px 22px; background: #111A2C; border-bottom: 1px solid var(--edge); }
+.sql-bar i { width: 14px; height: 14px; border-radius: 50%; background: #334155; }
+.sql-bar i:first-child { background: #F87171; } .sql-bar i:nth-child(2) { background: #FBBF24; } .sql-bar i:nth-child(3) { background: #34D399; }
+.sql-bar span { margin-left: 12px; font-family: var(--font-mono); color: #64748B; font-size: 17px; }
+.sql pre { padding: 32px 40px; font-size: 31px; line-height: 1.6; color: #E2E8F0; }
+.sql .k { color: var(--teal-l); font-weight: 700; } .sql .v { color: #FCD34D; } .sql .c { color: #64748B; }
+.caret { display: inline-block; width: 14px; height: 34px; background: var(--teal-l); vertical-align: middle; margin-left: 6px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sql-res { font-family: var(--font-mono); font-size: 19px; color: #34D399; padding: 16px 40px 22px; border-top: 1px solid var(--edge); }
+
+/* ===========================================
+   DARK SLIDES (title, sections, summary)
+   =========================================== */
+.slide.dark {
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(ellipse 70% 60% at 85% 10%, rgba(13,148,136,.35), transparent 60%),
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: auto, 48px 48px, 48px 48px;
+  color: #fff;
+}
+.slide.dark .sfoot { color: #475569; }
+.tl { position: absolute; left: 120px; top: 120px; width: 1000px; }
+.tl .over { font-size: 22px; color: #94A3B8; letter-spacing: .1em; text-transform: uppercase; }
+.tl .lecno { font-size: 28px; font-weight: 700; color: var(--teal-l); margin-top: 150px; letter-spacing: .06em; }
+.tl h1 { font-family: var(--font-display); font-weight: 800; font-size: 108px; line-height: 1.0; letter-spacing: -0.025em; margin-top: 22px; }
+.tl .sub { font-size: 33px; line-height: 1.4; color: #CBD5E1; margin-top: 34px; max-width: 900px; }
+.tl .who { font-size: 24px; color: #94A3B8; margin-top: 60px; }
+.mock { position: absolute; right: 120px; top: 300px; width: 560px; }
+.mock-name { color: var(--teal-l); font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+.mock-t { border: 1.5px solid #334155; border-radius: 14px; overflow: hidden; box-shadow: 0 40px 80px -40px rgba(13,148,136,.6); }
+.mr { display: flex; opacity: 0; }
+.slide.visible .mr { animation: rowin .5s var(--ease) forwards; animation-delay: calc(var(--r) * 110ms + 700ms); }
+.mr span { flex: 1; height: 74px; display: flex; align-items: center; padding: 0 20px; border-right: 1px solid #263248; border-top: 1px solid #263248; background: #121B2D; }
+.mr:nth-child(odd) span { background: #172235; }
+.mr.head span { background: var(--teal); border-top: 0; color: #fff; font-size: 26px; }
+.mr em { display: block; height: 14px; border-radius: 7px; background: #3B4A63; }
+.mr em.pkb { width: 46%; background: var(--teal-l); opacity: .7; }
+.sec { position: absolute; left: 120px; right: 120px; top: 50%; transform: translateY(-50%); }
+.sec .cmt { font-size: 28px; color: var(--teal-l); }
+.secrow { display: flex; align-items: center; gap: 64px; margin-top: 18px; }
+.secnum { font-size: 220px; font-weight: 700; line-height: 1; color: var(--teal); letter-spacing: -0.04em; }
+.sec h2 { font-family: var(--font-display); font-weight: 800; font-size: 92px; line-height: 1.02; letter-spacing: -0.02em; }
+.sec .sub { font-size: 32px; color: #CBD5E1; margin-top: 22px; }
+.sumwrap { position: absolute; left: 120px; right: 120px; top: 90px; }
+.sumwrap .cmt { font-size: 24px; color: var(--teal-l); }
+.sumwrap h2 { font-family: var(--font-display); font-weight: 800; font-size: 84px; margin: 14px 0 40px; letter-spacing: -0.02em; }
+.takeaways { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.takeaways li { display: flex; gap: 34px; align-items: center; background: rgba(23,32,51,.85); border: 1.5px solid var(--edge); border-radius: 16px; padding: 24px 34px; }
+.takeaways .mono { color: var(--teal-l); font-size: 28px; font-weight: 700; }
+.takeaways p { font-size: 29px; line-height: 1.4; color: #F1F5F9; }
+.notes-link { display: inline-block; margin-top: 34px; font-family: var(--font-mono); font-size: 22px; color: var(--teal-l); text-decoration: none; border-bottom: 2px solid rgba(94,234,212,.4); padding-bottom: 4px; }
+
+/* ===========================================
+   DECK CHROME (outside the stage)
+   =========================================== */
+.progress { position: fixed; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,.06); z-index: 999; }
+.progress i { display: block; height: 100%; width: 0; background: #2DD4BF; transition: width .4s var(--ease); }
+.deck-controls { display: flex; align-items: center; gap: 6px; background: rgba(11,18,32,.82); border: 1px solid #2A3650; border-radius: 999px; padding: 6px 8px; backdrop-filter: blur(8px); opacity: .35; transition: opacity .25s; }
+.deck-controls:hover, .deck-controls:focus-within { opacity: 1; }
+.deck-controls button { background: none; border: 0; color: #E2E8F0; font-size: 22px; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; }
+.deck-controls button:hover { background: rgba(255,255,255,.1); }
+.deck-controls #count { color: #94A3B8; font-size: 14px; min-width: 70px; text-align: center; }
+.overview { position: fixed; inset: 0; z-index: 2000; background: rgba(7,11,20,.94); display: none; padding: 48px; overflow: auto; font-family: var(--font-body); }
+.overview.open { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; align-content: start; }
+.overview button { text-align: left; background: #131C2E; border: 1px solid #2A3650; color: #E2E8F0; border-radius: 12px; padding: 14px 16px; cursor: pointer; font: inherit; font-size: 15px; }
+.overview button span { display: block; font-family: var(--font-mono); color: #5EEAD4; font-size: 12px; margin-bottom: 6px; }
+.overview button:hover, .overview button.cur { border-color: #2DD4BF; }
+.edit-hotzone { position: fixed; top: 0; left: 0; width: 80px; height: 80px; z-index: 10000; cursor: pointer; }
+.edit-toggle { position: fixed; top: 16px; left: 16px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10001; background: #0D9488; color: #fff; border: 0; border-radius: 999px; padding: 8px 16px; font: 600 14px var(--font-body); cursor: pointer; }
+.edit-toggle.show, .edit-toggle.active { opacity: 1; pointer-events: auto; }
+.edit-toggle.active { background: #F59E0B; color: #111; }
+body.editing [contenteditable="true"] { outline: 2px dashed rgba(245,158,11,.6); outline-offset: 4px; }
+
+/* sparse card slides get roomier type */
+.cards.roomy .card-b p { font-size: 30px; }
+.cards.roomy .card-h h4 { font-size: 31px; }
+.cards.roomy .card-h { padding: 24px 28px; }
+.cards.roomy .card-b { padding: 26px 30px 34px; }
+@media (max-height: 520px) { .deck-controls { transform: translateX(-50%) scale(.7); transform-origin: bottom center; bottom: 4px; } }
+</style></head>
+<body>
+<div class="deck-viewport"><main class="deck-stage" id="deckStage" aria-live="polite">
+<section class="slide dark title-slide" data-title="Title">
+    <div class="tl">
+      <div class="rv mono over" style="--d:0">62153 · Introduction to Database Systems</div>
+      <div class="rv mono lecno" style="--d:1">LECTURE_04 · PART 1</div>
+      <h1 class="rv" style="--d:2">The Relational Data Model Concepts</h1>
+      <p class="rv sub" style="--d:3">Relations, domains, attributes and tuples, and the characteristics of relations</p>
+      <div class="rv who" style="--d:4">Mohamed Al-Kumati</div>
+    </div>
+    <div class="mock rv" style="--d:5"><div class="mono mock-name">lecture_04</div>
+      <div class="mock-t"><div class="mr head" style="--r:0"><span><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"></path></svg></span></span><span></span><span></span><span></span></div><div class="mr" style="--r:1"><span><em class='pkb'></em></span><span><em style="width:50%"></em></span><span><em style="width:73%"></em></span><span><em style="width:46%"></em></span></div><div class="mr" style="--r:2"><span><em class='pkb'></em></span><span><em style="width:87%"></em></span><span><em style="width:60%"></em></span><span><em style="width:83%"></em></span></div><div class="mr" style="--r:3"><span><em class='pkb'></em></span><span><em style="width:74%"></em></span><span><em style="width:47%"></em></span><span><em style="width:70%"></em></span></div><div class="mr" style="--r:4"><span><em class='pkb'></em></span><span><em style="width:61%"></em></span><span><em style="width:84%"></em></span><span><em style="width:57%"></em></span></div><div class="mr" style="--r:5"><span><em class='pkb'></em></span><span><em style="width:48%"></em></span><span><em style="width:71%"></em></span><span><em style="width:44%"></em></span></div></div></div>
+    <footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>01 / 14</span></footer></section>
+<section class="slide light t-agenda" data-title="Objectives"><header class="shead"><div class="rv mono kicker" style="--d:0">Lecture 4</div><h2 class="rv" style="--d:1">Objectives</h2></header><div class="sbody"><div class="agenda">
+  <div class="tbl rv" style="--d:2"><table class="agenda-t"><thead><tr><th>id</th><th>topic</th></tr></thead><tbody>
+  <tr style="--r:0"><td class="mono id">01</td><td>Introduce the concepts of the relational data model</td></tr><tr style="--r:1"><td class="mono id">02</td><td>Introduce the characteristics of relations</td></tr><tr style="--r:2"><td class="mono id">03</td><td>Introduce relational model constraints</td></tr><tr style="--r:3"><td class="mono id">04</td><td>Introduce update operations on the relational model</td></tr></tbody></table></div>
+  <div class="sql rv" style="--d:3"><div class="sql-bar"><i></i><i></i><i></i><span>query.sql</span></div>
+  <pre><code><span class="c">-- this lecture</span>
+<span class="k">SELECT</span> id, topic
+<span class="k">FROM</span>   <span class="v">lecture_04</span>
+<span class="k">ORDER BY</span> id;<span class="caret"></span></code></pre>
+  <div class="sql-res">✓ 4 rows returned</div></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>02 / 14</span></footer></section>
+<section class="slide dark section-slide" data-title="The relational data model">
+        <div class="sec"><div class="rv mono cmt" style="--d:0">-- section 01</div><div class="secrow"><div class="rv mono secnum" style="--d:1">01</div>
+        <div><h2 class="rv" style="--d:2">The relational data model</h2><p class="rv sub" style="--d:3">Relations, domains, attributes and tuples</p></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>03 / 14</span></footer></section>
+<section class="slide light t-schema" data-title="The database as a collection of relations"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">The database as a collection of relations</h2></header><div class="sbody"><div class="media"><figure class="rv fig schema" style="--d:2"><div class="rv srel" style="--d:3"><div class="tname">STUDENT</div><div class="cells"><span class="pk">Name</span><span>Student_number</span><span>Class</span><span>Major</span></div></div><div class="rv srel" style="--d:4"><div class="tname">COURSE</div><div class="cells"><span class="pk">Course_name</span><span>Course_number</span><span>Credit_hours</span><span>Department</span></div></div><div class="rv srel" style="--d:5"><div class="tname">PREREQUISITE</div><div class="cells"><span class="pk">Course_number</span><span>Prerequisite_number</span></div></div><div class="rv srel" style="--d:6"><div class="tname">SECTION</div><div class="cells"><span class="pk">Section_identifier</span><span>Course_number</span><span>Semester</span><span>Year</span><span>Instructor</span></div></div><div class="rv srel" style="--d:7"><div class="tname">GRADE_REPORT</div><div class="cells"><span class="pk">Student_number</span><span>Section_identifier</span><span>Grade</span></div></div><figcaption>The University schema: each relation looks like a table of values</figcaption></figure><ol class="points"><li class="rv" style="--d:8"><span class="pn">1</span><div>The relational model represents the database as a collection of relations.</div></li><li class="rv" style="--d:9"><span class="pn">2</span><div>Each relation looks like a table of values.</div></li></ol></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>04 / 14</span></footer></section>
+<section class="slide light t-relation" data-title="Anatomy of a relation"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">Anatomy of a relation</h2></header><div class="sbody"><div class="relation"><div class="rv relname" style="--d:2"><span>Relation name</span> <b class="mono">STUDENT</b></div>
+  <div class="relgrid"><div class="rv tuplab" style="--d:3"><span>Tuples<br>(rows)</span></div><div class="relwrap"><div class="rv attlab" style="--d:4"><span>Attributes (column headers)</span></div><div class="rv tbl" style="--d:5">
+    <table><thead><tr><th>Name</th><th>Ssn</th><th>Home_phone</th><th>Address</th><th>Office_phone</th><th>Age</th><th>Gpa</th></tr></thead>
+    <tbody><tr style="--r:0"><td>Benjamin Bayer</td><td>305-61-2435</td><td>(817)373-1616</td><td>2918 Bluebonnet Lane</td><td class="null">NULL</td><td>19</td><td>3.21</td></tr><tr style="--r:1"><td>Chung-cha Kim</td><td>381-62-1245</td><td>(817)375-4409</td><td>125 Kirby Road</td><td class="null">NULL</td><td>18</td><td>2.89</td></tr><tr style="--r:2"><td>Dick Davidson</td><td>422-11-2320</td><td class="null">NULL</td><td>3452 Elgin Road</td><td>(817)749-1253</td><td>25</td><td>3.53</td></tr><tr style="--r:3"><td>Rohan Panchal</td><td>489-22-1100</td><td>(817)376-9821</td><td>265 Lark Lane</td><td>(817)749-6492</td><td>28</td><td>3.93</td></tr><tr style="--r:4"><td>Barbara Benson</td><td>533-69-1238</td><td>(817)839-8461</td><td>7384 Fontana Lane</td><td class="null">NULL</td><td>19</td><td>3.25</td></tr></tbody></table></div></div></div>
+  <p class="rv intro" style="--d:6">Each column’s values come from a <b>domain</b>. <span class="null">NULL</span> marks a value that is unknown.</p></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>05 / 14</span></footer></section>
+<section class="slide light t-terms" data-title="Relational model terminology"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">Relational model terminology</h2></header><div class="sbody"><div class="terms"><div class="th mono rv" style="--d:2"><span>informal</span><span></span><span>formal (relational model)</span></div>
+  <div class="rv term-row" style="--d:3"><div class="ta">Row</div><div class="arrow"><i></i></div><div class="tb">Tuple</div></div><div class="rv term-row" style="--d:4"><div class="ta">Column header</div><div class="arrow"><i></i></div><div class="tb">Attribute</div></div><div class="rv term-row" style="--d:5"><div class="ta">Table</div><div class="arrow"><i></i></div><div class="tb">Relation</div></div><div class="rv term-row" style="--d:6"><div class="ta">Data type of the values in a column</div><div class="arrow"><i></i></div><div class="tb">Domain (of possible values)</div></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>06 / 14</span></footer></section>
+<section class="slide light t-def" data-title="What is a relation schema?"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">What is a relation schema?</h2></header><div class="sbody"><div class="def"><div class="rv defcard" style="--d:2"><div class="mono lab">DEFINITION</div><div class="term mono">R (A1, A2, …, An)</div><p>A relation schema is made up of a relation name R and a list of attributes A1, A2, …, An.</p></div>
+  <div class="defside"><h4 class="rv" style="--d:3">Reading it</h4>
+  <div class="rv dpt" style="--d:4"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64v-96h160v96zm0-160H64v-96h160v96zm224 160H288v-96h160v96zm0-160H288v-96h160v96z"></path></svg></span><div><b>R</b> <span>The relation name, e.g. STUDENT.</span></div></div><div class="rv dpt" style="--d:5"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M464 32H48C21.49 32 0 53.49 0 80v352c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V80c0-26.51-21.49-48-48-48zM224 416H64V160h160v256zm224 0H288V160h160v256z"></path></svg></span><div><b>A1 … An</b> <span>The attributes, e.g. Name, SSN, Age.</span></div></div>
+  </div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>07 / 14</span></footer></section>
+<section class="slide light t-stat" data-title="Relation degree"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">Relation degree</h2></header><div class="sbody"><div class="stat"><div class="rv bignum" style="--d:2"><div class="mono">n =</div><div class="count" data-to="7">7</div><p>attributes = degree 7</p></div>
+  <div class="statside"><p class="rv lead" style="--d:3">The degree of a relation is the number of attributes n of its relation schema.</p><div class="rv codeblk" style="--d:4"><div class="mono lab">Relation schema of degree 7</div><pre><code><span class="v">STUDENT</span> (<span class="a">Name</span>, <span class="a">SSN</span>, <span class="a">HomePhone</span>, <span class="a">Address</span>, <span class="a">Office_Phone</span>, <span class="a">Age</span>, <span class="a">GPA</span>)</code></pre></div><div class="rv codeblk" style="--d:5"><div class="mono lab">Sometimes written with data types</div><pre><code><span class="v">STUDENT</span> (<span class="a">Name</span>: <span class="k">string</span>, <span class="a">SSN</span>: <span class="k">string</span>, <span class="a">HomePhone</span>: <span class="k">string</span>, <span class="a">Address</span>: <span class="k">string</span>, <span class="a">Office_Phone</span>: <span class="k">string</span>, <span class="a">Age</span>: <span class="k">integer</span>, <span class="a">GPA</span>: <span class="k">real</span>)</code></pre></div></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>08 / 14</span></footer></section>
+<section class="slide light t-cards" data-title="What is a domain?"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">What is a domain?</h2></header><div class="sbody"><p class="rv intro" style="--d:2">A domain D is a set of atomic values. Examples:</p><div class="cards" style="--cols:3"><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M493.4 24.6l-104-24c-11.3-2.6-22.9 3.3-27.5 13.9l-48 112c-4.2 9.8-1.4 21.3 6.9 28l60.6 49.6c-36 76.7-98.9 140.5-177.2 177.2l-49.6-60.6c-6.8-8.3-18.2-11.1-28-6.9l-112 48C3.9 366.5-2 378.1.6 389.4l24 104C27.1 504.2 36.7 512 48 512c256.1 0 464-207.5 464-464 0-11.2-7.7-20.9-18.6-23.4z"></path></svg></span><h4>Phone_numbers</h4></div>
+    <div class="card-b"><p>The set of 7-digit phone numbers valid in a particular area code.</p></div>
+    
+  </div><div class="rv card" style="--d:4">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M528 32H48C21.5 32 0 53.5 0 80v16h576V80c0-26.5-21.5-48-48-48zM0 432c0 26.5 21.5 48 48 48h480c26.5 0 48-21.5 48-48V128H0v304zm352-232c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zm0 64c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zm0 64c0-4.4 3.6-8 8-8h144c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H360c-4.4 0-8-3.6-8-8v-16zM176 192c35.3 0 64 28.7 64 64s-28.7 64-64 64-64-28.7-64-64 28.7-64 64-64zM67.1 396.2C75.5 370.5 99.6 352 128 352h8.2c12.3 5.1 25.7 8 39.8 8s27.6-2.9 39.8-8h8.2c28.4 0 52.5 18.5 60.9 44.2 3.2 9.9-5.2 19.8-15.6 19.8H82.7c-10.4 0-18.8-10-15.6-19.8z"></path></svg></span><h4>Social_security_numbers</h4></div>
+    <div class="card-b"><p>The set of valid 9-digit social security numbers.</p></div>
+    
+  </div><div class="rv card" style="--d:5">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></span><h4>Names</h4></div>
+    <div class="card-b"><p>The set of names of persons.</p></div>
+    
+  </div><div class="rv card" style="--d:6">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M332.8 320h38.4c6.4 0 12.8-6.4 12.8-12.8V172.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v134.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V76.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v230.4c0 6.4 6.4 12.8 12.8 12.8zm-288 0h38.4c6.4 0 12.8-6.4 12.8-12.8v-70.4c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v70.4c0 6.4 6.4 12.8 12.8 12.8zm96 0h38.4c6.4 0 12.8-6.4 12.8-12.8V108.8c0-6.4-6.4-12.8-12.8-12.8h-38.4c-6.4 0-12.8 6.4-12.8 12.8v198.4c0 6.4 6.4 12.8 12.8 12.8zM496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"></path></svg></span><h4>Grade_point_averages</h4></div>
+    <div class="card-b"><p>Possible computed GPAs; each a real (floating point) number between 0 and 4.</p></div>
+    
+  </div><div class="rv card" style="--d:7">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z"></path></svg></span><h4>Employee_ages</h4></div>
+    <div class="card-b"><p>Possible ages of a company’s employees; each between 15 and 80 years old.</p></div>
+    
+  </div><div class="rv card" style="--d:8">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M622.34 153.2L343.4 67.5c-15.2-4.67-31.6-4.67-46.79 0L17.66 153.2c-23.54 7.23-23.54 38.36 0 45.59l48.63 14.94c-10.67 13.19-17.23 29.28-17.88 46.9C38.78 266.15 32 276.11 32 288c0 10.78 5.68 19.85 13.86 25.65L20.33 428.53C18.11 438.52 25.71 448 35.94 448h56.11c10.24 0 17.84-9.48 15.62-19.47L82.14 313.65C90.32 307.85 96 298.78 96 288c0-11.57-6.47-21.25-15.66-26.87.76-15.02 8.44-28.3 20.69-36.72L296.6 284.5c9.06 2.78 26.44 6.25 46.79 0l278.95-85.7c23.55-7.24 23.55-38.36 0-45.6zM352.79 315.09c-28.53 8.76-52.84 3.92-65.59 0l-145.02-44.55L128 384c0 35.35 85.96 64 192 64s192-28.65 192-64l-14.18-113.47-145.03 44.56z"></path></svg></span><h4>Academic_department_names</h4></div>
+    <div class="card-b"><p>Such as Computer Science, Economics and Physics in a university.</p></div>
+    
+  </div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>09 / 14</span></footer></section>
+<section class="slide light t-split" data-title="Data type and relation state"><header class="shead"><div class="rv mono kicker" style="--d:0">01 · The relational data model</div><h2 class="rv" style="--d:1">Data type and relation state</h2></header><div class="sbody"><div class="split"><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M440.667 182.109l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l14.623-81.891C377.123 38.754 371.468 32 363.997 32h-40.632a12 12 0 0 0-11.813 9.891L296.175 128H197.54l14.623-81.891C213.477 38.754 207.822 32 200.35 32h-40.632a12 12 0 0 0-11.813 9.891L132.528 128H53.432a12 12 0 0 0-11.813 9.891l-7.143 40C33.163 185.246 38.818 192 46.289 192h74.81L98.242 320H19.146a12 12 0 0 0-11.813 9.891l-7.143 40C-1.123 377.246 4.532 384 12.003 384h74.81L72.19 465.891C70.877 473.246 76.532 480 84.003 480h40.632a12 12 0 0 0 11.813-9.891L151.826 384h98.634l-14.623 81.891C234.523 473.246 240.178 480 247.65 480h40.632a12 12 0 0 0 11.813-9.891L315.472 384h79.096a12 12 0 0 0 11.813-9.891l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l22.857-128h79.096a12 12 0 0 0 11.813-9.891zM261.889 320h-98.634l22.857-128h98.634l-22.857 128z"></path></svg></span><h4>Data type (format)</h4></div>
+    <div class="card-b"><p>Specified for each domain. Example: Phone_numbers can be declared as a character string of the form ddd-dddd, where each d is a numeric (decimal) digit.</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 144v288c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48h88l12.3-32.9c7-18.7 24.9-31.1 44.9-31.1h125.5c20 0 37.9 12.4 44.9 31.1L376 96h88c26.5 0 48 21.5 48 48zM376 288c0-66.2-53.8-120-120-120s-120 53.8-120 120 53.8 120 120 120 120-53.8 120-120zm-32 0c0 48.5-39.5 88-88 88s-88-39.5-88-88 39.5-88 88-88 88 39.5 88 88z"></path></svg></span><h4>Relation state r(R)</h4></div>
+    <div class="card-b"><p>A relation state r of the relation schema R(A1, A2, …, An), denoted r(R), is a set of n-tuples r = {t1, t2, …, tm}.</p></div>
+    
+  </div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>10 / 14</span></footer></section>
+<section class="slide dark section-slide" data-title="Characteristics of relations">
+        <div class="sec"><div class="rv mono cmt" style="--d:0">-- section 02</div><div class="secrow"><div class="rv mono secnum" style="--d:1">02</div>
+        <div><h2 class="rv" style="--d:2">Characteristics of relations</h2><p class="rv sub" style="--d:3">Ordering, atomic values and nulls</p></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>11 / 14</span></footer></section>
+<section class="slide light t-ordering" data-title="Ordering of tuples is not important"><header class="shead"><div class="rv mono kicker" style="--d:0">02 · Characteristics of relations</div><h2 class="rv" style="--d:1">Ordering of tuples is not important</h2></header><div class="sbody"><div class="opoints"><div class="rv opt" style="--d:2">A relation is defined as a set of tuples.</div><div class="rv opt" style="--d:3">Tuples in a relation do not have any particular order.</div><div class="rv opt" style="--d:4">Tuple ordering is not part of a relation definition.</div></div>
+  <div class="shuffle"><div class="rv tbl" style="--d:5"><div class="tname">STUDENT  -- same tuples, new order</div>
+    <table><thead><tr><th>Name</th><th>Ssn</th><th>Home_phone</th><th>Address</th><th>Office_phone</th><th>Age</th><th>Gpa</th></tr></thead>
+    <tbody><tr style="--r:0;--k:2"><td>Dick Davidson</td><td>422-11-2320</td><td class="null">NULL</td><td>3452 Elgin Road</td><td>(817)749-1253</td><td>25</td><td>3.53</td></tr><tr style="--r:1;--k:3"><td>Barbara Benson</td><td>533-69-1238</td><td>(817)839-8461</td><td>7384 Fontana Lane</td><td class="null">NULL</td><td>19</td><td>3.25</td></tr><tr style="--r:2;--k:1"><td>Rohan Panchal</td><td>489-22-1100</td><td>(817)376-9821</td><td>265 Lark Lane</td><td>(817)749-6492</td><td>28</td><td>3.93</td></tr><tr style="--r:3;--k:-2"><td>Chung-cha Kim</td><td>381-62-1245</td><td>(817)375-4409</td><td>125 Kirby Road</td><td class="null">NULL</td><td>18</td><td>2.89</td></tr><tr style="--r:4;--k:-4"><td>Benjamin Bayer</td><td>305-61-2435</td><td>(817)373-1616</td><td>2918 Bluebonnet Lane</td><td class="null">NULL</td><td>19</td><td>3.21</td></tr></tbody></table></div></div>
+  <p class="rv caption" style="--d:6">The same STUDENT relation with its tuples in a different order</p></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>12 / 14</span></footer></section>
+<section class="slide light t-list" data-title="Atomic values and nulls"><header class="shead"><div class="rv mono kicker" style="--d:0">02 · Characteristics of relations</div><h2 class="rv" style="--d:1">Atomic values and nulls</h2></header><div class="sbody"><div class="rows"><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M239.1 6.3l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V129.3c0-20-12.4-37.9-31.1-44.9l-208-78C262 2.2 250 2.2 239.1 6.3zM256 68.4l192 72v1.1l-192 78-192-78v-1.1l192-72zm32 356V275.5l160-65v133.9l-160 80z"></path></svg></span><h4>Atomic values</h4><p>Each value in a tuple is an atomic value.</p></div><div class="rv row" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"></path></svg></span><h4>No composite or multi-valued attributes</h4><p>Multi-valued attributes must be represented by separate relations; composite attributes are represented only by their simple component attributes.</p></div><div class="rv row" style="--d:4"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"></path></svg></span><h4>Nulls</h4><p>The values of some attributes within a particular tuple may be unknown (shown as NULL, e.g. a missing Office_phone).</p></div></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>13 / 14</span></footer></section>
+<section class="slide dark summary-slide" data-title="Key takeaways">
+    <div class="sumwrap"><div class="rv mono cmt" style="--d:0">-- end of lecture 4</div><h2 class="rv" style="--d:1">Key takeaways</h2>
+    <ol class="takeaways"><li class="rv" style="--d:2"><span class="mono">01</span><p>The relational model represents a database as a collection of relations (tables).</p></li><li class="rv" style="--d:3"><span class="mono">02</span><p>Tuple = row, attribute = column header, relation = table, domain = set of allowed atomic values.</p></li><li class="rv" style="--d:4"><span class="mono">03</span><p>A relation schema R(A1, …, An) has degree n; a relation state r(R) is a set of n-tuples.</p></li><li class="rv" style="--d:5"><span class="mono">04</span><p>Tuple order does not matter; values are atomic and may be NULL when unknown.</p></li></ol>
+    <a class="notes-link rv" style="--d:6" href="Lec 4 - Relational Data Model Concepts (Part 1) - Study Notes.html">Open the study notes →</a></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 4</span><span>14 / 14</span></footer></section>
+</main></div>
+<div class="progress" aria-hidden="true"><i id="prog"></i></div>
+<nav class="deck-controls" aria-label="Slide navigation"><button id="prev" aria-label="Previous slide">‹</button><span id="count" class="mono"></span><button id="next" aria-label="Next slide">›</button><button id="ovBtn" aria-label="Slide overview (O)" title="Overview (O)">▦</button></nav>
+<div class="overview" id="overview" role="dialog" aria-label="All slides"></div>
+<div class="edit-hotzone"></div><button class="edit-toggle" id="editToggle" title="Edit mode (E)">✎ Edit</button>
+<script>/* ===========================================
+   SLIDE PRESENTATION CONTROLLER
+   Arrows / Space / PageUp-Down / Home-End, swipe, wheel. O = overview, E = edit.
+   =========================================== */
+class SlidePresentation {
+  constructor() {
+    this.slides = [...document.querySelectorAll('.slide')];
+    this.stage = document.getElementById('deckStage');
+    this.count = document.getElementById('count');
+    this.prog = document.getElementById('prog');
+    this.ov = document.getElementById('overview');
+    this.current = -1;
+    this.setupStageScale();
+    this.setupNav();
+    this.buildOverview();
+    const fromHash = parseInt((location.hash || '').replace('#', ''), 10);
+    this.show(Number.isFinite(fromHash) ? fromHash - 1 : 0);
+  }
+  setupStageScale() {
+    const scale = () => {
+      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2, y = (window.innerHeight - 1080 * f) / 2;
+      this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
+    };
+    scale();
+    window.addEventListener('resize', scale);
+  }
+  setupNav() {
+    document.addEventListener('keydown', (e) => {
+      if (document.body.classList.contains('editing') && e.target.isContentEditable) return;
+      const k = e.key;
+      if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); this.show(this.current + 1); }
+      else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); this.show(this.current - 1); }
+      else if (k === 'Home') this.show(0);
+      else if (k === 'End') this.show(this.slides.length - 1);
+      else if (k === 'o' || k === 'O' || (k === 'Escape' && this.ov.classList.contains('open'))) this.toggleOverview();
+    });
+    document.getElementById('next').onclick = () => this.show(this.current + 1);
+    document.getElementById('prev').onclick = () => this.show(this.current - 1);
+    document.getElementById('ovBtn').onclick = () => this.toggleOverview();
+    let tx = null, ty = null;
+    document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      if (tx === null) return;
+      const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) this.show(this.current + (dx < 0 ? 1 : -1));
+      tx = null;
+    });
+    let lock = false;
+    document.addEventListener('wheel', (e) => {
+      if (this.ov.classList.contains('open') || lock || Math.abs(e.deltaY) < 30) return;
+      lock = true; setTimeout(() => (lock = false), 700);
+      this.show(this.current + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: true });
+    // Click anywhere on the stage (not on a link) to advance
+    this.stage.addEventListener('click', (e) => {
+      if (document.body.classList.contains('editing') || e.target.closest('a')) return;
+      this.show(this.current + 1);
+    });
+  }
+  buildOverview() {
+    this.slides.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.innerHTML = `<span>${String(i + 1).padStart(2, '0')}</span>`;
+      b.appendChild(document.createTextNode(s.dataset.title || 'Slide'));
+      b.onclick = () => { this.toggleOverview(false); this.show(i); };
+      this.ov.appendChild(b);
+    });
+  }
+  toggleOverview(force) {
+    const open = force ?? !this.ov.classList.contains('open');
+    this.ov.classList.toggle('open', open);
+    [...this.ov.children].forEach((b, i) => b.classList.toggle('cur', i === this.current));
+  }
+  show(i) {
+    i = Math.max(0, Math.min(i, this.slides.length - 1));
+    if (i === this.current) return;
+    this.current = i;
+    this.slides.forEach((s, k) => {
+      const on = k === i;
+      s.classList.toggle('active', on);
+      if (on) { s.classList.remove('visible'); void s.offsetWidth; s.classList.add('visible'); }
+      else s.classList.remove('visible');
+      s.setAttribute('aria-hidden', on ? 'false' : 'true');
+    });
+    this.count.textContent = `${i + 1} / ${this.slides.length}`;
+    this.prog.style.width = `${((i + 1) / this.slides.length) * 100}%`;
+    history.replaceState(null, '', `#${i + 1}`);
+    this.slides[i].querySelectorAll('.count[data-to]').forEach((el) => this.countUp(el));
+  }
+  countUp(el) {
+    const to = parseInt(el.dataset.to, 10); if (!Number.isFinite(to)) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = to; return; }
+    const t0 = performance.now() + 400, dur = 900;
+    const tick = (t) => {
+      const p = Math.min(1, Math.max(0, (t - t0) / dur));
+      el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = '0'; requestAnimationFrame(tick);
+  }
+}
+const deck = new SlidePresentation();
+
+/* ===========================================
+   INLINE EDITING: hover top-left corner or press E.
+   Edits auto-save in this browser; Ctrl+S downloads an edited copy.
+   =========================================== */
+const editor = {
+  isActive: false,
+  key: 'deck-edits:' + document.title,
+  targets() { return document.querySelectorAll('.slide h1, .slide h2, .slide h4, .slide p, .slide li, .slide td, .slide .chip, .slide .opt, .slide .ta, .slide .tb'); },
+  toggleEditMode() {
+    this.isActive = !this.isActive;
+    document.body.classList.toggle('editing', this.isActive);
+    editToggle.classList.toggle('active', this.isActive);
+    editToggle.textContent = this.isActive ? '✓ Done' : '✎ Edit';
+    this.targets().forEach((el) => el.setAttribute('contenteditable', this.isActive ? 'true' : 'false'));
+    if (!this.isActive) this.save();
+  },
+  save() {
+    try { localStorage.setItem(this.key, JSON.stringify([...this.targets()].map((el) => el.innerHTML))); } catch (e) {}
+  },
+  restore() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(this.key) || 'null');
+      const els = [...this.targets()];
+      if (saved && saved.length === els.length) els.forEach((el, i) => (el.innerHTML = saved[i]));
+    } catch (e) {}
+  },
+  download() {
+    const clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('[contenteditable]').forEach((el) => el.removeAttribute('contenteditable'));
+    clone.querySelector('body').classList.remove('editing');
+    const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = (document.title || 'slides') + '.html'; a.click();
+  },
+};
+editor.restore();
+const hotzone = document.querySelector('.edit-hotzone');
+const editToggle = document.getElementById('editToggle');
+let hideTimeout = null;
+editToggle.addEventListener('click', () => editor.toggleEditMode());
+hotzone.addEventListener('click', () => editor.toggleEditMode());
+const showToggle = () => { clearTimeout(hideTimeout); editToggle.classList.add('show'); };
+const hideLater = () => { hideTimeout = setTimeout(() => { if (!editor.isActive) editToggle.classList.remove('show'); }, 400); };
+hotzone.addEventListener('mouseenter', showToggle);
+hotzone.addEventListener('mouseleave', hideLater);
+editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+editToggle.addEventListener('mouseleave', hideLater);
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'e' || e.key === 'E') && !e.target.isContentEditable) editor.toggleEditMode();
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); editor.save(); editor.download(); }
+});
+document.addEventListener('input', () => editor.isActive && editor.save());
+</script>
+</body></html>

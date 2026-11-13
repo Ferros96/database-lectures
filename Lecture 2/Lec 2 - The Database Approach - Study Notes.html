@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 2 Notes</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>/* ===========================================
+   THEME TOKENS (light + dark)
+   =========================================== */
+:root {
+  --bg: #F5F7FA; --card: #FFFFFF; --line: #D9E1EA; --line2: #E8EDF3; --zebra: #F8FAFC;
+  --text: #0F172A; --muted: #475569; --sub: #64748B; --strong: #334155;
+  --teal: #0D9488; --teal-d: #0F766E; --teal-l: #5EEAD4; --teal-t: #E8F7F4; --teal-b: #A7E8DD;
+  --slate-t: #EEF2F6; --slate-ic: #334155; --amber: #F59E0B; --amber-t: #FEF3C7; --amber-b: #FCD34D; --amber-d: #92400E;
+  --ink: #0B1220; --ink2: #131C2E; --edge: #2A3650; --dot: #D5DDE7;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --shadow: 0 10px 30px -22px rgba(15, 23, 42, .45);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+    --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+    --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+    --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+    --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+  --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+  --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+  --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+  --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { font-family: var(--font-body); color: var(--text); background: var(--bg); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px); background-size: 24px 24px; }
+.mono { font-family: var(--font-mono); }
+b { font-weight: 600; }
+.ic { display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 1em; height: 1em; }
+
+/* ===========================================
+   HERO
+   =========================================== */
+.hero { background-color: #0B1220; color: #fff;
+  background-image: radial-gradient(ellipse 60% 80% at 90% 0%, rgba(13,148,136,.4), transparent 60%), linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: auto, 36px 36px, 36px 36px; }
+.hero-in { max-width: 1240px; margin: 0 auto; padding: 56px 24px 52px; }
+.hero .over { font-size: 13px; color: #94A3B8; letter-spacing: .08em; text-transform: uppercase; }
+.hero .lecno { font-size: 15px; font-weight: 700; color: #5EEAD4; margin-top: 40px; letter-spacing: .06em; }
+.hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 6vw, 64px); line-height: 1.04; letter-spacing: -0.02em; margin-top: 10px; max-width: 900px; }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); color: #CBD5E1; margin-top: 16px; max-width: 760px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px var(--font-body); color: #0B1220; background: #5EEAD4; border: 0; border-radius: 999px; padding: 11px 20px; text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: #E2E8F0; border: 1.5px solid #334155; }
+.btn:hover { filter: brightness(1.08); }
+
+/* ===========================================
+   LAYOUT: sticky "schema browser" contents + notes column
+   =========================================== */
+.layout { max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; }
+.toc { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px; font-size: 14px; box-shadow: var(--shadow); }
+.toc-h { color: var(--teal); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.toc ul { list-style: none; }
+.toc > ul > li { margin-top: 6px; }
+.toc a { color: var(--strong); text-decoration: none; display: block; padding: 4px 8px; border-radius: 8px; line-height: 1.35; }
+.toc a:hover, .toc a.on { background: var(--teal-t); color: var(--teal-d); }
+.toc > ul > li > a { font-weight: 600; }
+.toc > ul > li > a .mono { color: var(--teal); font-size: 12px; margin-right: 8px; }
+.toc ul ul { margin-left: 14px; border-left: 1px solid var(--line); padding-left: 4px; }
+.toc ul ul a { color: var(--sub); font-size: 13px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 16px 64px; }
+  .toc { position: static; max-height: none; }
+  .toc ul ul { display: none; }
+}
+
+/* ===========================================
+   SECTIONS + BLOCKS
+   =========================================== */
+.nsec { margin-bottom: 48px; }
+.nsec-h { display: flex; gap: 18px; align-items: center; padding: 6px 0 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.nsec-h > .mono { font-size: 34px; font-weight: 700; color: var(--teal); line-height: 1; min-width: 56px; }
+.nsec-h h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.1; letter-spacing: -0.01em; }
+.nsec-h p { color: var(--sub); }
+.blk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px 28px; margin-bottom: 22px; box-shadow: var(--shadow); }
+.blk > h3 { font-family: var(--font-display); font-weight: 700; font-size: 23px; line-height: 1.2; margin-bottom: 18px; }
+.nbody { display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 600px) { .blk { padding: 20px 16px; border-radius: 14px; } }
+.intro { color: var(--muted); }
+.caption, figcaption { font-size: 14px; font-style: italic; color: var(--sub); }
+
+.callout { display: flex; gap: 12px; align-items: center; background: var(--amber-t); border: 1px solid var(--amber-b); color: var(--amber-d); font-weight: 600; border-radius: 12px; padding: 12px 16px; }
+.callout .ic { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 14px; }
+
+/* cards */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.card-h { display: flex; align-items: center; gap: 12px; background: var(--teal-t); border-bottom: 1px solid var(--line); padding: 12px 16px; }
+.card-h .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.card-h h4 { font-size: 17px; font-weight: 600; line-height: 1.25; }
+.card-h .num { margin-left: auto; font-family: var(--font-mono); font-weight: 700; color: var(--teal); font-size: 13px; }
+.card-b { padding: 14px 16px 16px; color: var(--muted); }
+.card-b ul { list-style: none; display: grid; gap: 8px; }
+.card-b li { padding-left: 20px; position: relative; }
+.card-b li::before { content: "▸"; position: absolute; left: 0; color: var(--teal); font-family: var(--font-mono); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.cards.tiles .card-h { border-bottom: 0; height: 100%; }
+.compare, .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare .vs { display: none; }
+.compare > .card:first-child .card-h, .split > .card:first-child .card-h { background: var(--slate-t); }
+.compare > .card:first-child .card-h .ic, .split > .card:first-child .card-h .ic { background: var(--slate-ic); }
+@media (max-width: 700px) { .compare, .split { grid-template-columns: 1fr; } }
+
+/* definition */
+.def { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; }
+.defcard { background: #0B1220; color: #fff; border-radius: 14px; padding: 22px 24px;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; }
+.defcard .lab { font-size: 12px; letter-spacing: .2em; color: #5EEAD4; font-weight: 700; }
+.defcard .term { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 8px 0 10px; line-height: 1.1; }
+.defcard .term.mono { font-family: var(--font-mono); color: #FCD34D; font-size: 22px; }
+.defcard p { color: #CBD5E1; font-size: 17px; }
+.defside { display: flex; flex-direction: column; gap: 10px; }
+.defside h4 { font-weight: 600; }
+.dpt { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.dpt .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.dpt span { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+@media (max-width: 700px) { .def { grid-template-columns: 1fr; } }
+
+/* rows */
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.row { display: grid; grid-template-columns: 38px 220px 1fr; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.row .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--teal); color: #fff; font-size: 18px; }
+.row h4 { font-weight: 600; line-height: 1.3; }
+.row p { color: var(--muted); }
+@media (max-width: 700px) { .row { grid-template-columns: 38px 1fr; } .row p { grid-column: 1 / -1; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: s; }
+.step { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.step .sn { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; }
+.step:last-child .sn { background: #1E293B; }
+.step h4 { font-weight: 600; margin: 10px 0 4px; line-height: 1.3; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* tables */
+.tbl { overflow-x: auto; max-width: 100%; }
+.tname { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); margin-bottom: 6px; }
+.tbl table { border-collapse: separate; border-spacing: 0; width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.tbl th { background: #131C2E; color: #E2E8F0; font-family: var(--font-mono); font-weight: 600; font-size: 12.5px; text-align: left; padding: 8px 12px; white-space: nowrap; }
+.tbl td { padding: 7px 12px; border-top: 1px solid var(--line2); white-space: nowrap; }
+.tbl tbody tr:nth-child(even) td { background: var(--zebra); }
+.tbl.wide td { white-space: normal; }
+.tbl td.key { font-weight: 600; color: var(--teal-d); }
+td.null, span.null { color: #94A3B8; font-style: italic; font-family: var(--font-mono); font-size: .9em; }
+.tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+.tables .tcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.agenda-t td.id { color: var(--teal); font-weight: 700; width: 56px; }
+
+/* media */
+.media { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+@media (max-width: 800px) { .media { grid-template-columns: 1fr; } }
+figure.fig { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+figure.fig figcaption { align-self: flex-end; color: #64748B; }
+figure.fig img { border-radius: 6px; }
+figure.mini { margin-top: 12px; background: #fff; border-radius: 10px; padding: 8px; text-align: center; }
+figure.mini img { max-height: 260px; }
+svg.diagram { width: 100%; height: auto; }
+.points { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.points li { display: flex; gap: 12px; align-items: flex-start; color: var(--strong); }
+.points .pn { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--teal-t); border: 1px solid var(--teal-b); color: var(--teal-d); display: grid; place-items: center; font-family: var(--font-mono); font-size: 13px; font-weight: 700; margin-top: 1px; }
+.points.plain .ic { color: var(--teal); margin-top: 5px; }
+.points b { display: block; color: var(--text); }
+.points span { display: block; color: var(--muted); }
+
+/* SVG diagram (figure stays light in both themes) */
+svg.diagram text { font-family: var(--font-body); }
+svg.diagram rect.group { fill: #F1F5F9; stroke: #CBD5E1; stroke-width: 1.5; }
+svg.diagram rect.group2 { fill: #E8F7F4; stroke: #99F6E4; stroke-width: 1.5; }
+svg.diagram .glabel { font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .group-t { fill: #64748B; } svg.diagram .group2-t { fill: #0F766E; }
+svg.diagram rect.box { fill: #fff; stroke: #94A3B8; stroke-width: 1.5; }
+svg.diagram rect.accent { fill: #0D9488; } svg.diagram rect.accent2 { fill: #131C2E; }
+svg.diagram .t-box { fill: #0F172A; } svg.diagram .t-accent, svg.diagram .t-accent2 { fill: #fff; font-weight: 600; }
+svg.diagram .cyl { fill: #CCFBF1; stroke: #0D9488; stroke-width: 1.5; } svg.diagram .cyl-top { fill: #E6FFFA; stroke: #0D9488; stroke-width: 1.5; }
+svg.diagram .t-cyl { fill: #0F766E; font-weight: 600; }
+svg.diagram .t-plain { fill: #64748B; font-weight: 600; }
+svg.diagram .t-label { fill: #0F766E; font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .t-note { fill: #64748B; font-style: italic; }
+svg.diagram .de { stroke: #334155; stroke-width: 2.2; }
+svg.diagram .arrowhead { fill: #334155; }
+
+/* schema */
+figure.schema { align-items: stretch; gap: 12px; }
+.srel .cells { display: flex; flex-wrap: wrap; }
+.srel .cells span { border: 1px solid #94A3B8; padding: 4px 10px; font-size: 14px; margin: 0 -1px -1px 0; color: #0F172A; background: #fff; }
+.srel .cells span:first-child { background: #E8F7F4; }
+.srel .tname { color: #0F766E; }
+
+/* spectrum */
+.axis { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+.axis i { flex: 1; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #0D9488, #131C2E); }
+.bands { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.band { border-radius: 14px; padding: 18px 20px; color: #fff; }
+.band.b0 { background: #0D9488; } .band.b1 { background: #115E59; } .band.b2 { background: #131C2E; border: 1px solid #26334A; }
+.band .tag { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #CCFBF1; text-transform: uppercase; }
+.band h4 { font-family: var(--font-display); font-size: 20px; margin: 6px 0; }
+.band p { color: #E2E8F0; font-size: 15.5px; }
+
+/* relation anatomy */
+.relation { display: flex; flex-direction: column; gap: 10px; }
+.relname { color: var(--sub); } .relname b { color: var(--teal-d); }
+.relgrid { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: end; }
+.tuplab { height: 190px; display: flex; align-items: center; justify-content: flex-end; border-right: 4px solid var(--amber); padding-right: 10px; }
+.tuplab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: #B45309; text-align: right; }
+.relwrap { min-width: 0; }
+.attlab { border-top: 4px solid var(--teal); text-align: right; padding-top: 2px; margin-bottom: 6px; }
+.attlab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); }
+@media (max-width: 600px) { .relgrid { grid-template-columns: 1fr; } .tuplab { display: none; } }
+
+/* terms */
+.terms { display: flex; flex-direction: column; gap: 10px; }
+.terms .th, .term-row { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; }
+.terms .th { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+.terms .th span:last-child { color: var(--teal-d); }
+.ta { background: var(--slate-t); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.tb { background: #0D9488; color: #fff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.arrow { padding: 0 8px; } .arrow i { display: block; height: 3px; background: var(--teal); border-radius: 3px; position: relative; }
+.arrow i::after { content: ""; position: absolute; right: -3px; top: -6px; border: 7.5px solid transparent; border-left-color: var(--teal); border-right: 0; }
+
+/* stat */
+.stat { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 18px; }
+.bignum { background: #0B1220; color: #fff; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.bignum .mono { color: #5EEAD4; align-self: flex-start; }
+.bignum .count { font-family: var(--font-display); font-weight: 800; font-size: 110px; line-height: 1; color: #5EEAD4; }
+.bignum p { color: #CBD5E1; font-size: 15px; }
+.statside { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.codeblk .lab { font-size: 12px; font-weight: 700; color: var(--teal-d); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+pre { font-family: var(--font-mono); white-space: pre-wrap; word-break: break-word; }
+.codeblk pre { background: #131C2E; color: #94A3B8; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+.codeblk .v { color: #FCD34D; font-weight: 700; } .codeblk .a { color: #E2E8F0; } .codeblk .k { color: #5EEAD4; }
+@media (max-width: 600px) { .stat { grid-template-columns: 1fr; } }
+
+/* ordering */
+.opoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.opt { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 10px 14px; }
+
+/* agenda */
+.agenda { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.sql { background: #0B1220; border-radius: 12px; overflow: hidden; }
+.sql-bar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; background: #111A2C; }
+.sql-bar i { width: 9px; height: 9px; border-radius: 50%; background: #F87171; } .sql-bar i:nth-child(2) { background: #FBBF24; } .sql-bar i:nth-child(3) { background: #34D399; }
+.sql-bar span { margin-left: 6px; font-family: var(--font-mono); color: #64748B; font-size: 12px; }
+.sql pre { padding: 14px 16px; font-size: 14px; color: #E2E8F0; }
+.sql .k { color: #5EEAD4; font-weight: 700; } .sql .v { color: #FCD34D; } .sql .c { color: #64748B; }
+.caret { display: inline-block; width: 8px; height: 16px; background: #5EEAD4; vertical-align: middle; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sql-res { font-family: var(--font-mono); font-size: 12px; color: #34D399; padding: 8px 16px 12px; border-top: 1px solid #2A3650; }
+@media (max-width: 800px) { .agenda { grid-template-columns: 1fr; } }
+
+/* takeaways + review */
+.takeaways { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.takeaways li { display: flex; gap: 16px; align-items: center; background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.takeaways .mono { color: #5EEAD4; font-weight: 700; }
+.qa { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.qa summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; gap: 12px; align-items: baseline; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary .mono { color: var(--teal); font-size: 13px; }
+.qa summary::after { content: "+"; margin-left: auto; font-family: var(--font-mono); color: var(--teal); font-size: 20px; line-height: 1; }
+.qa[open] summary::after { content: "−"; }
+.qa p { padding: 0 18px 16px 52px; color: var(--muted); }
+.nfoot { color: var(--sub); font-size: 12px; margin-top: 40px; }
+
+/* gentle reveal on scroll */
+.blk { transition: opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1); }
+.js .blk:not(.in) { opacity: 0; transform: translateY(14px); }
+@media (prefers-reduced-motion: reduce) { .js .blk:not(.in) { opacity: 1; transform: none; } * { scroll-behavior: auto !important; } }
+
+@media print {
+  body { background: #fff; } .toc, .hero-actions { display: none; } .layout { display: block; }
+  .blk { break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+  .qa { break-inside: avoid; } .qa p { display: block; }
+}
+/* keep grids from growing past narrow screens */
+.agenda > *, .media > *, .def > *, .compare > *, .split > *, .tables > * { min-width: 0; }
+.agenda-t td { white-space: normal; }
+@media (max-width: 800px) { .agenda, .media { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .compare, .split, .def { grid-template-columns: minmax(0, 1fr); } }
+img { max-width: 100%; height: auto; }
+.tables { display: flex; flex-wrap: wrap; }
+.tables .tcol { flex: 1 1 auto; }
+</style></head>
+<body>
+<header class="hero"><div class="hero-in">
+  <div class="mono over">62153 · Introduction to Database Systems · Mohamed Al-Kumati</div>
+  <div class="mono lecno">LECTURE_02 · STUDY NOTES</div>
+  <h1>The Database Approach</h1><p>How databases differ from file processing, their advantages, their users, and when not to use a DBMS</p>
+  <div class="hero-actions"><a class="btn" href="Lec 2 - The Database Approach - Slides.html">▶ Open the slides</a><button class="btn ghost" id="themeBtn" type="button">◐ Theme</button></div>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="Contents"><div class="mono toc-h">-- contents</div><ul><li><a href="#overview"><span class="mono">00</span>Overview</a>
+    <ul></ul></li><li><a href="#characteristics-of-the-database-approach"><span class="mono">01</span>Characteristics of the database approach</a>
+    <ul><li><a href="#characteristics-of-the-database-approach-file-processing-vs-the-database-approach">File processing vs the database approach</a></li><li><a href="#characteristics-of-the-database-approach-main-characteristics-of-the-database-approach">Main characteristics of the database approach</a></li><li><a href="#characteristics-of-the-database-approach-1-self-describing-nature-of-a-database-system">1. Self-describing nature of a database system</a></li><li><a href="#characteristics-of-the-database-approach-2-insulation-between-programs-and-data">2. Insulation between programs and data</a></li><li><a href="#characteristics-of-the-database-approach-3-support-of-multiple-views-of-the-data">3. Support of multiple views of the data</a></li><li><a href="#characteristics-of-the-database-approach-4-sharing-of-data-and-multiuser-transaction-processing">4. Sharing of data and multiuser transaction processing</a></li></ul></li><li><a href="#advantages-of-using-the-dbms-approach"><span class="mono">02</span>Advantages of using the DBMS approach</a>
+    <ul><li><a href="#advantages-of-using-the-dbms-approach-advantages-of-using-the-dbms-approach">Advantages of using the DBMS approach</a></li><li><a href="#advantages-of-using-the-dbms-approach-1-controlling-redundancy-the-problem">1. Controlling redundancy: the problem</a></li><li><a href="#advantages-of-using-the-dbms-approach-1-controlling-redundancy-the-database-solution">1. Controlling redundancy: the database solution</a></li><li><a href="#advantages-of-using-the-dbms-approach-2-restricting-unauthorized-access">2. Restricting unauthorized access</a></li><li><a href="#advantages-of-using-the-dbms-approach-3-providing-backup-and-recovery">3. Providing backup and recovery</a></li><li><a href="#advantages-of-using-the-dbms-approach-4-providing-multiple-user-interfaces">4. Providing multiple user interfaces</a></li><li><a href="#advantages-of-using-the-dbms-approach-5-enforcing-integrity-constraints">5. Enforcing integrity constraints</a></li></ul></li><li><a href="#people-and-limits"><span class="mono">03</span>People and limits</a>
+    <ul><li><a href="#people-and-limits-database-users">Database users</a></li><li><a href="#people-and-limits-when-not-to-use-a-dbms">When not to use a DBMS</a></li></ul></li><li><a href="#takeaways"><span class="mono">✓</span>Key takeaways</a></li><li><a href="#review"><span class="mono">?</span>Check yourself</a></li></ul></nav>
+<main class="notes">
+<section class="nsec" id="overview"><div class="nsec-h"><span class="mono">--</span><div><h2>Overview</h2></div></div><article class="blk t-agenda" id="overview-outline"><h3>Outline</h3><div class="nbody"><div class="agenda">
+  <div class="tbl rv" style="--d:0"><table class="agenda-t"><thead><tr><th>id</th><th>topic</th></tr></thead><tbody>
+  <tr style="--r:0"><td class="mono id">01</td><td>Characteristics of the database approach</td></tr><tr style="--r:1"><td class="mono id">02</td><td>Database approach vs file processing</td></tr><tr style="--r:2"><td class="mono id">03</td><td>Advantages of using the DBMS approach</td></tr><tr style="--r:3"><td class="mono id">04</td><td>Database users</td></tr><tr style="--r:4"><td class="mono id">05</td><td>When not to use a DBMS</td></tr></tbody></table></div>
+  <div class="sql rv" style="--d:1"><div class="sql-bar"><i></i><i></i><i></i><span>query.sql</span></div>
+  <pre><code><span class="c">-- this lecture</span>
+<span class="k">SELECT</span> id, topic
+<span class="k">FROM</span>   <span class="v">lecture_02</span>
+<span class="k">ORDER BY</span> id;<span class="caret"></span></code></pre>
+  <div class="sql-res">✓ 5 rows returned</div></div></div></div></article></section>
+<section class="nsec" id="characteristics-of-the-database-approach"><div class="nsec-h"><span class="mono">01</span><div><h2>Characteristics of the database approach</h2><p>What makes it different from writing programs over files</p></div></div><article class="blk t-compare" id="characteristics-of-the-database-approach-file-processing-vs-the-database-approach"><h3>File processing vs the database approach</h3><div class="nbody"><p class="rv intro" style="--d:0">Several characteristics distinguish the database approach from the much older approach of writing customized programs to access data stored in files.</p><div class="compare"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></span><h4>Traditional file processing</h4></div>
+    
+    <div class="card-b"><ul><li>Each user defines and implements the files needed for a specific application as part of programming that application.</li><li>Example: files of students’ data may be implemented as part of many applications, which causes data redundancy.</li></ul></div>
+  </div><div class="vs rv" style="--d:2">vs</div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M448 73.143v45.714C448 159.143 347.667 192 224 192S0 159.143 0 118.857V73.143C0 32.857 100.333 0 224 0s224 32.857 224 73.143zM448 176v102.857C448 319.143 347.667 352 224 352S0 319.143 0 278.857V176c48.125 33.143 136.208 48.572 224 48.572S399.874 209.143 448 176zm0 160v102.857C448 479.143 347.667 512 224 512S0 479.143 0 438.857V336c48.125 33.143 136.208 48.572 224 48.572S399.874 369.143 448 336z"></path></svg></span><h4>Database approach</h4></div>
+    
+    <div class="card-b"><ul><li>A single repository maintains data that is defined once.</li><li>It is then accessed by various users repeatedly through queries, transactions and application programs.</li></ul></div>
+  </div></div></div></article>
+<article class="blk t-cards" id="characteristics-of-the-database-approach-main-characteristics-of-the-database-approach"><h3>Main characteristics of the database approach</h3><div class="nbody"><div class="cards roomy" style="--cols:4"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M448 360V24c0-13.3-10.7-24-24-24H96C43 0 0 43 0 96v320c0 53 43 96 96 96h328c13.3 0 24-10.7 24-24v-16c0-7.5-3.5-14.3-8.9-18.7-4.2-15.4-4.2-59.3 0-74.7 5.4-4.3 8.9-11.1 8.9-18.6zM128 134c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm0 64c0-3.3 2.7-6 6-6h212c3.3 0 6 2.7 6 6v20c0 3.3-2.7 6-6 6H134c-3.3 0-6-2.7-6-6v-20zm253.4 250H96c-17.7 0-32-14.3-32-32 0-17.6 14.4-32 32-32h285.4c-1.9 17.1-1.9 46.9 0 64z"></path></svg></span><h4>Self-describing nature</h4><span class="num">01</span></div>
+    <div class="card-b"><p>of a database system</p></div>
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z"></path></svg></span><h4>Insulation &amp; data abstraction</h4><span class="num">02</span></div>
+    <div class="card-b"><p>between programs and data</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"></path></svg></span><h4>Multiple views</h4><span class="num">03</span></div>
+    <div class="card-b"><p>of the data</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></svg></span><h4>Sharing &amp; multiuser transactions</h4><span class="num">04</span></div>
+    <div class="card-b"><p>of data</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-compare" id="characteristics-of-the-database-approach-1-self-describing-nature-of-a-database-system"><h3>1. Self-describing nature of a database system</h3><div class="nbody"><div class="compare"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M448 73.143v45.714C448 159.143 347.667 192 224 192S0 159.143 0 118.857V73.143C0 32.857 100.333 0 224 0s224 32.857 224 73.143zM448 176v102.857C448 319.143 347.667 352 224 352S0 319.143 0 278.857V176c48.125 33.143 136.208 48.572 224 48.572S399.874 209.143 448 176zm0 160v102.857C448 479.143 347.667 512 224 512S0 479.143 0 438.857V336c48.125 33.143 136.208 48.572 224 48.572S399.874 369.143 448 336z"></path></svg></span><h4>Database system</h4></div>
+    
+    <div class="card-b"><ul><li>Contains not only the database itself but also a complete definition or description of the database structure and constraints (meta-data).</li></ul></div>
+  </div><div class="vs rv" style="--d:1">vs</div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></span><h4>Traditional file processing</h4></div>
+    
+    <div class="card-b"><ul><li>Data definition is part of the application programs themselves.</li></ul></div>
+  </div></div></div></article>
+<article class="blk t-compare" id="characteristics-of-the-database-approach-2-insulation-between-programs-and-data"><h3>2. Insulation between programs and data</h3><div class="nbody"><div class="compare"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"></path></svg></span><h4>Traditional file processing</h4></div>
+    
+    <div class="card-b"><ul><li>The structure of data files is embedded in the application programs.</li><li>Any change to the structure of a file may require changing all programs that access that file.</li></ul></div>
+  </div><div class="vs rv" style="--d:1">vs</div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M448 73.143v45.714C448 159.143 347.667 192 224 192S0 159.143 0 118.857V73.143C0 32.857 100.333 0 224 0s224 32.857 224 73.143zM448 176v102.857C448 319.143 347.667 352 224 352S0 319.143 0 278.857V176c48.125 33.143 136.208 48.572 224 48.572S399.874 209.143 448 176zm0 160v102.857C448 479.143 347.667 512 224 512S0 479.143 0 438.857V336c48.125 33.143 136.208 48.572 224 48.572S399.874 369.143 448 336z"></path></svg></span><h4>Databases</h4></div>
+    
+    <div class="card-b"><ul><li>The structure of data files is stored in the DBMS catalog, separately from the access programs.</li></ul></div>
+  </div></div><div class="rv callout" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path></svg></span><span>This separation is also called data abstraction.</span></div></div></article>
+<article class="blk t-split" id="characteristics-of-the-database-approach-3-support-of-multiple-views-of-the-data"><h3>3. Support of multiple views of the data</h3><div class="nbody"><p class="rv intro" style="--d:0">A database typically has many types of users, each of whom may need a different perspective or view. A view may be a subset of the database, or it may contain virtual data derived from the database files but not explicitly stored.</p><div class="split"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M288 256H96v64h192v-64zm89-151L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9zm-153 31V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zM64 72c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8V72zm0 64c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm256 304c0 4.42-3.58 8-8 8h-80c-4.42 0-8-3.58-8-8v-16c0-4.42 3.58-8 8-8h80c4.42 0 8 3.58 8 8v16zm0-200v96c0 8.84-7.16 16-16 16H80c-8.84 0-16-7.16-16-16v-96c0-8.84 7.16-16 16-16h224c8.84 0 16 7.16 16 16z"></path></svg></span><h4>User 1: transcripts</h4></div>
+    <div class="card-b"><p>Interested only in accessing and printing the transcript of each student.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><h4>User 2: prerequisites</h4></div>
+    <div class="card-b"><p>Interested only in checking that students have taken all the prerequisites of each course they register for.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-def" id="characteristics-of-the-database-approach-4-sharing-of-data-and-multiuser-transaction-processing"><h3>4. Sharing of data and multiuser transaction processing</h3><div class="nbody"><div class="def"><div class="rv defcard" style="--d:0"><div class="mono lab">DEFINITION</div><div class="term">Multiuser DBMS</div><p>Must allow multiple users to access the database at the same time.</p></div>
+  <div class="defside"><h4 class="rv" style="--d:1">How it stays correct</h4>
+  <div class="rv dpt" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z"></path></svg></span><div><b>Concurrency control</b> <span>Software that ensures several users updating the same data do so in a controlled manner, so the result of the updates is correct.</span></div></div><div class="rv dpt" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M480 192H365.71L260.61 8.06A16.014 16.014 0 0 0 246.71 0h-65.5c-10.63 0-18.3 10.17-15.38 20.39L214.86 192H112l-43.2-57.6c-3.02-4.03-7.77-6.4-12.8-6.4H16.01C5.6 128-2.04 137.78.49 147.88L32 256 .49 364.12C-2.04 374.22 5.6 384 16.01 384H56c5.04 0 9.78-2.37 12.8-6.4L112 320h102.86l-49.03 171.6c-2.92 10.22 4.75 20.4 15.38 20.4h65.5c5.74 0 11.04-3.08 13.89-8.06L365.71 320H480c35.35 0 96-28.65 96-64s-60.65-64-96-64z"></path></svg></span><div><b>Example: airline seats</b> <span>When several reservation agents try to assign a seat on a flight, the DBMS ensures each seat can be accessed by only one agent at a time.</span></div></div>
+  </div></div></div></article></section>
+<section class="nsec" id="advantages-of-using-the-dbms-approach"><div class="nsec-h"><span class="mono">02</span><div><h2>Advantages of using the DBMS approach</h2><p>Five capabilities a DBMS gives you</p></div></div><article class="blk t-cards" id="advantages-of-using-the-dbms-approach-advantages-of-using-the-dbms-approach"><h3>Advantages of using the DBMS approach</h3><div class="nbody"><div class="cards tiles" style="--cols:5"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M320 448v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V120c0-13.255 10.745-24 24-24h72v296c0 30.879 25.121 56 56 56h168zm0-344V0H152c-13.255 0-24 10.745-24 24v368c0 13.255 10.745 24 24 24h272c13.255 0 24-10.745 24-24V128H344c-13.2 0-24-10.8-24-24zm120.971-31.029L375.029 7.029A24 24 0 0 0 358.059 0H352v96h96v-6.059a24 24 0 0 0-7.029-16.97z"></path></svg></span><h4>Controlling redundancy</h4><span class="num">01</span></div>
+    
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M400 224h-24v-72C376 68.2 307.8 0 224 0S72 68.2 72 152v72H48c-26.5 0-48 21.5-48 48v192c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V272c0-26.5-21.5-48-48-48zm-104 0H152v-72c0-39.7 32.3-72 72-72s72 32.3 72 72v72z"></path></svg></span><h4>Restricting unauthorized access</h4><span class="num">02</span></div>
+    
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"></path></svg></span><h4>Backup and recovery</h4><span class="num">03</span></div>
+    
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"></path></svg></span><h4>Multiple user interfaces</h4><span class="num">04</span></div>
+    
+    
+  </div><div class="rv card" style="--d:4">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><h4>Enforcing integrity constraints</h4><span class="num">05</span></div>
+    
+    
+  </div></div></div></article>
+<article class="blk t-list" id="advantages-of-using-the-dbms-approach-1-controlling-redundancy-the-problem"><h3>1. Controlling redundancy: the problem</h3><div class="nbody"><p class="rv intro" style="--d:0">In file processing, every user group maintains its own files. Storing the same data multiple times leads to three problems:</p><div class="rows"><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M500.33 0h-47.41a12 12 0 0 0-12 12.57l4 82.76A247.42 247.42 0 0 0 256 8C119.34 8 7.9 119.53 8 256.19 8.1 393.07 119.1 504 256 504a247.1 247.1 0 0 0 166.18-63.91 12 12 0 0 0 .48-17.43l-34-34a12 12 0 0 0-16.38-.55A176 176 0 1 1 402.1 157.8l-101.53-4.87a12 12 0 0 0-12.57 12v47.41a12 12 0 0 0 12 12h200.33a12 12 0 0 0 12-12V12a12 12 0 0 0-12-12z"></path></svg></span><h4>Duplication of effort</h4><p>A single logical update, such as entering data on a new student, must be performed multiple times: once for each file where student data is recorded.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M576 304v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48zm-48-80a79.557 79.557 0 0 1 30.777 6.165L462.25 85.374A48.003 48.003 0 0 0 422.311 64H153.689a48 48 0 0 0-39.938 21.374L17.223 230.165A79.557 79.557 0 0 1 48 224h480zm-48 96c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm-96 0c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z"></path></svg></span><h4>Wasted storage</h4><p>Storage space is wasted when the same data is stored repeatedly; this may be serious for large databases.</p></div><div class="rv row" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg></span><h4>Inconsistency</h4><p>Files that represent the same data may become inconsistent when an update is applied to some files but not to others.</p></div></div></div></article>
+<article class="blk t-cards" id="advantages-of-using-the-dbms-approach-1-controlling-redundancy-the-database-solution"><h3>1. Controlling redundancy: the database solution</h3><div class="nbody"><div class="cards roomy" style="--cols:3"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 384 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M384 144c0-44.2-35.8-80-80-80s-80 35.8-80 80c0 36.4 24.3 67.1 57.5 76.8-.6 16.1-4.2 28.5-11 36.9-15.4 19.2-49.3 22.4-85.2 25.7-28.2 2.6-57.4 5.4-81.3 16.9v-144c32.5-10.2 56-40.5 56-76.3 0-44.2-35.8-80-80-80S0 35.8 0 80c0 35.8 23.5 66.1 56 76.3v199.3C23.5 365.9 0 396.2 0 432c0 44.2 35.8 80 80 80s80-35.8 80-80c0-34-21.2-63.1-51.2-74.6 3.1-5.2 7.8-9.8 14.9-13.4 16.2-8.2 40.4-10.4 66.1-12.8 42.2-3.9 90-8.4 118.2-43.4 14-17.4 21.1-39.8 21.6-67.9 31.6-10.8 54.4-40.7 54.4-75.9zM80 64c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16 7.2-16 16-16zm0 384c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16zm224-320c8.8 0 16 7.2 16 16s-7.2 16-16 16-16-7.2-16-16 7.2-16 16-16z"></path></svg></span><h4>Integrated views</h4></div>
+    <div class="card-b"><p>The views of different user groups are integrated during database design.</p></div>
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M448 73.143v45.714C448 159.143 347.667 192 224 192S0 159.143 0 118.857V73.143C0 32.857 100.333 0 224 0s224 32.857 224 73.143zM448 176v102.857C448 319.143 347.667 352 224 352S0 319.143 0 278.857V176c48.125 33.143 136.208 48.572 224 48.572S399.874 209.143 448 176zm0 160v102.857C448 479.143 347.667 512 224 512S0 479.143 0 438.857V336c48.125 33.143 136.208 48.572 224 48.572S399.874 369.143 448 336z"></path></svg></span><h4>One place to store data</h4></div>
+    <div class="card-b"><p>Each item is stored only once.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><h4>Data normalization</h4></div>
+    <div class="card-b"><p>Ensures consistency and saves storage space.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-list" id="advantages-of-using-the-dbms-approach-2-restricting-unauthorized-access"><h3>2. Restricting unauthorized access</h3><div class="nbody"><div class="rows"><div class="rv row" style="--d:0"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></svg></span><h4>Not everyone sees everything</h4><p>When many users share a large database, most users are likely not authorized to access all of its information.</p></div><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"></path></svg></span><h4>Different permissions</h4><p>Some users may only retrieve data, while others may retrieve and update it.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"></path></svg></span><h4>Accounts and passwords</h4><p>Users are given account numbers protected by passwords, which they use to gain access to the database.</p></div></div></div></article>
+<article class="blk t-cards" id="advantages-of-using-the-dbms-approach-3-providing-backup-and-recovery"><h3>3. Providing backup and recovery</h3><div class="nbody"><div class="cards roomy" style="--cols:3"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"></path></svg></span><h4>Recovery facilities</h4></div>
+    <div class="card-b"><p>A DBMS must provide facilities for recovering from hardware or software failures.</p></div>
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512.1 191l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0L552 6.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zm-10.5-58.8c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.7-82.4 14.3-52.8 52.8zM386.3 286.1l33.7 16.8c10.1 5.8 14.5 18.1 10.5 29.1-8.9 24.2-26.4 46.4-42.6 65.8-7.4 8.9-20.2 11.1-30.3 5.3l-29.1-16.8c-16 13.7-34.6 24.6-54.9 31.7v33.6c0 11.6-8.3 21.6-19.7 23.6-24.6 4.2-50.4 4.4-75.9 0-11.5-2-20-11.9-20-23.6V418c-20.3-7.2-38.9-18-54.9-31.7L74 403c-10 5.8-22.9 3.6-30.3-5.3-16.2-19.4-33.3-41.6-42.2-65.7-4-10.9.4-23.2 10.5-29.1l33.3-16.8c-3.9-20.9-3.9-42.4 0-63.4L12 205.8c-10.1-5.8-14.6-18.1-10.5-29 8.9-24.2 26-46.4 42.2-65.8 7.4-8.9 20.2-11.1 30.3-5.3l29.1 16.8c16-13.7 34.6-24.6 54.9-31.7V57.1c0-11.5 8.2-21.5 19.6-23.5 24.6-4.2 50.5-4.4 76-.1 11.5 2 20 11.9 20 23.6v33.6c20.3 7.2 38.9 18 54.9 31.7l29.1-16.8c10-5.8 22.9-3.6 30.3 5.3 16.2 19.4 33.2 41.6 42.1 65.8 4 10.9.1 23.2-10 29.1l-33.7 16.8c3.9 21 3.9 42.5 0 63.5zm-117.6 21.1c59.2-77-28.7-164.9-105.7-105.7-59.2 77 28.7 164.9 105.7 105.7zm243.4 182.7l-8.2 14.3c-3 5.3-9.4 7.5-15.1 5.4-11.8-4.4-22.6-10.7-32.1-18.6-4.6-3.8-5.8-10.5-2.8-15.7l8.2-14.3c-6.9-8-12.3-17.3-15.9-27.4h-16.5c-6 0-11.2-4.3-12.2-10.3-2-12-2.1-24.6 0-37.1 1-6 6.2-10.4 12.2-10.4h16.5c3.6-10.1 9-19.4 15.9-27.4l-8.2-14.3c-3-5.2-1.9-11.9 2.8-15.7 9.5-7.9 20.4-14.2 32.1-18.6 5.7-2.1 12.1.1 15.1 5.4l8.2 14.3c10.5-1.9 21.2-1.9 31.7 0l8.2-14.3c3-5.3 9.4-7.5 15.1-5.4 11.8 4.4 22.6 10.7 32.1 18.6 4.6 3.8 5.8 10.5 2.8 15.7l-8.2 14.3c6.9 8 12.3 17.3 15.9 27.4h16.5c6 0 11.2 4.3 12.2 10.3 2 12 2.1 24.6 0 37.1-1 6-6.2 10.4-12.2 10.4h-16.5c-3.6 10.1-9 19.4-15.9 27.4l8.2 14.3c3 5.2 1.9 11.9-2.8 15.7-9.5 7.9-20.4 14.2-32.1 18.6-5.7 2.1-12.1-.1-15.1-5.4l-8.2-14.3c-10.4 1.9-21.2 1.9-31.7 0zM501.6 431c38.5 29.6 82.4-14.3 52.8-52.8-38.5-29.6-82.4 14.3-52.8 52.8z"></path></svg></span><h4>Backup &amp; recovery subsystem</h4></div>
+    <div class="card-b"><p>This part of the DBMS is responsible for recovery.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M576 304v96c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48v-96c0-26.51 21.49-48 48-48h480c26.51 0 48 21.49 48 48zm-48-80a79.557 79.557 0 0 1 30.777 6.165L462.25 85.374A48.003 48.003 0 0 0 422.311 64H153.689a48 48 0 0 0-39.938 21.374L17.223 230.165A79.557 79.557 0 0 1 48 224h480zm-48 96c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32zm-96 0c-17.673 0-32 14.327-32 32s14.327 32 32 32 32-14.327 32-32-14.327-32-32-32z"></path></svg></span><h4>Disk backup</h4></div>
+    <div class="card-b"><p>Also necessary in case of a catastrophic disk failure.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-cards" id="advantages-of-using-the-dbms-approach-4-providing-multiple-user-interfaces"><h3>4. Providing multiple user interfaces</h3><div class="nbody"><p class="rv intro" style="--d:0">Users with varying levels of technical knowledge use a database, so a DBMS should provide a variety of user interfaces.</p><div class="cards roomy" style="--cols:3"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 320 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M272 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h224c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM160 480c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm112-108c0 6.6-5.4 12-12 12H60c-6.6 0-12-5.4-12-12V60c0-6.6 5.4-12 12-12h200c6.6 0 12 5.4 12 12v312z"></path></svg></span><h4>Apps</h4></div>
+    <div class="card-b"><p>For mobile users.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></span><h4>Query languages</h4></div>
+    <div class="card-b"><p>For users who query the data.</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg></span><h4>Programming language interfaces</h4></div>
+    <div class="card-b"><p>For application programmers.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-def" id="advantages-of-using-the-dbms-approach-5-enforcing-integrity-constraints"><h3>5. Enforcing integrity constraints</h3><div class="nbody"><div class="def"><div class="rv defcard" style="--d:0"><div class="mono lab">DEFINITION</div><div class="term">Integrity constraints</div><p>A DBMS should provide capabilities for defining and enforcing them. The simplest type specifies a data type for each data item.</p></div>
+  <div class="defside"><h4 class="rv" style="--d:1">Examples from the STUDENT record</h4>
+  <div class="rv dpt" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M440.667 182.109l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l14.623-81.891C377.123 38.754 371.468 32 363.997 32h-40.632a12 12 0 0 0-11.813 9.891L296.175 128H197.54l14.623-81.891C213.477 38.754 207.822 32 200.35 32h-40.632a12 12 0 0 0-11.813 9.891L132.528 128H53.432a12 12 0 0 0-11.813 9.891l-7.143 40C33.163 185.246 38.818 192 46.289 192h74.81L98.242 320H19.146a12 12 0 0 0-11.813 9.891l-7.143 40C-1.123 377.246 4.532 384 12.003 384h74.81L72.19 465.891C70.877 473.246 76.532 480 84.003 480h40.632a12 12 0 0 0 11.813-9.891L151.826 384h98.634l-14.623 81.891C234.523 473.246 240.178 480 247.65 480h40.632a12 12 0 0 0 11.813-9.891L315.472 384h79.096a12 12 0 0 0 11.813-9.891l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l22.857-128h79.096a12 12 0 0 0 11.813-9.891zM261.889 320h-98.634l22.857-128h98.634l-22.857 128z"></path></svg></span><div><b>Class</b> <span>Must be a one-digit integer.</span></div></div><div class="rv dpt" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M432 416h-23.41L277.88 53.69A32 32 0 0 0 247.58 32h-47.16a32 32 0 0 0-30.3 21.69L39.41 416H16a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16h-19.58l23.3-64h152.56l23.3 64H304a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16h128a16 16 0 0 0 16-16v-32a16 16 0 0 0-16-16zM176.85 272L224 142.51 271.15 272z"></path></svg></span><div><b>Name</b> <span>Must be a string of no more than 30 alphabetic characters.</span></div></div>
+  </div></div></div></article></section>
+<section class="nsec" id="people-and-limits"><div class="nsec-h"><span class="mono">03</span><div><h2>People and limits</h2><p>Who uses a database, and when a DBMS is not worth it</p></div></div><article class="blk t-cards" id="people-and-limits-database-users"><h3>Database users</h3><div class="nbody"><div class="cards" style="--cols:3"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M622.3 271.1l-115.2-45c-4.1-1.6-12.6-3.7-22.2 0l-115.2 45c-10.7 4.2-17.7 14-17.7 24.9 0 111.6 68.7 188.8 132.9 213.9 9.6 3.7 18 1.6 22.2 0C558.4 489.9 640 420.5 640 296c0-10.9-7-20.7-17.7-24.9zM496 462.4V273.3l95.5 37.3c-5.6 87.1-60.9 135.4-95.5 151.8zM224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm96 40c0-2.5.8-4.8 1.1-7.2-2.5-.1-4.9-.8-7.5-.8h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c6.8 0 13.3-1.5 19.2-4-54-42.9-99.2-116.7-99.2-212z"></path></svg></span><h4>Database administrators</h4></div>
+    <div class="card-b"><p>Authorize access to the database, coordinate and monitor its use, and acquire software and hardware resources as needed.</p></div>
+    
+  </div><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M109.46 244.04l134.58-134.56-44.12-44.12-61.68 61.68a7.919 7.919 0 0 1-11.21 0l-11.21-11.21c-3.1-3.1-3.1-8.12 0-11.21l61.68-61.68-33.64-33.65C131.47-3.1 111.39-3.1 99 9.29L9.29 99c-12.38 12.39-12.39 32.47 0 44.86l100.17 100.18zm388.47-116.8c18.76-18.76 18.75-49.17 0-67.93l-45.25-45.25c-18.76-18.76-49.18-18.76-67.95 0l-46.02 46.01 113.2 113.2 46.02-46.03zM316.08 82.71l-297 296.96L.32 487.11c-2.53 14.49 10.09 27.11 24.59 24.56l107.45-18.84L429.28 195.9 316.08 82.71zm186.63 285.43l-33.64-33.64-61.68 61.68c-3.1 3.1-8.12 3.1-11.21 0l-11.21-11.21c-3.09-3.1-3.09-8.12 0-11.21l61.68-61.68-44.14-44.14L267.93 402.5l100.21 100.2c12.39 12.39 32.47 12.39 44.86 0l89.71-89.7c12.39-12.39 12.39-32.47 0-44.86z"></path></svg></span><h4>Database designers</h4></div>
+    <div class="card-b"><p>Identify the data to be stored in the database and choose appropriate structures to represent and store it.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M96 224c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm448 0c35.3 0 64-28.7 64-64s-28.7-64-64-64-64 28.7-64 64 28.7 64 64 64zm32 32h-64c-17.6 0-33.5 7.1-45.1 18.6 40.3 22.1 68.9 62 75.1 109.4h66c17.7 0 32-14.3 32-32v-32c0-35.3-28.7-64-64-64zm-256 0c61.9 0 112-50.1 112-112S381.9 32 320 32 208 82.1 208 144s50.1 112 112 112zm76.8 32h-8.3c-20.8 10-43.9 16-68.5 16s-47.6-6-68.5-16h-8.3C179.6 288 128 339.6 128 403.2V432c0 26.5 21.5 48 48 48h288c26.5 0 48-21.5 48-48v-28.8c0-63.6-51.6-115.2-115.2-115.2zm-223.7-13.4C161.5 263.1 145.6 256 128 256H64c-35.3 0-64 28.7-64 64v32c0 17.7 14.3 32 32 32h65.9c6.3-47.4 34.9-87.3 75.2-109.4z"></path></svg></span><h4>End users</h4></div>
+    <div class="card-b"><p>People whose jobs require access to the database for querying, updating and generating reports.</p></div>
+    
+  </div></div></div></article>
+<article class="blk t-compare" id="people-and-limits-when-not-to-use-a-dbms"><h3>When not to use a DBMS</h3><div class="nbody"><div class="compare"><div class="rv card" style="--d:0">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M0 405.3V448c0 35.3 86 64 192 64s192-28.7 192-64v-42.7C342.7 434.4 267.2 448 192 448S41.3 434.4 0 405.3zM320 128c106 0 192-28.7 192-64S426 0 320 0 128 28.7 128 64s86 64 192 64zM0 300.4V352c0 35.3 86 64 192 64s192-28.7 192-64v-51.6c-41.3 34-116.9 51.6-192 51.6S41.3 334.4 0 300.4zm416 11c57.3-11.1 96-31.7 96-55.4v-42.7c-23.2 16.4-57.3 27.6-96 34.5v63.6zM192 160C86 160 0 195.8 0 240s86 80 192 80 192-35.8 192-80-86-80-192-80zm219.3 56.3c60-10.8 100.7-32 100.7-56.3v-42.7c-35.5 25.1-96.5 38.6-160.7 41.8 29.5 14.3 51.2 33.5 60 57.2z"></path></svg></span><h4>Overhead costs of a DBMS</h4></div>
+    
+    <div class="card-b"><ul><li>High initial investment in hardware, software and training</li><li>The generality a DBMS provides for defining and processing data</li><li>Overhead for security, concurrency control, recovery and integrity functions</li></ul></div>
+  </div><div class="vs rv" style="--d:1">vs</div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M278.9 511.5l-61-17.7c-6.4-1.8-10-8.5-8.2-14.9L346.2 8.7c1.8-6.4 8.5-10 14.9-8.2l61 17.7c6.4 1.8 10 8.5 8.2 14.9L293.8 503.3c-1.9 6.4-8.5 10.1-14.9 8.2zm-114-112.2l43.5-46.4c4.6-4.9 4.3-12.7-.8-17.2L117 256l90.6-79.7c5.1-4.5 5.5-12.3.8-17.2l-43.5-46.4c-4.5-4.8-12.1-5.1-17-.5L3.8 247.2c-5.1 4.7-5.1 12.8 0 17.5l144.1 135.1c4.9 4.6 12.5 4.4 17-.5zm327.2.6l144.1-135.1c5.1-4.7 5.1-12.8 0-17.5L492.1 112.1c-4.8-4.5-12.4-4.3-17 .5L431.6 159c-4.6 4.9-4.3 12.7.8 17.2L523 256l-90.6 79.7c-5.1 4.5-5.5 12.3-.8 17.2l43.5 46.4c4.5 4.9 12.1 5.1 17 .6z"></path></svg></span><h4>Build a custom application instead when…</h4></div>
+    
+    <div class="card-b"><ul><li>The application is simple, well-defined and not expected to change</li><li>There are stringent real-time requirements DBMS overhead may not meet</li><li>It is an embedded system with limited storage where a general-purpose DBMS would not fit</li><li>There is no multiple-user access to data</li></ul></div>
+  </div></div></div></article></section>
+<section class="nsec" id="takeaways"><div class="nsec-h"><span class="mono">✓</span><div><h2>Key takeaways</h2></div></div>
+<ol class="takeaways"><li><span class="mono">01</span><p>The database approach stores data once, in a single repository, instead of in files owned by each application.</p></li><li><span class="mono">02</span><p>Four characteristics: self-describing, program–data insulation, multiple views, multiuser sharing.</p></li><li><span class="mono">03</span><p>Five advantages: controlled redundancy, restricted access, backup &amp; recovery, multiple interfaces, integrity constraints.</p></li><li><span class="mono">04</span><p>A DBMS has overhead; simple, real-time, embedded or single-user applications may not need one.</p></li></ol></section>
+<section class="nsec" id="review"><div class="nsec-h"><span class="mono">?</span><div><h2>Check yourself</h2><p>Try to answer, then tap a question to reveal the answer.</p></div></div>
+<details class="qa"><summary><span class="mono">Q1</span>Why does traditional file processing cause data redundancy?</summary><p>Each user defines and implements their own files as part of each application, so the same data (e.g. students’ data) is stored in many applications’ files.</p></details><details class="qa"><summary><span class="mono">Q2</span>What does “self-describing” mean for a database system?</summary><p>The system contains not only the database but also a complete description of its structure and constraints (meta-data) in the catalog.</p></details><details class="qa"><summary><span class="mono">Q3</span>What is a view?</summary><p>A perspective on the database for a user type: a subset of the database, or virtual data derived from the database files but not explicitly stored.</p></details><details class="qa"><summary><span class="mono">Q4</span>Which DBMS software keeps simultaneous updates correct?</summary><p>Concurrency control software.</p></details><details class="qa"><summary><span class="mono">Q5</span>Name the three problems caused by redundancy.</summary><p>Duplication of effort, wasted storage space, and inconsistent data.</p></details><details class="qa"><summary><span class="mono">Q6</span>Give two situations where a DBMS may not be desirable.</summary><p>Any two of: simple, well-defined applications not expected to change; stringent real-time requirements; embedded systems with limited storage; no multiple-user access.</p></details></section>
+<footer class="nfoot mono">-- based on the lecture slides for 62153 by Mohamed Al-Kumati · Elmasri &amp; Navathe, Fundamentals of Database Systems</footer>
+</main></div>
+<script>/* Theme toggle (remembered per browser), scroll reveal, and contents highlighting */
+(function () {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('db-notes-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('db-notes-theme', root.dataset.theme); } catch (e) {}
+  });
+  const blocks = document.querySelectorAll('.blk');
+  if ('IntersectionObserver' in window) {
+    root.classList.add('js');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    blocks.forEach((b) => io.observe(b));
+    const links = [...document.querySelectorAll('.toc > ul > li > a')];
+    const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+    const so = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { links.forEach((l) => l.classList.remove('on')); const a = map.get(e.target.id); if (a) a.classList.add('on'); }
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.nsec').forEach((s) => so.observe(s));
+  }
+  window.addEventListener('beforeprint', () => document.querySelectorAll('.qa').forEach((d) => (d.open = true)));
+})();
+</script>
+</body></html>
