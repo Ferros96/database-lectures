@@ -199,7 +199,8 @@ svg.diagram .arrowhead { fill: #334155; }
 figure.schema { align-items: stretch; gap: 12px; }
 .srel .cells { display: flex; flex-wrap: wrap; }
 .srel .cells span { border: 1px solid #94A3B8; padding: 4px 10px; font-size: 14px; margin: 0 -1px -1px 0; color: #0F172A; background: #fff; }
-.srel .cells span:first-child { background: #E8F7F4; }
+.srel .cells span.first { background: #E8F7F4; }
+.srel .cells span.pk { text-decoration: underline; text-underline-offset: 3px; background: #E8F7F4; font-weight: 600; }
 .srel .tname { color: #0F766E; }
 
 /* spectrum */
@@ -294,6 +295,31 @@ pre { font-family: var(--font-mono); white-space: pre-wrap; word-break: break-wo
 img { max-width: 100%; height: auto; }
 .tables { display: flex; flex-wrap: wrap; }
 .tables .tcol { flex: 1 1 auto; }
+/* key-highlight tables + foreign-key map */
+.hlt { display: flex; flex-direction: column; gap: 8px; }
+.legend { display: flex; gap: 8px; flex-wrap: wrap; }
+.lg { font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.lg-key, .lg-pk { background: var(--teal-t); color: var(--teal-d); border: 1px solid var(--teal-b); }
+.lg-ck { background: var(--amber-t); color: var(--amber-d); border: 1px solid var(--amber-b); }
+.lg-bad { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+.tbl th .badge { display: block; font-size: 10px; letter-spacing: .08em; color: #5EEAD4; }
+.tbl th.col-ck .badge { color: #FCD34D; } .tbl th.col-bad .badge { color: #FCA5A5; }
+.tbl th.col-pk .hn { text-decoration: underline; text-underline-offset: 3px; }
+.tbl td.col-key, .tbl td.col-pk, .tbl tbody tr:nth-child(even) td.col-key, .tbl tbody tr:nth-child(even) td.col-pk { background: var(--teal-t); font-weight: 600; color: var(--teal-d); }
+.tbl td.col-ck, .tbl tbody tr:nth-child(even) td.col-ck { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
+.tbl td.col-bad, .tbl tbody tr:nth-child(even) td.col-bad { background: #FEF2F2; color: #991B1B; }
+.tbl tr.hl td { box-shadow: inset 0 2px 0 #F59E0B, inset 0 -2px 0 #F59E0B; }
+.hlpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.hlp { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.hlp .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.hlp.hlp-ck .ic { background: #F59E0B; } .hlp.hlp-bad .ic { background: #DC2626; }
+.hlp b { display: block; } .hlp span { color: var(--muted); }
+.fks { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 8px 20px; }
+.fk { display: grid; grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr); align-items: center; }
+.fk-a, .fk-b { border-radius: 10px; padding: 8px 12px; font-size: 13.5px; overflow-wrap: anywhere; }
+.fk-a { background: var(--slate-t); border: 1px solid var(--line); }
+.fk-b { background: #0D9488; color: #fff; }
+.fk-a span, .fk-b span { opacity: .7; }
 </style></head>
 <body>
 <header class="hero"><div class="hero-in">
