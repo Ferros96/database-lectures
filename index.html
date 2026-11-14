@@ -318,6 +318,47 @@ img { max-width: 100%; height: auto; }
 .fk-a { background: var(--slate-t); border: 1px solid var(--line); }
 .fk-b { background: #0D9488; color: #fff; }
 .fk-a span, .fk-b span { opacity: .7; }
+/* explain blocks */
+.defband { background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.defband .lab { display: block; font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #5EEAD4; margin-bottom: 4px; }
+.defband p { font-size: 17px; } .defband code, .defband .m { font-family: var(--font-mono); color: #FCD34D; }
+.exgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 14px; }
+.exgrid.stack { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 800px) { .exgrid { grid-template-columns: minmax(0, 1fr); } }
+.plain, .example { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.plain { background: var(--amber-t); border-color: var(--amber-b); }
+.ph { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber-d); }
+.ph .ic { width: 26px; height: 26px; border-radius: 7px; background: #F59E0B; color: #fff; font-size: 13px; }
+.example .ph { color: var(--teal-d); } .example .ph .ic { background: #0D9488; }
+.ex-p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+.exmap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.exmap span { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 8px; padding: 2px 10px; font-size: 14px; } .exmap b { color: var(--teal-d); margin-right: 4px; }
+.exchips { display: grid; gap: 6px; }
+.exchip { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 10px; background: var(--slate-t); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.exchip b { color: var(--teal-d); font-size: 13px; overflow-wrap: anywhere; }
+.extwo { display: grid; grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr); align-items: center; }
+.exarrow { text-align: center; font-size: 11px; font-weight: 700; color: var(--teal-d); padding: 0 6px; }
+.exarrow i { display: block; height: 3px; background: var(--teal); margin-top: 6px; }
+@media (max-width: 700px) { .extwo { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+.excmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.excol { border-radius: 10px; padding: 10px 14px; } .excol.no { background: #FEF2F2; border: 1px solid #FECACA; color: #7F1D1D; } .excol.ok { background: var(--teal-t); border: 1px solid var(--teal-b); }
+.exh { font-weight: 700; font-size: 13px; margin-bottom: 6px; } .excol ul { list-style: none; display: grid; gap: 4px; }
+.tbl tr.bad td { background: #FEE2E2 !important; color: #991B1B; text-decoration: line-through; }
+/* quick checks */
+.check { display: flex; flex-direction: column; gap: 10px; }
+.cq { background: #0B1220; color: #fff; border-radius: 12px; padding: 12px 16px; }
+.cq .lab { font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #FCD34D; } .cq p { font-weight: 600; font-size: 18px; }
+.copts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.copt { display: flex; gap: 10px; align-items: center; border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.copt .mono { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--slate-t); display: grid; place-items: center; font-weight: 700; color: var(--teal-d); font-size: 13px; }
+.check.revealed .copt { opacity: .5; } .check.revealed .copt.right { opacity: 1; border-color: #0D9488; background: var(--teal-t); }
+.crow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.reveal-btn { background: #0D9488; color: #fff; border: 0; border-radius: 999px; padding: 8px 16px; font: 600 14px var(--font-body); cursor: pointer; } .reveal-btn .mono { display: none; }
+.cwhy { display: flex; gap: 10px; align-items: center; background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 8px 12px; }
+.cwhy[hidden] { display: none; } .cwhy .ic { color: #0D9488; }
+.snote { display: none; }
+.tbl th.col-fk .badge { color: #FCD34D; }
+.tbl td.col-fk, .tbl tbody tr:nth-child(even) td.col-fk { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
 
 .hub { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; list-style: none; display: grid; gap: 16px; }
 .hub-item { display: grid; grid-template-columns: 72px minmax(0,1fr); gap: 18px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px 24px; box-shadow: var(--shadow); }
@@ -330,10 +371,11 @@ img { max-width: 100%; height: auto; }
 @media (max-width: 560px) { .hub-item { grid-template-columns: minmax(0,1fr); } }
 </style></head><body>
 <header class="hero"><div class="hero-in"><div class="mono over">62153 · Mohamed Al-Kumati</div><div class="mono lecno">SELECT * FROM lectures ORDER BY id;</div>
-<h1>Introduction to Database Systems</h1><p>Redesigned slides and study notes for lectures 1 to 4. In the slides: arrow keys or swipe to move, O for an overview of every slide, E to edit text.</p></div></header>
+<h1>Introduction to Database Systems</h1><p>Redesigned slides, study notes and exercises for lectures 1 to 4. In the slides: arrow keys or swipe to move, O for an overview of every slide, N for speaker notes, P for the presenter view, E to edit text.</p></div></header>
 <ol class="hub"><li class="hub-item"><div class="mono hub-n">01</div><div class="hub-b"><h3>Introduction to Database Systems</h3><p>What a database is, what a DBMS does, and how a database application is designed</p>
     <div class="hub-a"><a class="btn" href="Lecture%201/Lec%201%20-%20Introduction%20to%20Databases%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%201/Lec%201%20-%20Introduction%20to%20Databases%20-%20Study%20Notes.html">Study notes</a></div></div></li><li class="hub-item"><div class="mono hub-n">02</div><div class="hub-b"><h3>The Database Approach</h3><p>How databases differ from file processing, their advantages, their users, and when not to use a DBMS</p>
     <div class="hub-a"><a class="btn" href="Lecture%202/Lec%202%20-%20The%20Database%20Approach%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%202/Lec%202%20-%20The%20Database%20Approach%20-%20Study%20Notes.html">Study notes</a></div></div></li><li class="hub-item"><div class="mono hub-n">03</div><div class="hub-b"><h3>Data Models, Schemas, and Instances</h3><p>Data abstraction, categories of data models, schemas vs states, the three-schema architecture, languages and DBMS classification</p>
     <div class="hub-a"><a class="btn" href="Lecture%203/Lec%203%20-%20Data%20Models,%20Schemas%20and%20Instances%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%203/Lec%203%20-%20Data%20Models,%20Schemas%20and%20Instances%20-%20Study%20Notes.html">Study notes</a></div></div></li><li class="hub-item"><div class="mono hub-n">04</div><div class="hub-b"><h3>The Relational Data Model Concepts <span class="mono kick">Part 1</span></h3><p>Relations, domains, attributes and tuples, and the characteristics of relations</p>
-    <div class="hub-a"><a class="btn" href="Lecture%204/Lec%204%20-%20Relational%20Data%20Model%20Concepts%20(Part%201)%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%204/Lec%204%20-%20Relational%20Data%20Model%20Concepts%20(Part%201)%20-%20Study%20Notes.html">Study notes</a></div></div></li><li class="hub-item"><div class="mono hub-n">04</div><div class="hub-b"><h3>Relational Model Constraints <span class="mono kick">Part 2</span></h3><p>Domain, key, NULL, entity integrity and referential integrity constraints, and the relational database schema</p>
-    <div class="hub-a"><a class="btn" href="Lecture%204%20Part%202/Lec%204%20-%20Relational%20Model%20Constraints%20(Part%202)%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%204%20Part%202/Lec%204%20-%20Relational%20Model%20Constraints%20(Part%202)%20-%20Study%20Notes.html">Study notes</a></div></div></li></ol></body></html>
+    <div class="hub-a"><a class="btn" href="Lecture%204/Lec%204%20-%20Relational%20Data%20Model%20Concepts%20(Part%201)%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%204/Lec%204%20-%20Relational%20Data%20Model%20Concepts%20(Part%201)%20-%20Study%20Notes.html">Study notes</a><a class="btn ghost2" href="Lecture%204/Lec%204%20-%20Relational%20Data%20Model%20Concepts%20(Part%201)%20-%20Exercises.html">✎ Exercises</a></div></div></li><li class="hub-item"><div class="mono hub-n">04</div><div class="hub-b"><h3>Relational Model Constraints <span class="mono kick">Part 2</span></h3><p>Domain, key, NULL, entity integrity and referential integrity constraints, and the relational database schema</p>
+    <div class="hub-a"><a class="btn" href="Lecture%204%20Part%202/Lec%204%20-%20Relational%20Model%20Constraints%20(Part%202)%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%204%20Part%202/Lec%204%20-%20Relational%20Model%20Constraints%20(Part%202)%20-%20Study%20Notes.html">Study notes</a><a class="btn ghost2" href="Lecture%204%20Part%202/Lec%204%20-%20Relational%20Model%20Constraints%20(Part%202)%20-%20Exercises.html">✎ Exercises</a></div></div></li><li class="hub-item"><div class="mono hub-n">04</div><div class="hub-b"><h3>The Relational Data Model <span class="mono kick">Parts 1 + 2</span></h3><p>Concepts and characteristics of relations, and the relational model constraints</p>
+    <div class="hub-a"><a class="btn" href="Lecture%204%20Combined/Lec%204%20-%20The%20Relational%20Data%20Model%20(Parts%201%20+%202)%20-%20Slides.html">▶ Slides</a><a class="btn ghost2" href="Lecture%204%20Combined/Lec%204%20-%20The%20Relational%20Data%20Model%20(Parts%201%20+%202)%20-%20Study%20Notes.html">Study notes</a></div></div></li></ol></body></html>

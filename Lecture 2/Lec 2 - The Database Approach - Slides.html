@@ -395,6 +395,91 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(245,158,11,.6);
 .media.dense figure.schema { gap: 10px; padding: 24px 32px; }
 .media.dense .srel .tname { font-size: 18px; margin-bottom: 4px; }
 .media.dense .srel .cells span { font-size: 21px; padding: 6px 14px; }
+
+/* ===========================================
+   EXPLAIN SLIDES: definition band + plain words + example
+   =========================================== */
+.defband { background: var(--ink); color: #fff; border-radius: 20px; padding: 30px 40px; display: flex; gap: 32px; align-items: center;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 36px 36px; }
+.defband .lab { flex: none; font-size: 17px; font-weight: 700; letter-spacing: .18em; color: var(--teal-l); writing-mode: vertical-rl; transform: rotate(180deg); }
+.defband p { font-size: 33px; line-height: 1.4; color: #F1F5F9; }
+.defband code, .defband .m { font-family: var(--font-mono); color: #FCD34D; }
+.exgrid { display: grid; grid-template-columns: 560px 1fr; gap: 32px; align-items: stretch; }
+.exgrid.stack { grid-template-columns: 1fr; }
+.plain, .example { background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 26px 30px; box-shadow: 0 10px 30px -20px rgba(15,23,42,.35); min-width: 0; }
+.plain { background: #FFFBEB; border-color: #FDE68A; }
+.ph { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; font-family: var(--font-mono); font-weight: 700; font-size: 18px; letter-spacing: .1em; text-transform: uppercase; color: var(--amber-d); }
+.ph .ic { width: 42px; height: 42px; border-radius: 11px; background: var(--amber); color: #fff; font-size: 20px; }
+.example .ph { color: var(--teal-d); } .example .ph .ic { background: var(--teal); }
+.plain p { font-size: 29px; line-height: 1.5; color: #3F3A2A; }
+.ex-p { font-size: 24px; line-height: 1.5; color: var(--muted); margin-top: 14px; }
+.example .codeblk pre { font-size: 26px; }
+.exmap { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.exmap span { background: var(--teal-t); border: 1.5px solid #A7E8DD; border-radius: 10px; padding: 6px 14px; font-size: 21px; color: #334155; }
+.exmap b { color: var(--teal-d); margin-right: 6px; }
+.exchips { display: grid; gap: 12px; }
+.exchip { display: grid; grid-template-columns: 300px 1fr; gap: 18px; align-items: center; background: var(--slate-t); border-radius: 12px; padding: 14px 20px; }
+.exchip b { color: var(--teal-d); font-size: 21px; } .exchip span { font-size: 23px; color: #334155; }
+.example .tbl td { font-size: 22px; padding: 9px 16px; } .example .tbl th { font-size: 17px; padding: 10px 16px; }
+.extwo { display: grid; grid-template-columns: 1fr 150px 1fr; align-items: center; gap: 0; }
+.exarrow { text-align: center; font-size: 16px; font-weight: 700; color: var(--teal-d); padding: 0 12px; }
+.exarrow i { display: block; height: 4px; background: var(--teal); margin-top: 8px; position: relative; border-radius: 4px; }
+.exarrow i::after { content: ""; position: absolute; right: -4px; top: -9px; border: 11px solid transparent; border-left-color: var(--teal); border-right: 0; }
+.excmp { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.excol { border-radius: 14px; padding: 18px 22px; }
+.excol.no { background: #FEF2F2; border: 1.5px solid #FECACA; } .excol.ok { background: var(--teal-t); border: 1.5px solid #A7E8DD; }
+.exh { font-weight: 700; font-size: 19px; margin-bottom: 10px; } .excol.no .exh { color: #991B1B; } .excol.ok .exh { color: var(--teal-d); }
+.excol ul { list-style: none; display: grid; gap: 10px; } .excol li { font-size: 23px; line-height: 1.4; color: #334155; }
+.tbl tr.bad td { background: #FEE2E2 !important; color: #991B1B; text-decoration: line-through; text-decoration-color: rgba(153,27,27,.5); }
+
+/* ===========================================
+   QUICK CHECK SLIDES
+   =========================================== */
+.check { display: flex; flex-direction: column; gap: 26px; }
+.cq { background: var(--ink); color: #fff; border-radius: 20px; padding: 30px 40px; }
+.cq .lab { font-size: 17px; font-weight: 700; letter-spacing: .18em; color: #FCD34D; }
+.cq p { font-size: 36px; line-height: 1.35; margin-top: 10px; font-family: var(--font-display); font-weight: 700; }
+.copts { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.copt { display: flex; gap: 20px; align-items: center; background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 22px 26px; transition: border-color .3s, background .3s, opacity .3s; }
+.copt .mono { width: 52px; height: 52px; flex: none; border-radius: 50%; background: var(--slate-t); display: grid; place-items: center; font-weight: 700; font-size: 22px; color: var(--teal-d); }
+.copt p { font-size: 27px; line-height: 1.35; }
+.check.revealed .copt { opacity: .45; }
+.check.revealed .copt.right { opacity: 1; border-color: var(--teal); background: var(--teal-t); }
+.check.revealed .copt.right .mono { background: var(--teal); color: #fff; }
+.crow { display: flex; align-items: center; gap: 24px; min-height: 80px; }
+.reveal-btn { background: var(--teal); color: #fff; border: 0; border-radius: 999px; padding: 18px 32px; font: 600 24px var(--font-body); cursor: pointer; }
+.reveal-btn .mono { opacity: .7; font-size: 18px; }
+.cwhy { display: flex; gap: 16px; align-items: center; background: var(--teal-t); border: 1.5px solid #A7E8DD; border-radius: 16px; padding: 18px 26px; animation: rise .5s var(--ease); }
+.cwhy[hidden] { display: none; }
+.cwhy .ic { color: var(--teal); font-size: 32px; } .cwhy p { font-size: 26px; line-height: 1.4; color: #134E4A; }
+
+/* end links + speaker notes panel */
+.endlinks { display: flex; gap: 40px; margin-top: 30px; } .endlinks .notes-link { margin-top: 0; }
+.snote { display: none !important; }
+.deck-controls .txtbtn { width: auto; border-radius: 999px; padding: 0 12px; font: 600 13px var(--font-body); color: #A7F3D0; }
+.notes-panel { position: fixed; left: 0; right: 0; bottom: 0; height: 30vh; z-index: 1500; background: #0F1626; border-top: 2px solid #0D9488; color: #E2E8F0; display: none; flex-direction: column; font-family: var(--font-body); }
+body.notes-open .notes-panel { display: flex; }
+body.notes-open .deck-viewport { bottom: 30vh; }
+body.notes-open .deck-controls { bottom: calc(30vh + 12px); }
+.np-h { display: flex; gap: 16px; align-items: center; padding: 10px 18px; font-size: 12px; color: #5EEAD4; border-bottom: 1px solid #22304A; }
+.np-h #npCount { color: #64748B; } .np-h button { margin-left: auto; background: none; border: 0; color: #94A3B8; font-size: 22px; cursor: pointer; }
+.np-b { padding: 12px 22px 20px; overflow: auto; font-size: clamp(14px, 1.35vw, 18px); line-height: 1.5; }
+.sn-time{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.8em;color:#FCD34D;border:1px solid #6B4E16;border-radius:99px;padding:1px 10px;margin-bottom:10px}.sn-row{display:grid;grid-template-columns:11em 1fr;gap:14px;padding:7px 0;border-top:1px solid #1E293B}.sn-row:first-of-type{border-top:0}.sn-row b{font-family:'JetBrains Mono',monospace;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:#5EEAD4;padding-top:.3em}.sn-row p{margin:0}.sn-say p{color:#fff;font-weight:500}.sn-watch b{color:#FCA5A5}.sn-ask b{color:#FCD34D}.sn-next b{color:#94A3B8}.sn-next p{color:#94A3B8}
+@media (max-width:700px){.sn-row{grid-template-columns:1fr;gap:2px}}
+/* compact stacked explain (definition + plain words + a wide table) */
+.sbody:has(.exgrid.stack) .defband { padding: 20px 36px; }
+.sbody:has(.exgrid.stack) .defband p { font-size: 28px; }
+.exgrid.stack { gap: 18px; }
+.exgrid.stack .plain { display: flex; gap: 22px; align-items: center; padding: 16px 26px; }
+.exgrid.stack .plain .ph { margin: 0; flex: none; }
+.exgrid.stack .plain p { font-size: 25px; line-height: 1.4; }
+.exgrid.stack .example { padding: 18px 26px; }
+.exgrid.stack .example .ph { margin-bottom: 10px; }
+.exgrid.stack .example .tname { font-size: 19px; }
+.exgrid.stack .example .tbl td { font-size: 20px; padding: 6px 14px; } .exgrid.stack .example .tbl th { font-size: 15px; padding: 8px 14px; }
+.exgrid.stack .ex-p { font-size: 21px; margin-top: 10px; }
+.tbl th.col-fk .badge { color: #FCD34D; }
+.tbl td.col-fk, .tbl tbody tr:nth-child(even) td.col-fk { background: #FFF8E6; font-weight: 600; color: var(--amber-d); }
 </style></head>
 <body>
 <div class="deck-viewport"><main class="deck-stage" id="deckStage" aria-live="polite">
@@ -575,10 +660,11 @@ body.editing [contenteditable="true"] { outline: 2px dashed rgba(245,158,11,.6);
 <section class="slide dark summary-slide" data-title="Key takeaways">
     <div class="sumwrap"><div class="rv mono cmt" style="--d:0">-- end of lecture 2</div><h2 class="rv" style="--d:1">Key takeaways</h2>
     <ol class="takeaways"><li class="rv" style="--d:2"><span class="mono">01</span><p>The database approach stores data once, in a single repository, instead of in files owned by each application.</p></li><li class="rv" style="--d:3"><span class="mono">02</span><p>Four characteristics: self-describing, program–data insulation, multiple views, multiuser sharing.</p></li><li class="rv" style="--d:4"><span class="mono">03</span><p>Five advantages: controlled redundancy, restricted access, backup &amp; recovery, multiple interfaces, integrity constraints.</p></li><li class="rv" style="--d:5"><span class="mono">04</span><p>A DBMS has overhead; simple, real-time, embedded or single-user applications may not need one.</p></li></ol>
-    <a class="notes-link rv" style="--d:6" href="Lec 2 - The Database Approach - Study Notes.html">Open the study notes →</a></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 2</span><span>21 / 21</span></footer></section>
+    <div class="endlinks rv" style="--d:6"><a class="notes-link" href="Lec 2 - The Database Approach - Study Notes.html">Open the study notes →</a></div></div><footer class="sfoot"><span>62153 · Intro to Database Systems · Lecture 2</span><span>21 / 21</span></footer></section>
 </main></div>
 <div class="progress" aria-hidden="true"><i id="prog"></i></div>
 <nav class="deck-controls" aria-label="Slide navigation"><button id="prev" aria-label="Previous slide">‹</button><span id="count" class="mono"></span><button id="next" aria-label="Next slide">›</button><button id="ovBtn" aria-label="Slide overview (O)" title="Overview (O)">▦</button></nav>
+<aside class="notes-panel" id="notesPanel" aria-label="Speaker notes"><div class="np-h mono"><span>SPEAKER NOTES</span><span id="npCount"></span><button id="npClose" aria-label="Close notes">×</button></div><div class="np-b" id="npBody"></div></aside>
 <div class="overview" id="overview" role="dialog" aria-label="All slides"></div>
 <div class="edit-hotzone"></div><button class="edit-toggle" id="editToggle" title="Edit mode (E)">✎ Edit</button>
 <script>/* ===========================================
@@ -601,11 +687,14 @@ class SlidePresentation {
   }
   setupStageScale() {
     const scale = () => {
-      const f = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
-      const x = (window.innerWidth - 1920 * f) / 2, y = (window.innerHeight - 1080 * f) / 2;
+      const np = document.getElementById('notesPanel');
+      const H = window.innerHeight - (document.body.classList.contains('notes-open') && np ? np.offsetHeight : 0);
+      const f = Math.min(window.innerWidth / 1920, H / 1080);
+      const x = (window.innerWidth - 1920 * f) / 2, y = (H - 1080 * f) / 2;
       this.stage.style.transform = `translate(${x}px, ${y}px) scale(${f})`;
     };
     scale();
+    this.rescale = scale;
     window.addEventListener('resize', scale);
   }
   setupNav() {
@@ -617,10 +706,17 @@ class SlidePresentation {
       else if (k === 'Home') this.show(0);
       else if (k === 'End') this.show(this.slides.length - 1);
       else if (k === 'o' || k === 'O' || (k === 'Escape' && this.ov.classList.contains('open'))) this.toggleOverview();
+      else if (k === 'n' || k === 'N') this.toggleNotes();
+      else if (k === 'p' || k === 'P') this.openPresenter();
+      else if (k === 'r' || k === 'R') this.reveal();
     });
     document.getElementById('next').onclick = () => this.show(this.current + 1);
     document.getElementById('prev').onclick = () => this.show(this.current - 1);
     document.getElementById('ovBtn').onclick = () => this.toggleOverview();
+    const nb = document.getElementById('notesBtn'); if (nb) nb.onclick = () => this.toggleNotes();
+    const pb = document.getElementById('presBtn'); if (pb) pb.onclick = () => this.openPresenter();
+    const nc = document.getElementById('npClose'); if (nc) nc.onclick = () => this.toggleNotes(false);
+    document.addEventListener('click', (e) => { const b = e.target.closest('.reveal-btn'); if (b) this.reveal(b.closest('.check')); });
     let tx = null, ty = null;
     document.addEventListener('touchstart', (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
     document.addEventListener('touchend', (e) => {
@@ -637,7 +733,7 @@ class SlidePresentation {
     }, { passive: true });
     // Click anywhere on the stage (not on a link) to advance
     this.stage.addEventListener('click', (e) => {
-      if (document.body.classList.contains('editing') || e.target.closest('a')) return;
+      if (document.body.classList.contains('editing') || e.target.closest('a, button, .copt')) return;
       this.show(this.current + 1);
     });
   }
@@ -670,6 +766,56 @@ class SlidePresentation {
     this.prog.style.width = `${((i + 1) / this.slides.length) * 100}%`;
     history.replaceState(null, '', `#${i + 1}`);
     this.slides[i].querySelectorAll('.count[data-to]').forEach((el) => this.countUp(el));
+    this.updateNotes();
+  }
+  noteText(i) { const a = this.slides[i] && this.slides[i].querySelector('.snote'); return a ? a.innerHTML : ''; }
+  toggleNotes(force) {
+    if (!document.getElementById('notesPanel')) return;
+    const open = force ?? !document.body.classList.contains('notes-open');
+    document.body.classList.toggle('notes-open', open);
+    this.rescale(); this.updateNotes();
+  }
+  updateNotes() {
+    const b = document.getElementById('npBody');
+    if (b) { b.innerHTML = this.noteText(this.current) || '<p>No notes for this slide.</p>'; document.getElementById('npCount').textContent = `${this.current + 1} / ${this.slides.length}`; }
+    const w = this.presenter;
+    if (w && !w.closed) {
+      const d = w.document, nx = this.slides[this.current + 1];
+      d.getElementById('pCur').textContent = `${this.current + 1} / ${this.slides.length} · ${this.slides[this.current].dataset.title || ''}`;
+      d.getElementById('pNotes').innerHTML = this.noteText(this.current) || '<p>No notes for this slide.</p>';
+      d.getElementById('pNext').textContent = nx ? `Next: ${nx.dataset.title || ''}` : 'Last slide';
+    }
+  }
+  openPresenter() {
+    if (!document.querySelector('.snote')) return;
+    const w = window.open('', 'presenter-' + document.title, 'width=900,height=640');
+    if (!w) { this.toggleNotes(true); return; }
+    this.presenter = w;
+    w.document.open();
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>Presenter · ${document.title}</title><style>
+      body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:#0B1220;color:#E2E8F0;display:flex;flex-direction:column;height:100vh}
+      header{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-bottom:1px solid #2A3650;font-family:'JetBrains Mono',monospace;font-size:14px;color:#5EEAD4}
+      #pTimer{font-size:22px;color:#FCD34D} main{flex:1;overflow:auto;padding:24px 28px} #pNotes{font-size:22px;line-height:1.5}.sn-time{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.8em;color:#FCD34D;border:1px solid #6B4E16;border-radius:99px;padding:1px 10px;margin-bottom:10px}.sn-row{display:grid;grid-template-columns:11em 1fr;gap:14px;padding:7px 0;border-top:1px solid #1E293B}.sn-row:first-of-type{border-top:0}.sn-row b{font-family:'JetBrains Mono',monospace;font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:#5EEAD4;padding-top:.3em}.sn-row p{margin:0}.sn-say p{color:#fff;font-weight:500}.sn-watch b{color:#FCA5A5}.sn-ask b{color:#FCD34D}.sn-next b{color:#94A3B8}.sn-next p{color:#94A3B8} #pNotes p{margin:0 0 .4em}
+      footer{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;border-top:1px solid #2A3650;color:#94A3B8}
+      button{background:#0D9488;color:#fff;border:0;border-radius:999px;padding:10px 18px;font:600 15px system-ui;cursor:pointer;margin-left:8px}</style></head>
+      <body><header><span id="pCur"></span><span id="pTimer">00:00</span></header><main><div id="pNotes"></div></main>
+      <footer><span id="pNext"></span><span><button id="pPrev">‹ Prev</button><button id="pNextBtn">Next ›</button></span></footer></body></html>`);
+    w.document.close();
+    const t0 = Date.now();
+    const tick = () => { if (w.closed) return; const s = Math.floor((Date.now() - t0) / 1000); w.document.getElementById('pTimer').textContent = String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); setTimeout(tick, 1000); };
+    tick();
+    w.document.getElementById('pPrev').onclick = () => this.show(this.current - 1);
+    w.document.getElementById('pNextBtn').onclick = () => this.show(this.current + 1);
+    w.document.addEventListener('keydown', (e) => { if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); this.show(this.current + 1); } if (['ArrowLeft', 'PageUp'].includes(e.key)) this.show(this.current - 1); });
+    this.updateNotes();
+  }
+  reveal(box) {
+    box = box || this.slides[this.current].querySelector('.check');
+    if (!box) return;
+    box.classList.add('revealed');
+    box.querySelectorAll('.copt').forEach((o) => o.classList.toggle('right', o.dataset.i === box.dataset.answer));
+    const why = box.querySelector('.cwhy'); if (why) why.hidden = false;
+    const btn = box.querySelector('.reveal-btn'); if (btn) btn.hidden = true;
   }
   countUp(el) {
     const to = parseInt(el.dataset.to, 10); if (!Number.isFinite(to)) return;
@@ -738,4 +884,5 @@ document.addEventListener('keydown', (e) => {
 });
 document.addEventListener('input', () => editor.isActive && editor.save());
 </script>
+
 </body></html>

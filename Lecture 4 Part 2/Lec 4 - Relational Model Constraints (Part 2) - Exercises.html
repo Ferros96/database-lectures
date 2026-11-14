@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 4 · Part 2 Exercises</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>/* ===========================================
+   THEME TOKENS (light + dark)
+   =========================================== */
+:root {
+  --bg: #F5F7FA; --card: #FFFFFF; --line: #D9E1EA; --line2: #E8EDF3; --zebra: #F8FAFC;
+  --text: #0F172A; --muted: #475569; --sub: #64748B; --strong: #334155;
+  --teal: #0D9488; --teal-d: #0F766E; --teal-l: #5EEAD4; --teal-t: #E8F7F4; --teal-b: #A7E8DD;
+  --slate-t: #EEF2F6; --slate-ic: #334155; --amber: #F59E0B; --amber-t: #FEF3C7; --amber-b: #FCD34D; --amber-d: #92400E;
+  --ink: #0B1220; --ink2: #131C2E; --edge: #2A3650; --dot: #D5DDE7;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --shadow: 0 10px 30px -22px rgba(15, 23, 42, .45);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+    --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+    --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+    --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+    --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+  --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+  --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+  --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+  --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { font-family: var(--font-body); color: var(--text); background: var(--bg); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px); background-size: 24px 24px; }
+.mono { font-family: var(--font-mono); }
+b { font-weight: 600; }
+.ic { display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 1em; height: 1em; }
+
+/* ===========================================
+   HERO
+   =========================================== */
+.hero { background-color: #0B1220; color: #fff;
+  background-image: radial-gradient(ellipse 60% 80% at 90% 0%, rgba(13,148,136,.4), transparent 60%), linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: auto, 36px 36px, 36px 36px; }
+.hero-in { max-width: 1240px; margin: 0 auto; padding: 56px 24px 52px; }
+.hero .over { font-size: 13px; color: #94A3B8; letter-spacing: .08em; text-transform: uppercase; }
+.hero .lecno { font-size: 15px; font-weight: 700; color: #5EEAD4; margin-top: 40px; letter-spacing: .06em; }
+.hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 6vw, 64px); line-height: 1.04; letter-spacing: -0.02em; margin-top: 10px; max-width: 900px; }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); color: #CBD5E1; margin-top: 16px; max-width: 760px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px var(--font-body); color: #0B1220; background: #5EEAD4; border: 0; border-radius: 999px; padding: 11px 20px; text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: #E2E8F0; border: 1.5px solid #334155; }
+.btn:hover { filter: brightness(1.08); }
+
+/* ===========================================
+   LAYOUT: sticky "schema browser" contents + notes column
+   =========================================== */
+.layout { max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; }
+.toc { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px; font-size: 14px; box-shadow: var(--shadow); }
+.toc-h { color: var(--teal); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.toc ul { list-style: none; }
+.toc > ul > li { margin-top: 6px; }
+.toc a { color: var(--strong); text-decoration: none; display: block; padding: 4px 8px; border-radius: 8px; line-height: 1.35; }
+.toc a:hover, .toc a.on { background: var(--teal-t); color: var(--teal-d); }
+.toc > ul > li > a { font-weight: 600; }
+.toc > ul > li > a .mono { color: var(--teal); font-size: 12px; margin-right: 8px; }
+.toc ul ul { margin-left: 14px; border-left: 1px solid var(--line); padding-left: 4px; }
+.toc ul ul a { color: var(--sub); font-size: 13px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 16px 64px; }
+  .toc { position: static; max-height: none; }
+  .toc ul ul { display: none; }
+}
+
+/* ===========================================
+   SECTIONS + BLOCKS
+   =========================================== */
+.nsec { margin-bottom: 48px; }
+.nsec-h { display: flex; gap: 18px; align-items: center; padding: 6px 0 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.nsec-h > .mono { font-size: 34px; font-weight: 700; color: var(--teal); line-height: 1; min-width: 56px; }
+.nsec-h h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.1; letter-spacing: -0.01em; }
+.nsec-h p { color: var(--sub); }
+.blk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px 28px; margin-bottom: 22px; box-shadow: var(--shadow); }
+.blk > h3 { font-family: var(--font-display); font-weight: 700; font-size: 23px; line-height: 1.2; margin-bottom: 18px; }
+.nbody { display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 600px) { .blk { padding: 20px 16px; border-radius: 14px; } }
+.intro { color: var(--muted); }
+.caption, figcaption { font-size: 14px; font-style: italic; color: var(--sub); }
+
+.callout { display: flex; gap: 12px; align-items: center; background: var(--amber-t); border: 1px solid var(--amber-b); color: var(--amber-d); font-weight: 600; border-radius: 12px; padding: 12px 16px; }
+.callout .ic { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 14px; }
+
+/* cards */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.card-h { display: flex; align-items: center; gap: 12px; background: var(--teal-t); border-bottom: 1px solid var(--line); padding: 12px 16px; }
+.card-h .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.card-h h4 { font-size: 17px; font-weight: 600; line-height: 1.25; }
+.card-h .num { margin-left: auto; font-family: var(--font-mono); font-weight: 700; color: var(--teal); font-size: 13px; }
+.card-b { padding: 14px 16px 16px; color: var(--muted); }
+.card-b ul { list-style: none; display: grid; gap: 8px; }
+.card-b li { padding-left: 20px; position: relative; }
+.card-b li::before { content: "▸"; position: absolute; left: 0; color: var(--teal); font-family: var(--font-mono); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.cards.tiles .card-h { border-bottom: 0; height: 100%; }
+.compare, .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare .vs { display: none; }
+.compare > .card:first-child .card-h, .split > .card:first-child .card-h { background: var(--slate-t); }
+.compare > .card:first-child .card-h .ic, .split > .card:first-child .card-h .ic { background: var(--slate-ic); }
+@media (max-width: 700px) { .compare, .split { grid-template-columns: 1fr; } }
+
+/* definition */
+.def { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; }
+.defcard { background: #0B1220; color: #fff; border-radius: 14px; padding: 22px 24px;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; }
+.defcard .lab { font-size: 12px; letter-spacing: .2em; color: #5EEAD4; font-weight: 700; }
+.defcard .term { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 8px 0 10px; line-height: 1.1; }
+.defcard .term.mono { font-family: var(--font-mono); color: #FCD34D; font-size: 22px; }
+.defcard p { color: #CBD5E1; font-size: 17px; }
+.defside { display: flex; flex-direction: column; gap: 10px; }
+.defside h4 { font-weight: 600; }
+.dpt { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.dpt .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.dpt span { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+@media (max-width: 700px) { .def { grid-template-columns: 1fr; } }
+
+/* rows */
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.row { display: grid; grid-template-columns: 38px 220px 1fr; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.row .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--teal); color: #fff; font-size: 18px; }
+.row h4 { font-weight: 600; line-height: 1.3; }
+.row p { color: var(--muted); }
+@media (max-width: 700px) { .row { grid-template-columns: 38px 1fr; } .row p { grid-column: 1 / -1; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: s; }
+.step { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.step .sn { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; }
+.step:last-child .sn { background: #1E293B; }
+.step h4 { font-weight: 600; margin: 10px 0 4px; line-height: 1.3; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* tables */
+.tbl { overflow-x: auto; max-width: 100%; }
+.tname { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); margin-bottom: 6px; }
+.tbl table { border-collapse: separate; border-spacing: 0; width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.tbl th { background: #131C2E; color: #E2E8F0; font-family: var(--font-mono); font-weight: 600; font-size: 12.5px; text-align: left; padding: 8px 12px; white-space: nowrap; }
+.tbl td { padding: 7px 12px; border-top: 1px solid var(--line2); white-space: nowrap; }
+.tbl tbody tr:nth-child(even) td { background: var(--zebra); }
+.tbl.wide td { white-space: normal; }
+.tbl td.key { font-weight: 600; color: var(--teal-d); }
+td.null, span.null { color: #94A3B8; font-style: italic; font-family: var(--font-mono); font-size: .9em; }
+.tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+.tables .tcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.agenda-t td.id { color: var(--teal); font-weight: 700; width: 56px; }
+
+/* media */
+.media { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+@media (max-width: 800px) { .media { grid-template-columns: 1fr; } }
+figure.fig { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+figure.fig figcaption { align-self: flex-end; color: #64748B; }
+figure.fig img { border-radius: 6px; }
+figure.mini { margin-top: 12px; background: #fff; border-radius: 10px; padding: 8px; text-align: center; }
+figure.mini img { max-height: 260px; }
+svg.diagram { width: 100%; height: auto; }
+.points { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.points li { display: flex; gap: 12px; align-items: flex-start; color: var(--strong); }
+.points .pn { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--teal-t); border: 1px solid var(--teal-b); color: var(--teal-d); display: grid; place-items: center; font-family: var(--font-mono); font-size: 13px; font-weight: 700; margin-top: 1px; }
+.points.plain .ic { color: var(--teal); margin-top: 5px; }
+.points b { display: block; color: var(--text); }
+.points span { display: block; color: var(--muted); }
+
+/* SVG diagram (figure stays light in both themes) */
+svg.diagram text { font-family: var(--font-body); }
+svg.diagram rect.group { fill: #F1F5F9; stroke: #CBD5E1; stroke-width: 1.5; }
+svg.diagram rect.group2 { fill: #E8F7F4; stroke: #99F6E4; stroke-width: 1.5; }
+svg.diagram .glabel { font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .group-t { fill: #64748B; } svg.diagram .group2-t { fill: #0F766E; }
+svg.diagram rect.box { fill: #fff; stroke: #94A3B8; stroke-width: 1.5; }
+svg.diagram rect.accent { fill: #0D9488; } svg.diagram rect.accent2 { fill: #131C2E; }
+svg.diagram .t-box { fill: #0F172A; } svg.diagram .t-accent, svg.diagram .t-accent2 { fill: #fff; font-weight: 600; }
+svg.diagram .cyl { fill: #CCFBF1; stroke: #0D9488; stroke-width: 1.5; } svg.diagram .cyl-top { fill: #E6FFFA; stroke: #0D9488; stroke-width: 1.5; }
+svg.diagram .t-cyl { fill: #0F766E; font-weight: 600; }
+svg.diagram .t-plain { fill: #64748B; font-weight: 600; }
+svg.diagram .t-label { fill: #0F766E; font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .t-note { fill: #64748B; font-style: italic; }
+svg.diagram .de { stroke: #334155; stroke-width: 2.2; }
+svg.diagram .arrowhead { fill: #334155; }
+
+/* schema */
+figure.schema { align-items: stretch; gap: 12px; }
+.srel .cells { display: flex; flex-wrap: wrap; }
+.srel .cells span { border: 1px solid #94A3B8; padding: 4px 10px; font-size: 14px; margin: 0 -1px -1px 0; color: #0F172A; background: #fff; }
+.srel .cells span.first { background: #E8F7F4; }
+.srel .cells span.pk { text-decoration: underline; text-underline-offset: 3px; background: #E8F7F4; font-weight: 600; }
+.srel .tname { color: #0F766E; }
+
+/* spectrum */
+.axis { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+.axis i { flex: 1; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #0D9488, #131C2E); }
+.bands { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.band { border-radius: 14px; padding: 18px 20px; color: #fff; }
+.band.b0 { background: #0D9488; } .band.b1 { background: #115E59; } .band.b2 { background: #131C2E; border: 1px solid #26334A; }
+.band .tag { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #CCFBF1; text-transform: uppercase; }
+.band h4 { font-family: var(--font-display); font-size: 20px; margin: 6px 0; }
+.band p { color: #E2E8F0; font-size: 15.5px; }
+
+/* relation anatomy */
+.relation { display: flex; flex-direction: column; gap: 10px; }
+.relname { color: var(--sub); } .relname b { color: var(--teal-d); }
+.relgrid { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: end; }
+.tuplab { height: 190px; display: flex; align-items: center; justify-content: flex-end; border-right: 4px solid var(--amber); padding-right: 10px; }
+.tuplab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: #B45309; text-align: right; }
+.relwrap { min-width: 0; }
+.attlab { border-top: 4px solid var(--teal); text-align: right; padding-top: 2px; margin-bottom: 6px; }
+.attlab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); }
+@media (max-width: 600px) { .relgrid { grid-template-columns: 1fr; } .tuplab { display: none; } }
+
+/* terms */
+.terms { display: flex; flex-direction: column; gap: 10px; }
+.terms .th, .term-row { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; }
+.terms .th { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+.terms .th span:last-child { color: var(--teal-d); }
+.ta { background: var(--slate-t); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.tb { background: #0D9488; color: #fff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.arrow { padding: 0 8px; } .arrow i { display: block; height: 3px; background: var(--teal); border-radius: 3px; position: relative; }
+.arrow i::after { content: ""; position: absolute; right: -3px; top: -6px; border: 7.5px solid transparent; border-left-color: var(--teal); border-right: 0; }
+
+/* stat */
+.stat { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 18px; }
+.bignum { background: #0B1220; color: #fff; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.bignum .mono { color: #5EEAD4; align-self: flex-start; }
+.bignum .count { font-family: var(--font-display); font-weight: 800; font-size: 110px; line-height: 1; color: #5EEAD4; }
+.bignum p { color: #CBD5E1; font-size: 15px; }
+.statside { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.codeblk .lab { font-size: 12px; font-weight: 700; color: var(--teal-d); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+pre { font-family: var(--font-mono); white-space: pre-wrap; word-break: break-word; }
+.codeblk pre { background: #131C2E; color: #94A3B8; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+.codeblk .v { color: #FCD34D; font-weight: 700; } .codeblk .a { color: #E2E8F0; } .codeblk .k { color: #5EEAD4; }
+@media (max-width: 600px) { .stat { grid-template-columns: 1fr; } }
+
+/* ordering */
+.opoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.opt { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 10px 14px; }
+
+/* agenda */
+.agenda { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.sql { background: #0B1220; border-radius: 12px; overflow: hidden; }
+.sql-bar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; background: #111A2C; }
+.sql-bar i { width: 9px; height: 9px; border-radius: 50%; background: #F87171; } .sql-bar i:nth-child(2) { background: #FBBF24; } .sql-bar i:nth-child(3) { background: #34D399; }
+.sql-bar span { margin-left: 6px; font-family: var(--font-mono); color: #64748B; font-size: 12px; }
+.sql pre { padding: 14px 16px; font-size: 14px; color: #E2E8F0; }
+.sql .k { color: #5EEAD4; font-weight: 700; } .sql .v { color: #FCD34D; } .sql .c { color: #64748B; }
+.caret { display: inline-block; width: 8px; height: 16px; background: #5EEAD4; vertical-align: middle; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sql-res { font-family: var(--font-mono); font-size: 12px; color: #34D399; padding: 8px 16px 12px; border-top: 1px solid #2A3650; }
+@media (max-width: 800px) { .agenda { grid-template-columns: 1fr; } }
+
+/* takeaways + review */
+.takeaways { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.takeaways li { display: flex; gap: 16px; align-items: center; background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.takeaways .mono { color: #5EEAD4; font-weight: 700; }
+.qa { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.qa summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; gap: 12px; align-items: baseline; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary .mono { color: var(--teal); font-size: 13px; }
+.qa summary::after { content: "+"; margin-left: auto; font-family: var(--font-mono); color: var(--teal); font-size: 20px; line-height: 1; }
+.qa[open] summary::after { content: "−"; }
+.qa p { padding: 0 18px 16px 52px; color: var(--muted); }
+.nfoot { color: var(--sub); font-size: 12px; margin-top: 40px; }
+
+/* gentle reveal on scroll */
+.blk { transition: opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1); }
+.js .blk:not(.in) { opacity: 0; transform: translateY(14px); }
+@media (prefers-reduced-motion: reduce) { .js .blk:not(.in) { opacity: 1; transform: none; } * { scroll-behavior: auto !important; } }
+
+@media print {
+  body { background: #fff; } .toc, .hero-actions { display: none; } .layout { display: block; }
+  .blk { break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+  .qa { break-inside: avoid; } .qa p { display: block; }
+}
+/* keep grids from growing past narrow screens */
+.agenda > *, .media > *, .def > *, .compare > *, .split > *, .tables > * { min-width: 0; }
+.agenda-t td { white-space: normal; }
+@media (max-width: 800px) { .agenda, .media { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .compare, .split, .def { grid-template-columns: minmax(0, 1fr); } }
+img { max-width: 100%; height: auto; }
+.tables { display: flex; flex-wrap: wrap; }
+.tables .tcol { flex: 1 1 auto; }
+/* key-highlight tables + foreign-key map */
+.hlt { display: flex; flex-direction: column; gap: 8px; }
+.legend { display: flex; gap: 8px; flex-wrap: wrap; }
+.lg { font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.lg-key, .lg-pk { background: var(--teal-t); color: var(--teal-d); border: 1px solid var(--teal-b); }
+.lg-ck { background: var(--amber-t); color: var(--amber-d); border: 1px solid var(--amber-b); }
+.lg-bad { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+.tbl th .badge { display: block; font-size: 10px; letter-spacing: .08em; color: #5EEAD4; }
+.tbl th.col-ck .badge { color: #FCD34D; } .tbl th.col-bad .badge { color: #FCA5A5; }
+.tbl th.col-pk .hn { text-decoration: underline; text-underline-offset: 3px; }
+.tbl td.col-key, .tbl td.col-pk, .tbl tbody tr:nth-child(even) td.col-key, .tbl tbody tr:nth-child(even) td.col-pk { background: var(--teal-t); font-weight: 600; color: var(--teal-d); }
+.tbl td.col-ck, .tbl tbody tr:nth-child(even) td.col-ck { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
+.tbl td.col-bad, .tbl tbody tr:nth-child(even) td.col-bad { background: #FEF2F2; color: #991B1B; }
+.tbl tr.hl td { box-shadow: inset 0 2px 0 #F59E0B, inset 0 -2px 0 #F59E0B; }
+.hlpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.hlp { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.hlp .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.hlp.hlp-ck .ic { background: #F59E0B; } .hlp.hlp-bad .ic { background: #DC2626; }
+.hlp b { display: block; } .hlp span { color: var(--muted); }
+.fks { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 8px 20px; }
+.fk { display: grid; grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr); align-items: center; }
+.fk-a, .fk-b { border-radius: 10px; padding: 8px 12px; font-size: 13.5px; overflow-wrap: anywhere; }
+.fk-a { background: var(--slate-t); border: 1px solid var(--line); }
+.fk-b { background: #0D9488; color: #fff; }
+.fk-a span, .fk-b span { opacity: .7; }
+/* explain blocks */
+.defband { background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.defband .lab { display: block; font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #5EEAD4; margin-bottom: 4px; }
+.defband p { font-size: 17px; } .defband code, .defband .m { font-family: var(--font-mono); color: #FCD34D; }
+.exgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 14px; }
+.exgrid.stack { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 800px) { .exgrid { grid-template-columns: minmax(0, 1fr); } }
+.plain, .example { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.plain { background: var(--amber-t); border-color: var(--amber-b); }
+.ph { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber-d); }
+.ph .ic { width: 26px; height: 26px; border-radius: 7px; background: #F59E0B; color: #fff; font-size: 13px; }
+.example .ph { color: var(--teal-d); } .example .ph .ic { background: #0D9488; }
+.ex-p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+.exmap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.exmap span { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 8px; padding: 2px 10px; font-size: 14px; } .exmap b { color: var(--teal-d); margin-right: 4px; }
+.exchips { display: grid; gap: 6px; }
+.exchip { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 10px; background: var(--slate-t); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.exchip b { color: var(--teal-d); font-size: 13px; overflow-wrap: anywhere; }
+.extwo { display: grid; grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr); align-items: center; }
+.exarrow { text-align: center; font-size: 11px; font-weight: 700; color: var(--teal-d); padding: 0 6px; }
+.exarrow i { display: block; height: 3px; background: var(--teal); margin-top: 6px; }
+@media (max-width: 700px) { .extwo { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+.excmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.excol { border-radius: 10px; padding: 10px 14px; } .excol.no { background: #FEF2F2; border: 1px solid #FECACA; color: #7F1D1D; } .excol.ok { background: var(--teal-t); border: 1px solid var(--teal-b); }
+.exh { font-weight: 700; font-size: 13px; margin-bottom: 6px; } .excol ul { list-style: none; display: grid; gap: 4px; }
+.tbl tr.bad td { background: #FEE2E2 !important; color: #991B1B; text-decoration: line-through; }
+/* quick checks */
+.check { display: flex; flex-direction: column; gap: 10px; }
+.cq { background: #0B1220; color: #fff; border-radius: 12px; padding: 12px 16px; }
+.cq .lab { font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #FCD34D; } .cq p { font-weight: 600; font-size: 18px; }
+.copts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.copt { display: flex; gap: 10px; align-items: center; border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.copt .mono { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--slate-t); display: grid; place-items: center; font-weight: 700; color: var(--teal-d); font-size: 13px; }
+.check.revealed .copt { opacity: .5; } .check.revealed .copt.right { opacity: 1; border-color: #0D9488; background: var(--teal-t); }
+.crow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.reveal-btn { background: #0D9488; color: #fff; border: 0; border-radius: 999px; padding: 8px 16px; font: 600 14px var(--font-body); cursor: pointer; } .reveal-btn .mono { display: none; }
+.cwhy { display: flex; gap: 10px; align-items: center; background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 8px 12px; }
+.cwhy[hidden] { display: none; } .cwhy .ic { color: #0D9488; }
+.snote { display: none; }
+.tbl th.col-fk .badge { color: #FCD34D; }
+.tbl td.col-fk, .tbl tbody tr:nth-child(even) td.col-fk { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
+/* Exercises page (extends notes.css) */
+:root { --ok: #0F766E; --ok-t: #E6F6F1; --ok-b: #8FD9C8; --no: #B42318; --no-t: #FDECEA; --no-b: #F4B4AC; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ok: #5EEAD4; --ok-t: #0E2A2C; --ok-b: #1B5E57; --no: #FCA5A5; --no-t: #2D1518; --no-b: #6B2A2E; } }
+:root[data-theme="dark"] { --ok: #5EEAD4; --ok-t: #0E2A2C; --ok-b: #1B5E57; --no: #FCA5A5; --no-t: #2D1518; --no-b: #6B2A2E; }
+.exwrap { max-width: 920px; margin: 0 auto; padding: 0 20px 80px; }
+.scorebar { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.scorebar-in { max-width: 920px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.scorebar .sc { font-family: var(--font-mono); font-weight: 700; font-size: 15px; }
+.scorebar .sc b { color: var(--teal-d); font-size: 20px; }
+.scorebar .meter { flex: 1 1 160px; height: 8px; background: var(--line2); border-radius: 99px; overflow: hidden; min-width: 120px; }
+.scorebar .meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--teal), var(--teal-l)); transition: width .4s ease; }
+.scorebar button { font: 600 14px var(--font-body); background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; cursor: pointer; }
+.scorebar button:hover { color: var(--text); border-color: var(--muted); }
+.howto { margin: 28px 0 8px; color: var(--muted); font-size: 16px; }
+.exsec { margin-top: 40px; }
+.exsec > .nsec-h { margin-bottom: 14px; }
+.exsec-intro { color: var(--muted); margin: -4px 0 16px; }
+.extables { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; margin-bottom: 18px; }
+.extables > * { min-width: 0; }
+.q { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; margin-bottom: 14px; box-shadow: var(--shadow); transition: border-color .25s; }
+.q.is-ok { border-color: var(--ok-b); }
+.q.is-no { border-color: var(--no-b); }
+.qh { display: flex; gap: 12px; align-items: baseline; }
+.qn { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 8px; padding: 2px 8px; flex: none; }
+.qt { font-weight: 600; font-size: 17.5px; line-height: 1.5; min-width: 0; }
+.qt .mono { font-weight: 500; }
+.opts { display: grid; gap: 8px; margin-top: 14px; }
+.opts.tf { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 360px; }
+.opts.scen { grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.qt .opk { font-family: var(--font-mono); font-size: .85em; font-weight: 700; color: var(--teal-d); background: var(--teal-t); border-radius: 6px; padding: 1px 7px; margin-right: 4px; }
+.opt { display: flex; align-items: center; gap: 10px; text-align: left; font: 500 16px/1.4 var(--font-body); color: var(--text); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 14px; cursor: pointer; transition: border-color .2s, background .2s, transform .1s; }
+.opt:hover:not(:disabled) { border-color: var(--teal); }
+.opt:active:not(:disabled) { transform: scale(.99); }
+.opt .l { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--sub); width: 22px; height: 22px; display: grid; place-items: center; border-radius: 6px; background: var(--line2); flex: none; }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--ok); background: var(--ok-t); }
+.opt.right .l { background: var(--ok); color: #fff; }
+.opt.wrong { border-color: var(--no); background: var(--no-t); }
+.opt.wrong .l { background: var(--no); color: #fff; }
+.q.done .opt:not(.right):not(.wrong) { opacity: .55; }
+.fb { margin-top: 12px; border-radius: 12px; padding: 10px 14px; font-size: 15.5px; display: flex; gap: 10px; align-items: flex-start; }
+.fb[hidden] { display: none; }
+.fb b { flex: none; }
+.q.is-ok .fb { background: var(--ok-t); color: var(--text); }
+.q.is-ok .fb b { color: var(--ok); }
+.q.is-no .fb { background: var(--no-t); color: var(--text); }
+.q.is-no .fb b { color: var(--no); }
+.q .tbl { margin-top: 14px; }
+.q textarea { display: block; width: 100%; margin-top: 14px; min-height: 76px; resize: vertical; font: 15.5px/1.5 var(--font-body); color: var(--text); background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.q textarea:focus { outline: none; border-color: var(--teal); }
+.showsol { margin-top: 12px; font: 600 15px var(--font-body); color: var(--teal-d); background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 99px; padding: 7px 16px; cursor: pointer; }
+.sol { margin-top: 12px; background: var(--teal-t); border-left: 4px solid var(--teal); border-radius: 10px; padding: 12px 16px; font-size: 16px; }
+.sol[hidden] { display: none; }
+.sol .mono { display: block; font-size: 12px; font-weight: 700; color: var(--teal-d); letter-spacing: .06em; margin-bottom: 4px; }
+.done-card { margin-top: 36px; text-align: center; background: var(--ink); color: #fff; border-radius: 18px; padding: 28px 22px; }
+.done-card .mono { color: #5EEAD4; font-size: 13px; letter-spacing: .08em; }
+.done-card h2 { font-family: var(--font-display); font-size: 30px; margin-top: 6px; }
+.done-card p { color: #CBD5E1; margin-top: 6px; }
+.done-card .hero-actions { justify-content: center; }
+@media (max-width: 560px) { .q { padding: 16px; } .qt { font-size: 16.5px; } .opts.tf { max-width: none; } }
+</style></head>
+<body>
+<header class="hero"><div class="hero-in">
+  <div class="mono over">62153 · Introduction to Database Systems · Mohamed Al-Kumati</div>
+  <div class="mono lecno">LECTURE_04 · PART 2 · EXERCISES</div>
+  <h1>Relational Model Constraints: exercises</h1><p>Practice what the lecture covered. Choice questions mark themselves; for written questions, write your answer and then compare it with the model answer.</p>
+  <div class="hero-actions"><a class="btn" href="Lec 4 - Relational Model Constraints (Part 2) - Slides.html">▶ Slides</a><a class="btn ghost" href="Lec 4 - Relational Model Constraints (Part 2) - Study Notes.html">Study notes</a><button class="btn ghost" id="themeBtn" type="button">◐ Theme</button></div>
+</div></header>
+<div class="scorebar"><div class="scorebar-in"><span class="sc">Score <b id="score">0</b> / 24</span><span class="meter" aria-hidden="true"><i id="meter"></i></span><span class="mono" id="left" style="font-size:13px;color:var(--sub)"></span><button id="resetBtn" type="button">Start again</button></div></div>
+<main class="exwrap">
+<section class="exsec"><div class="nsec-h"><span class="mono">01</span><div><h2>A · Concepts</h2></div></div>
+    <p class="exsec-intro">Pick the best answer. You get feedback straight away.</p><div class="q" data-answer="2"><div class="qh"><span class="qn">Q1</span><div class="qt">Which constraint states that no primary key value can be NULL?</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button></div>
+        <div class="fb" hidden><b></b><span>Entity integrity: the primary key identifies tuples, so it can never be NULL.</span></div></div><div class="q" data-answer="0"><div class="qh"><span class="qn">Q2</span><div class="qt">“Within each tuple, the value of each attribute A must be an atomic value from dom(A)” describes the…</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button></div>
+        <div class="fb" hidden><b></b><span>That is the domain constraint.</span></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q3</span><div class="qt">A relation has two attributes that each identify every tuple uniquely. They are…</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Foreign keys</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Candidate keys</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Primary keys</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Domains</span></button></div>
+        <div class="fb" hidden><b></b><span>Each is a candidate key; one of them is designated the primary key.</span></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q4</span><div class="qt">By convention, the attributes of the primary key are…</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Written in capitals</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Underlined</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Marked with an asterisk</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Listed last</span></button></div>
+        <div class="fb" hidden><b></b><span>Primary key attributes are underlined.</span></div></div><div class="q" data-answer="2"><div class="qh"><span class="qn">Q5</span><div class="qt">A foreign key value in a tuple must…</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Be unique in its relation</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Never be NULL</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Match an existing primary key value of the referenced relation, or be NULL</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Be a number</span></button></div>
+        <div class="fb" hidden><b></b><span>Rule 2 of a foreign key: it occurs as a PK value of some tuple in r2(R2), or is null.</span></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q6</span><div class="qt">A database state DB is valid only if…</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Every relation has the same degree</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>It satisfies the integrity constraints IC</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>It has no NULL values</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Its tuples are sorted</span></button></div>
+        <div class="fb" hidden><b></b><span>The relation states ri must satisfy the integrity constraints specified in IC.</span></div></div><div class="q" data-answer="2"><div class="qh"><span class="qn">Q7</span><div class="qt">Why is Name not a key of STUDENT, even if all current names are different?</div></div><div class="opts"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Names are too long</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Names may be NULL</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>There is no guarantee two students with identical names will never exist</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Name is a composite attribute</span></button></div>
+        <div class="fb" hidden><b></b><span>A key must be time-invariant: it must still hold when new tuples are inserted.</span></div></div></section>
+<section class="exsec"><div class="nsec-h"><span class="mono">02</span><div><h2>B · Find the keys</h2></div></div>
+    <p class="exsec-intro">Write your answer first, then open the solution.</p><div class="q open"><div class="qh"><span class="qn">Q8</span><div class="qt">Using the CAR relation: list all candidate keys and state which one is the primary key in Figure 5.4.</div></div><div class="rv tbl" style="--d:6"><div class="tname">CAR</div>
+    <table><thead><tr><th><span class="hn">License_number</span></th><th><span class="hn">Engine_serial_number</span></th><th><span class="hn">Make</span></th><th><span class="hn">Model</span></th><th><span class="hn">Year</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Texas ABC-739</td><td>A69352</td><td>Ford</td><td>Mustang</td><td>02</td></tr><tr class="" style="--r:1"><td>Florida TVP-347</td><td>B43696</td><td>Oldsmobile</td><td>Cutlass</td><td>05</td></tr><tr class="" style="--r:2"><td>New York MPO-22</td><td>X83554</td><td>Oldsmobile</td><td>Delta</td><td>01</td></tr><tr class="" style="--r:3"><td>California 432-TFY</td><td>C43742</td><td>Mercedes</td><td>190-D</td><td>99</td></tr><tr class="" style="--r:4"><td>California RSK-629</td><td>Y82935</td><td>Toyota</td><td>Camry</td><td>04</td></tr><tr class="" style="--r:5"><td>Texas RSK-629</td><td>U028365</td><td>Jaguar</td><td>XJS</td><td>04</td></tr></tbody></table></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>Candidate keys: License_number and Engine_serial_number. License_number is the primary key (underlined).</div></div><div class="q open"><div class="qh"><span class="qn">Q9</span><div class="qt">In the COMPANY schema, give the primary key of each relation.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>EMPLOYEE: Ssn · DEPARTMENT: Dnumber · DEPT_LOCATIONS: (Dnumber, Dlocation) · PROJECT: Pnumber · WORKS_ON: (Essn, Pno) · DEPENDENT: (Essn, Dependent_name).</div></div><div class="q open"><div class="qh"><span class="qn">Q10</span><div class="qt">List every foreign key in COMPANY that references EMPLOYEE.Ssn.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>EMPLOYEE.Super_ssn, DEPARTMENT.Mgr_ssn, WORKS_ON.Essn and DEPENDENT.Essn.</div></div><div class="q open"><div class="qh"><span class="qn">Q11</span><div class="qt">Which foreign keys reference DEPARTMENT.Dnumber?</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>EMPLOYEE.Dno, DEPT_LOCATIONS.Dnumber and PROJECT.Dnum.</div></div><div class="q open"><div class="qh"><span class="qn">Q12</span><div class="qt">A foreign key may be NULL but a primary key may not. Explain why, using the rules from the lecture.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>Entity integrity says no primary key value can be NULL, because the primary key is used to identify individual tuples. A foreign key only refers to another tuple, and rule 2 allows its value to be null (the reference is simply missing or unknown).</div></div></section>
+<section class="exsec"><div class="nsec-h"><span class="mono">03</span><div><h2>C · Spot the violation</h2></div></div>
+    <p class="exsec-intro">Each item adds one tuple to the COMPANY state below. Which constraint, if any, does it violate? (Ssn and Dnumber are primary keys; Dno → DEPARTMENT.Dnumber and Super_ssn → EMPLOYEE.Ssn are foreign keys; Dnumber is an integer.)</p><div class="extables"><div class="rv tbl" style="--d:7"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td>123456789</td><td>333445555</td><td>5</td></tr><tr class="" style="--r:1"><td>Franklin</td><td>Wong</td><td>333445555</td><td>888665555</td><td>5</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td>987654321</td><td>888665555</td><td>4</td></tr><tr class="" style="--r:3"><td>James</td><td>Borg</td><td>888665555</td><td class="null">NULL</td><td>1</td></tr></tbody></table></div><div class="rv tbl" style="--d:8"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td>5</td><td>333445555</td></tr><tr class="" style="--r:1"><td>Administration</td><td>4</td><td>987654321</td></tr><tr class="" style="--r:2"><td>Headquarters</td><td>1</td><td>888665555</td></tr></tbody></table></div></div><div class="q" data-answer="2"><div class="qh"><span class="qn">Q13</span><div class="qt">Add EMPLOYEE <span class="mono">⟨Ahmed, Ali, NULL, 333445555, 4⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Ssn is the primary key and it is NULL, so entity integrity is violated.</span></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q14</span><div class="qt">Add EMPLOYEE <span class="mono">⟨Sara, Omar, 123456789, 888665555, 1⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Ssn 123456789 already belongs to John Smith. Two tuples would share a key value, so the key constraint is violated.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q15</span><div class="qt">Add EMPLOYEE <span class="mono">⟨Lina, Saad, 444556666, 888665555, 7⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Dno 7 does not exist in DEPARTMENT.Dnumber, so referential integrity is violated.</span></div></div><div class="q" data-answer="4"><div class="qh"><span class="qn">Q16</span><div class="qt">Add EMPLOYEE <span class="mono">⟨Omar, Nasr, 555667777, NULL, 4⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>The key is new and not NULL, Dno 4 exists, and the foreign key Super_ssn may be NULL. No constraint is violated.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q17</span><div class="qt">Add EMPLOYEE <span class="mono">⟨Huda, Salem, 666778888, 999999999, 5⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Super_ssn references EMPLOYEE.Ssn, and no employee has Ssn 999999999, so referential integrity is violated.</span></div></div><div class="q" data-answer="0"><div class="qh"><span class="qn">Q18</span><div class="qt">Add DEPARTMENT <span class="mono">⟨Sales, six, 987654321⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Dnumber must be an integer from its domain; “six” is not, so the domain constraint is violated.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q19</span><div class="qt">Add DEPARTMENT <span class="mono">⟨Finance, 2, 111111111⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Mgr_ssn references EMPLOYEE.Ssn, and there is no employee with Ssn 111111111, so referential integrity is violated.</span></div></div></section>
+<section class="exsec"><div class="nsec-h"><span class="mono">04</span><div><h2>D · Practical: insert, delete, update</h2></div></div>
+    <p class="exsec-intro">Each operation is applied to the original state below, not one after another. Which constraint would the DBMS report? (Same keys and foreign keys as section C, plus DEPARTMENT.Mgr_ssn → EMPLOYEE.Ssn.)</p><div class="extables"><div class="rv tbl" style="--d:9"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td>123456789</td><td>333445555</td><td>5</td></tr><tr class="" style="--r:1"><td>Franklin</td><td>Wong</td><td>333445555</td><td>888665555</td><td>5</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td>987654321</td><td>888665555</td><td>4</td></tr><tr class="" style="--r:3"><td>James</td><td>Borg</td><td>888665555</td><td class="null">NULL</td><td>1</td></tr></tbody></table></div><div class="rv tbl" style="--d:10"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td>5</td><td>333445555</td></tr><tr class="" style="--r:1"><td>Administration</td><td>4</td><td>987654321</td></tr><tr class="" style="--r:2"><td>Headquarters</td><td>1</td><td>888665555</td></tr></tbody></table></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q20</span><div class="qt"><span class="opk">INSERT</span> into DEPARTMENT <span class="mono">⟨Sales, 5, 888665555⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Dnumber is the primary key of DEPARTMENT and 5 already belongs to Research, so the key constraint is violated.</span></div></div><div class="q" data-answer="4"><div class="qh"><span class="qn">Q21</span><div class="qt"><span class="opk">INSERT</span> into DEPARTMENT <span class="mono">⟨Sales, 6, NULL⟩</span></div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>6 is a new, non-null key. Mgr_ssn is a foreign key and may be NULL (unless it was declared NOT NULL), so nothing is violated.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q22</span><div class="qt"><span class="opk">DELETE</span> the DEPARTMENT tuple for Research (Dnumber 5)</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>John Smith and Franklin Wong have Dno = 5. After the delete their foreign key would point to a department that no longer exists.</span></div></div><div class="q" data-answer="4"><div class="qh"><span class="qn">Q23</span><div class="qt"><span class="opk">DELETE</span> the EMPLOYEE tuple for John Smith (Ssn 123456789)</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>No tuple references Ssn 123456789 (it is nobody’s Super_ssn or Mgr_ssn), so the delete is safe.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q24</span><div class="qt"><span class="opk">DELETE</span> the EMPLOYEE tuple for Franklin Wong (Ssn 333445555)</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>John Smith’s Super_ssn and Research’s Mgr_ssn both reference 333445555. Deleting Franklin breaks those references.</span></div></div><div class="q" data-answer="4"><div class="qh"><span class="qn">Q25</span><div class="qt"><span class="opk">UPDATE</span> John Smith: set Dno = 1</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Department 1 (Headquarters) exists, so the foreign key is still valid.</span></div></div><div class="q" data-answer="3"><div class="qh"><span class="qn">Q26</span><div class="qt"><span class="opk">UPDATE</span> John Smith: set Dno = 9</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>There is no Dnumber 9 in DEPARTMENT, so the new foreign key value has nothing to refer to.</span></div></div><div class="q" data-answer="1"><div class="qh"><span class="qn">Q27</span><div class="qt"><span class="opk">UPDATE</span> Jennifer Wallace: set Ssn = 123456789</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>123456789 is already John Smith’s Ssn. Two tuples would share the same primary key value.</span></div></div><div class="q" data-answer="2"><div class="qh"><span class="qn">Q28</span><div class="qt"><span class="opk">UPDATE</span> James Borg: set Ssn = NULL</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>A primary key can never be NULL (entity integrity). It would also break the Super_ssn and Mgr_ssn references to 888665555.</span></div></div><div class="q" data-answer="0"><div class="qh"><span class="qn">Q29</span><div class="qt"><span class="opk">UPDATE</span> Headquarters: set Dnumber = 'one'</div></div><div class="opts scen"><button class="opt" type="button" data-i="0"><span class="l">A</span><span>Domain constraint</span></button><button class="opt" type="button" data-i="1"><span class="l">B</span><span>Key constraint</span></button><button class="opt" type="button" data-i="2"><span class="l">C</span><span>Entity integrity</span></button><button class="opt" type="button" data-i="3"><span class="l">D</span><span>Referential integrity</span></button><button class="opt" type="button" data-i="4"><span class="l">E</span><span>No violation</span></button></div>
+        <div class="fb" hidden><b></b><span>Dnumber is an integer; the string 'one' is not in its domain.</span></div></div></section>
+<section class="exsec"><div class="nsec-h"><span class="mono">05</span><div><h2>E · Design and fix</h2></div></div>
+    <p class="exsec-intro">Practical questions. Write your answer first, then open the model answer.</p><div class="q open"><div class="qh"><span class="qn">Q30</span><div class="qt">Write one EMPLOYEE tuple that violates two different constraints at the same time, and name both.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>Example: ⟨Ali, Hassan, NULL, 333445555, 7⟩. Ssn is NULL, which breaks entity integrity, and Dno 7 does not exist in DEPARTMENT, which breaks referential integrity.</div></div><div class="q open"><div class="qh"><span class="qn">Q31</span><div class="qt">Deleting the Research department is rejected because employees still reference it. What could be done first so the delete becomes valid?</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>Remove or change the references first: move John Smith and Franklin Wong to an existing department (for example set Dno = 4), or set their Dno to NULL if that is allowed. The DBMS can also be told to do this automatically, which you will meet later with SQL (ON DELETE SET NULL / CASCADE).</div></div><div class="q open"><div class="qh"><span class="qn">Q32</span><div class="qt">A university stores STUDENT(Student_id, Name, Email, Major), COURSE(Course_no, Title, Credits) and ENROLL(Student_id, Course_no, Semester, Grade). (a) Give the primary key of each relation. (b) Which attribute of STUDENT is also a candidate key? (c) List the foreign keys.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>(a) STUDENT: Student_id · COURSE: Course_no · ENROLL: (Student_id, Course_no, Semester), since a student can take the same course again in another semester. (b) Email, because no two students share an email address. (c) ENROLL.Student_id → STUDENT.Student_id and ENROLL.Course_no → COURSE.Course_no.</div></div><div class="q open"><div class="qh"><span class="qn">Q33</span><div class="qt">For the same university database, give one NOT NULL constraint and one domain constraint that make sense, and say why.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>NOT NULL: STUDENT.Name, because every student must have a name. Domain: COURSE.Credits must be an integer between 1 and 6 (or Grade must be one of A, B, C, D, F).</div></div><div class="q open"><div class="qh"><span class="qn">Q34</span><div class="qt">Can ENROLL.Student_id be NULL? Explain using both entity integrity and the foreign key rules.</div></div><textarea aria-label="Your answer" placeholder="Your answer…"></textarea>
+      <button class="showsol" type="button">Show answer</button><div class="sol" hidden><span class="mono">MODEL ANSWER</span>No. As a foreign key alone it could be NULL (rule 2), but Student_id is also part of ENROLL’s primary key, and entity integrity says no primary key value can be NULL.</div></div></section>
+<div class="done-card"><div class="mono">-- finished?</div><h2>Check your weak spots</h2><p>Anything you got wrong is explained in the study notes and the slides.</p><div class="hero-actions"><a class="btn" href="Lec 4 - Relational Model Constraints (Part 2) - Study Notes.html">Study notes</a><a class="btn ghost" href="Lec 4 - Relational Model Constraints (Part 2) - Slides.html">Slides</a></div></div>
+<footer class="nfoot mono">-- exercises for 62153 by Mohamed Al-Kumati · Elmasri &amp; Navathe, Fundamentals of Database Systems</footer>
+</main>
+<script>/* Exercises: instant feedback for choice questions, reveal for worked answers, running score */
+(function () {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('db-notes-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('db-notes-theme', root.dataset.theme); } catch (e) {}
+  });
+  const qs = [...document.querySelectorAll('.q[data-answer]')];
+  const total = qs.length;
+  const sc = document.getElementById('score'), meter = document.getElementById('meter'), left = document.getElementById('left');
+  function update() {
+    const done = qs.filter((q) => q.classList.contains('done')).length;
+    const ok = qs.filter((q) => q.classList.contains('is-ok')).length;
+    sc.textContent = ok; meter.style.width = (100 * done / total) + '%';
+    left.textContent = done === total ? 'all answered' : (total - done) + ' to go';
+  }
+  document.addEventListener('click', (e) => {
+    const o = e.target.closest('.opt');
+    if (o) {
+      const q = o.closest('.q'); if (q.classList.contains('done')) return;
+      const right = o.dataset.i === q.dataset.answer;
+      q.classList.add('done', right ? 'is-ok' : 'is-no');
+      o.classList.add(right ? 'right' : 'wrong');
+      q.querySelector(`.opt[data-i="${q.dataset.answer}"]`).classList.add('right');
+      q.querySelectorAll('.opt').forEach((b) => (b.disabled = true));
+      const fb = q.querySelector('.fb'); fb.querySelector('b').textContent = right ? 'Correct.' : 'Not quite.'; fb.hidden = false;
+      update(); return;
+    }
+    const s = e.target.closest('.showsol');
+    if (s) { const sol = s.nextElementSibling; sol.hidden = !sol.hidden; s.textContent = sol.hidden ? 'Show answer' : 'Hide answer'; return; }
+    if (e.target.closest('#resetBtn')) {
+      qs.forEach((q) => { q.classList.remove('done', 'is-ok', 'is-no'); q.querySelectorAll('.opt').forEach((b) => { b.disabled = false; b.classList.remove('right', 'wrong'); }); q.querySelector('.fb').hidden = true; });
+      document.querySelectorAll('.sol').forEach((x) => (x.hidden = true));
+      document.querySelectorAll('.showsol').forEach((x) => (x.textContent = 'Show answer'));
+      document.querySelectorAll('.q textarea').forEach((t) => (t.value = ''));
+      update(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+  update();
+})();
+</script>
+</body></html>
