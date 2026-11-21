@@ -390,6 +390,24 @@ img { max-width: 100%; height: auto; }
 .matrix td.can b { color: #DC2626; margin-right: 6px; } .matrix td.cannot .no { color: var(--sub); }
 .matrix td { white-space: normal !important; }
 @media (max-width: 560px) { .ref { grid-template-columns: minmax(0, 1fr); } }
+/* --- lecture text (verbatim) --- */
+.lec { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; }
+.lec.solo { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 760px) { .lec { grid-template-columns: minmax(0, 1fr); } }
+.lecbox { border: 1px solid var(--line); border-left: 4px solid var(--teal); border-radius: 12px; padding: 14px 18px; min-width: 0; }
+.lecbox .ph { color: var(--teal-d); }
+.lecl { list-style: none; display: flex; flex-direction: column; gap: 10px; padding: 0; }
+.lecl > li { position: relative; padding-left: 20px; }
+.lecl > li::before { content: ""; position: absolute; left: 0; top: .62em; width: 8px; height: 8px; border-radius: 2px; background: var(--teal); }
+.lecl > li.nob { padding-left: 0; } .lecl > li.nob::before { display: none; }
+.lecl b { color: var(--teal-d); }
+.lecl ul, .lecl ol { margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+.lecl ul { list-style: none; padding: 0; } .lecl ul li { position: relative; padding-left: 20px; color: var(--muted); }
+.lecl ul li::before { content: "–"; position: absolute; left: 4px; color: var(--teal); font-weight: 700; }
+.lecl ol { padding-left: 26px; } .lecl ol li { color: var(--muted); } .lecl ol li::marker { font-family: var(--font-mono); font-weight: 700; color: var(--teal-d); }
+.lec .codeblk pre { white-space: pre-wrap; word-break: break-word; }
+.lec .plain .pex { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--amber-b); font-size: .95em; }
+.cwhy.vd .vlec { font-style: italic; } .cwhy.vd .vwhy { font-size: .95em; }
 /* Exercises page (extends notes.css) */
 :root { --ok: #0F766E; --ok-t: #E6F6F1; --ok-b: #8FD9C8; --no: #B42318; --no-t: #FDECEA; --no-b: #F4B4AC; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ok: #5EEAD4; --ok-t: #0E2A2C; --ok-b: #1B5E57; --no: #FCA5A5; --no-t: #2D1518; --no-b: #6B2A2E; } }
