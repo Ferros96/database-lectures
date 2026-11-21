@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lecture 4 · Part 3 Notes</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>/* ===========================================
+   THEME TOKENS (light + dark)
+   =========================================== */
+:root {
+  --bg: #F5F7FA; --card: #FFFFFF; --line: #D9E1EA; --line2: #E8EDF3; --zebra: #F8FAFC;
+  --text: #0F172A; --muted: #475569; --sub: #64748B; --strong: #334155;
+  --teal: #0D9488; --teal-d: #0F766E; --teal-l: #5EEAD4; --teal-t: #E8F7F4; --teal-b: #A7E8DD;
+  --slate-t: #EEF2F6; --slate-ic: #334155; --amber: #F59E0B; --amber-t: #FEF3C7; --amber-b: #FCD34D; --amber-d: #92400E;
+  --ink: #0B1220; --ink2: #131C2E; --edge: #2A3650; --dot: #D5DDE7;
+  --font-display: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --shadow: 0 10px 30px -22px rgba(15, 23, 42, .45);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+    --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+    --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+    --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+    --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1220; --card: #121B2D; --line: #26334A; --line2: #1E293B; --zebra: #0F1828;
+  --text: #E6EDF5; --muted: #A7B4C6; --sub: #8494AA; --strong: #CBD5E1;
+  --teal: #14B8A6; --teal-d: #5EEAD4; --teal-t: #0E2A2C; --teal-b: #1B4D4A;
+  --slate-t: #172235; --slate-ic: #475569; --amber-t: #2B2110; --amber-b: #6B4E16; --amber-d: #FCD34D; --dot: #1A2537;
+  --shadow: 0 10px 30px -20px rgba(0, 0, 0, .7); color-scheme: dark;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { font-family: var(--font-body); color: var(--text); background: var(--bg); font-size: 17px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  background-image: radial-gradient(circle, var(--dot) 1px, transparent 1.2px); background-size: 24px 24px; }
+.mono { font-family: var(--font-mono); }
+b { font-weight: 600; }
+.ic { display: inline-grid; place-items: center; flex: none; }
+.ic svg { width: 1em; height: 1em; }
+
+/* ===========================================
+   HERO
+   =========================================== */
+.hero { background-color: #0B1220; color: #fff;
+  background-image: radial-gradient(ellipse 60% 80% at 90% 0%, rgba(13,148,136,.4), transparent 60%), linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: auto, 36px 36px, 36px 36px; }
+.hero-in { max-width: 1240px; margin: 0 auto; padding: 56px 24px 52px; }
+.hero .over { font-size: 13px; color: #94A3B8; letter-spacing: .08em; text-transform: uppercase; }
+.hero .lecno { font-size: 15px; font-weight: 700; color: #5EEAD4; margin-top: 40px; letter-spacing: .06em; }
+.hero h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 6vw, 64px); line-height: 1.04; letter-spacing: -0.02em; margin-top: 10px; max-width: 900px; }
+.hero p { font-size: clamp(17px, 2.2vw, 21px); color: #CBD5E1; margin-top: 16px; max-width: 760px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font: 600 15px var(--font-body); color: #0B1220; background: #5EEAD4; border: 0; border-radius: 999px; padding: 11px 20px; text-decoration: none; cursor: pointer; }
+.btn.ghost { background: transparent; color: #E2E8F0; border: 1.5px solid #334155; }
+.btn:hover { filter: brightness(1.08); }
+
+/* ===========================================
+   LAYOUT: sticky "schema browser" contents + notes column
+   =========================================== */
+.layout { max-width: 1240px; margin: 0 auto; padding: 32px 24px 80px; display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px; align-items: start; }
+.toc { position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px; font-size: 14px; box-shadow: var(--shadow); }
+.toc-h { color: var(--teal); font-size: 12px; font-weight: 700; margin-bottom: 8px; }
+.toc ul { list-style: none; }
+.toc > ul > li { margin-top: 6px; }
+.toc a { color: var(--strong); text-decoration: none; display: block; padding: 4px 8px; border-radius: 8px; line-height: 1.35; }
+.toc a:hover, .toc a.on { background: var(--teal-t); color: var(--teal-d); }
+.toc > ul > li > a { font-weight: 600; }
+.toc > ul > li > a .mono { color: var(--teal); font-size: 12px; margin-right: 8px; }
+.toc ul ul { margin-left: 14px; border-left: 1px solid var(--line); padding-left: 4px; }
+.toc ul ul a { color: var(--sub); font-size: 13px; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 20px 16px 64px; }
+  .toc { position: static; max-height: none; }
+  .toc ul ul { display: none; }
+}
+
+/* ===========================================
+   SECTIONS + BLOCKS
+   =========================================== */
+.nsec { margin-bottom: 48px; }
+.nsec-h { display: flex; gap: 18px; align-items: center; padding: 6px 0 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.nsec-h > .mono { font-size: 34px; font-weight: 700; color: var(--teal); line-height: 1; min-width: 56px; }
+.nsec-h h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 3.4vw, 34px); line-height: 1.1; letter-spacing: -0.01em; }
+.nsec-h p { color: var(--sub); }
+.blk { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px 28px; margin-bottom: 22px; box-shadow: var(--shadow); }
+.blk > h3 { font-family: var(--font-display); font-weight: 700; font-size: 23px; line-height: 1.2; margin-bottom: 18px; }
+.nbody { display: flex; flex-direction: column; gap: 18px; }
+@media (max-width: 600px) { .blk { padding: 20px 16px; border-radius: 14px; } }
+.intro { color: var(--muted); }
+.caption, figcaption { font-size: 14px; font-style: italic; color: var(--sub); }
+
+.callout { display: flex; gap: 12px; align-items: center; background: var(--amber-t); border: 1px solid var(--amber-b); color: var(--amber-d); font-weight: 600; border-radius: 12px; padding: 12px 16px; }
+.callout .ic { width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: #fff; font-size: 14px; }
+
+/* cards */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+.card-h { display: flex; align-items: center; gap: 12px; background: var(--teal-t); border-bottom: 1px solid var(--line); padding: 12px 16px; }
+.card-h .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.card-h h4 { font-size: 17px; font-weight: 600; line-height: 1.25; }
+.card-h .num { margin-left: auto; font-family: var(--font-mono); font-weight: 700; color: var(--teal); font-size: 13px; }
+.card-b { padding: 14px 16px 16px; color: var(--muted); }
+.card-b ul { list-style: none; display: grid; gap: 8px; }
+.card-b li { padding-left: 20px; position: relative; }
+.card-b li::before { content: "▸"; position: absolute; left: 0; color: var(--teal); font-family: var(--font-mono); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.cards.tiles .card-h { border-bottom: 0; height: 100%; }
+.compare, .split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.compare .vs { display: none; }
+.compare > .card:first-child .card-h, .split > .card:first-child .card-h { background: var(--slate-t); }
+.compare > .card:first-child .card-h .ic, .split > .card:first-child .card-h .ic { background: var(--slate-ic); }
+@media (max-width: 700px) { .compare, .split { grid-template-columns: 1fr; } }
+
+/* definition */
+.def { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 18px; }
+.defcard { background: #0B1220; color: #fff; border-radius: 14px; padding: 22px 24px;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px); background-size: 28px 28px; }
+.defcard .lab { font-size: 12px; letter-spacing: .2em; color: #5EEAD4; font-weight: 700; }
+.defcard .term { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 8px 0 10px; line-height: 1.1; }
+.defcard .term.mono { font-family: var(--font-mono); color: #FCD34D; font-size: 22px; }
+.defcard p { color: #CBD5E1; font-size: 17px; }
+.defside { display: flex; flex-direction: column; gap: 10px; }
+.defside h4 { font-weight: 600; }
+.dpt { display: flex; gap: 12px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; }
+.dpt .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.dpt span { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 999px; padding: 4px 14px; font-size: 15px; }
+@media (max-width: 700px) { .def { grid-template-columns: 1fr; } }
+
+/* rows */
+.rows { display: flex; flex-direction: column; gap: 10px; }
+.row { display: grid; grid-template-columns: 38px 220px 1fr; gap: 14px; align-items: center; border: 1px solid var(--line); border-radius: 12px; padding: 12px 16px; }
+.row .ic { width: 38px; height: 38px; border-radius: 10px; background: var(--teal); color: #fff; font-size: 18px; }
+.row h4 { font-weight: 600; line-height: 1.3; }
+.row p { color: var(--muted); }
+@media (max-width: 700px) { .row { grid-template-columns: 38px 1fr; } .row p { grid-column: 1 / -1; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; counter-reset: s; }
+.step { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.step .sn { width: 36px; height: 36px; border-radius: 50%; background: var(--teal); color: #fff; display: grid; place-items: center; font-family: var(--font-mono); font-weight: 700; }
+.step:last-child .sn { background: #1E293B; }
+.step h4 { font-weight: 600; margin: 10px 0 4px; line-height: 1.3; }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* tables */
+.tbl { overflow-x: auto; max-width: 100%; }
+.tname { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); margin-bottom: 6px; }
+.tbl table { border-collapse: separate; border-spacing: 0; width: 100%; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+.tbl th { background: #131C2E; color: #E2E8F0; font-family: var(--font-mono); font-weight: 600; font-size: 12.5px; text-align: left; padding: 8px 12px; white-space: nowrap; }
+.tbl td { padding: 7px 12px; border-top: 1px solid var(--line2); white-space: nowrap; }
+.tbl tbody tr:nth-child(even) td { background: var(--zebra); }
+.tbl.wide td { white-space: normal; }
+.tbl td.key { font-weight: 600; color: var(--teal-d); }
+td.null, span.null { color: #94A3B8; font-style: italic; font-family: var(--font-mono); font-size: .9em; }
+.tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; align-items: start; }
+.tables .tcol { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.agenda-t td.id { color: var(--teal); font-weight: 700; width: 56px; }
+
+/* media */
+.media { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+@media (max-width: 800px) { .media { grid-template-columns: 1fr; } }
+figure.fig { border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: #fff; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+figure.fig figcaption { align-self: flex-end; color: #64748B; }
+figure.fig img { border-radius: 6px; }
+figure.mini { margin-top: 12px; background: #fff; border-radius: 10px; padding: 8px; text-align: center; }
+figure.mini img { max-height: 260px; }
+svg.diagram { width: 100%; height: auto; }
+.points { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.points li { display: flex; gap: 12px; align-items: flex-start; color: var(--strong); }
+.points .pn { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--teal-t); border: 1px solid var(--teal-b); color: var(--teal-d); display: grid; place-items: center; font-family: var(--font-mono); font-size: 13px; font-weight: 700; margin-top: 1px; }
+.points.plain .ic { color: var(--teal); margin-top: 5px; }
+.points b { display: block; color: var(--text); }
+.points span { display: block; color: var(--muted); }
+
+/* SVG diagram (figure stays light in both themes) */
+svg.diagram text { font-family: var(--font-body); }
+svg.diagram rect.group { fill: #F1F5F9; stroke: #CBD5E1; stroke-width: 1.5; }
+svg.diagram rect.group2 { fill: #E8F7F4; stroke: #99F6E4; stroke-width: 1.5; }
+svg.diagram .glabel { font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .group-t { fill: #64748B; } svg.diagram .group2-t { fill: #0F766E; }
+svg.diagram rect.box { fill: #fff; stroke: #94A3B8; stroke-width: 1.5; }
+svg.diagram rect.accent { fill: #0D9488; } svg.diagram rect.accent2 { fill: #131C2E; }
+svg.diagram .t-box { fill: #0F172A; } svg.diagram .t-accent, svg.diagram .t-accent2 { fill: #fff; font-weight: 600; }
+svg.diagram .cyl { fill: #CCFBF1; stroke: #0D9488; stroke-width: 1.5; } svg.diagram .cyl-top { fill: #E6FFFA; stroke: #0D9488; stroke-width: 1.5; }
+svg.diagram .t-cyl { fill: #0F766E; font-weight: 600; }
+svg.diagram .t-plain { fill: #64748B; font-weight: 600; }
+svg.diagram .t-label { fill: #0F766E; font-family: var(--font-mono); font-weight: 700; }
+svg.diagram .t-note { fill: #64748B; font-style: italic; }
+svg.diagram .de { stroke: #334155; stroke-width: 2.2; }
+svg.diagram .arrowhead { fill: #334155; }
+
+/* schema */
+figure.schema { align-items: stretch; gap: 12px; }
+.srel .cells { display: flex; flex-wrap: wrap; }
+.srel .cells span { border: 1px solid #94A3B8; padding: 4px 10px; font-size: 14px; margin: 0 -1px -1px 0; color: #0F172A; background: #fff; }
+.srel .cells span.first { background: #E8F7F4; }
+.srel .cells span.pk { text-decoration: underline; text-underline-offset: 3px; background: #E8F7F4; font-weight: 600; }
+.srel .tname { color: #0F766E; }
+
+/* spectrum */
+.axis { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+.axis i { flex: 1; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #0D9488, #131C2E); }
+.bands { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.band { border-radius: 14px; padding: 18px 20px; color: #fff; }
+.band.b0 { background: #0D9488; } .band.b1 { background: #115E59; } .band.b2 { background: #131C2E; border: 1px solid #26334A; }
+.band .tag { font-size: 11px; font-weight: 700; letter-spacing: .12em; color: #CCFBF1; text-transform: uppercase; }
+.band h4 { font-family: var(--font-display); font-size: 20px; margin: 6px 0; }
+.band p { color: #E2E8F0; font-size: 15.5px; }
+
+/* relation anatomy */
+.relation { display: flex; flex-direction: column; gap: 10px; }
+.relname { color: var(--sub); } .relname b { color: var(--teal-d); }
+.relgrid { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; align-items: end; }
+.tuplab { height: 190px; display: flex; align-items: center; justify-content: flex-end; border-right: 4px solid var(--amber); padding-right: 10px; }
+.tuplab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: #B45309; text-align: right; }
+.relwrap { min-width: 0; }
+.attlab { border-top: 4px solid var(--teal); text-align: right; padding-top: 2px; margin-bottom: 6px; }
+.attlab span { font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--teal-d); }
+@media (max-width: 600px) { .relgrid { grid-template-columns: 1fr; } .tuplab { display: none; } }
+
+/* terms */
+.terms { display: flex; flex-direction: column; gap: 10px; }
+.terms .th, .term-row { display: grid; grid-template-columns: 1fr 50px 1fr; align-items: center; }
+.terms .th { font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--sub); }
+.terms .th span:last-child { color: var(--teal-d); }
+.ta { background: var(--slate-t); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.tb { background: #0D9488; color: #fff; border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.arrow { padding: 0 8px; } .arrow i { display: block; height: 3px; background: var(--teal); border-radius: 3px; position: relative; }
+.arrow i::after { content: ""; position: absolute; right: -3px; top: -6px; border: 7.5px solid transparent; border-left-color: var(--teal); border-right: 0; }
+
+/* stat */
+.stat { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 18px; }
+.bignum { background: #0B1220; color: #fff; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.bignum .mono { color: #5EEAD4; align-self: flex-start; }
+.bignum .count { font-family: var(--font-display); font-weight: 800; font-size: 110px; line-height: 1; color: #5EEAD4; }
+.bignum p { color: #CBD5E1; font-size: 15px; }
+.statside { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.codeblk .lab { font-size: 12px; font-weight: 700; color: var(--teal-d); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px; }
+pre { font-family: var(--font-mono); white-space: pre-wrap; word-break: break-word; }
+.codeblk pre { background: #131C2E; color: #94A3B8; border-radius: 10px; padding: 12px 16px; font-size: 14px; }
+.codeblk .v { color: #FCD34D; font-weight: 700; } .codeblk .a { color: #E2E8F0; } .codeblk .k { color: #5EEAD4; }
+@media (max-width: 600px) { .stat { grid-template-columns: 1fr; } }
+
+/* ordering */
+.opoints { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.opt { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 10px 14px; }
+
+/* agenda */
+.agenda { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 18px; align-items: start; }
+.sql { background: #0B1220; border-radius: 12px; overflow: hidden; }
+.sql-bar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; background: #111A2C; }
+.sql-bar i { width: 9px; height: 9px; border-radius: 50%; background: #F87171; } .sql-bar i:nth-child(2) { background: #FBBF24; } .sql-bar i:nth-child(3) { background: #34D399; }
+.sql-bar span { margin-left: 6px; font-family: var(--font-mono); color: #64748B; font-size: 12px; }
+.sql pre { padding: 14px 16px; font-size: 14px; color: #E2E8F0; }
+.sql .k { color: #5EEAD4; font-weight: 700; } .sql .v { color: #FCD34D; } .sql .c { color: #64748B; }
+.caret { display: inline-block; width: 8px; height: 16px; background: #5EEAD4; vertical-align: middle; margin-left: 4px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.sql-res { font-family: var(--font-mono); font-size: 12px; color: #34D399; padding: 8px 16px 12px; border-top: 1px solid #2A3650; }
+@media (max-width: 800px) { .agenda { grid-template-columns: 1fr; } }
+
+/* takeaways + review */
+.takeaways { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.takeaways li { display: flex; gap: 16px; align-items: center; background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.takeaways .mono { color: #5EEAD4; font-weight: 700; }
+.qa { background: var(--card); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.qa summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; gap: 12px; align-items: baseline; }
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary .mono { color: var(--teal); font-size: 13px; }
+.qa summary::after { content: "+"; margin-left: auto; font-family: var(--font-mono); color: var(--teal); font-size: 20px; line-height: 1; }
+.qa[open] summary::after { content: "−"; }
+.qa p { padding: 0 18px 16px 52px; color: var(--muted); }
+.nfoot { color: var(--sub); font-size: 12px; margin-top: 40px; }
+
+/* gentle reveal on scroll */
+.blk { transition: opacity .6s ease, transform .6s cubic-bezier(.16,1,.3,1); }
+.js .blk:not(.in) { opacity: 0; transform: translateY(14px); }
+@media (prefers-reduced-motion: reduce) { .js .blk:not(.in) { opacity: 1; transform: none; } * { scroll-behavior: auto !important; } }
+
+@media print {
+  body { background: #fff; } .toc, .hero-actions { display: none; } .layout { display: block; }
+  .blk { break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+  .qa { break-inside: avoid; } .qa p { display: block; }
+}
+/* keep grids from growing past narrow screens */
+.agenda > *, .media > *, .def > *, .compare > *, .split > *, .tables > * { min-width: 0; }
+.agenda-t td { white-space: normal; }
+@media (max-width: 800px) { .agenda, .media { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 700px) { .compare, .split, .def { grid-template-columns: minmax(0, 1fr); } }
+img { max-width: 100%; height: auto; }
+.tables { display: flex; flex-wrap: wrap; }
+.tables .tcol { flex: 1 1 auto; }
+/* key-highlight tables + foreign-key map */
+.hlt { display: flex; flex-direction: column; gap: 8px; }
+.legend { display: flex; gap: 8px; flex-wrap: wrap; }
+.lg { font-family: var(--font-mono); font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.lg-key, .lg-pk { background: var(--teal-t); color: var(--teal-d); border: 1px solid var(--teal-b); }
+.lg-ck { background: var(--amber-t); color: var(--amber-d); border: 1px solid var(--amber-b); }
+.lg-bad { background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5; }
+.tbl th .badge { display: block; font-size: 10px; letter-spacing: .08em; color: #5EEAD4; }
+.tbl th.col-ck .badge { color: #FCD34D; } .tbl th.col-bad .badge { color: #FCA5A5; }
+.tbl th.col-pk .hn { text-decoration: underline; text-underline-offset: 3px; }
+.tbl td.col-key, .tbl td.col-pk, .tbl tbody tr:nth-child(even) td.col-key, .tbl tbody tr:nth-child(even) td.col-pk { background: var(--teal-t); font-weight: 600; color: var(--teal-d); }
+.tbl td.col-ck, .tbl tbody tr:nth-child(even) td.col-ck { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
+.tbl td.col-bad, .tbl tbody tr:nth-child(even) td.col-bad { background: #FEF2F2; color: #991B1B; }
+.tbl tr.hl td { box-shadow: inset 0 2px 0 #F59E0B, inset 0 -2px 0 #F59E0B; }
+.hlpts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.hlp { display: flex; gap: 12px; align-items: flex-start; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.hlp .ic { width: 34px; height: 34px; border-radius: 9px; background: var(--teal); color: #fff; font-size: 16px; }
+.hlp.hlp-ck .ic { background: #F59E0B; } .hlp.hlp-bad .ic { background: #DC2626; }
+.hlp b { display: block; } .hlp span { color: var(--muted); }
+.fks { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 8px 20px; }
+.fk { display: grid; grid-template-columns: minmax(0,1fr) 44px minmax(0,1fr); align-items: center; }
+.fk-a, .fk-b { border-radius: 10px; padding: 8px 12px; font-size: 13.5px; overflow-wrap: anywhere; }
+.fk-a { background: var(--slate-t); border: 1px solid var(--line); }
+.fk-b { background: #0D9488; color: #fff; }
+.fk-a span, .fk-b span { opacity: .7; }
+/* explain blocks */
+.defband { background: #0B1220; color: #F1F5F9; border-radius: 12px; padding: 14px 18px; }
+.defband .lab { display: block; font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #5EEAD4; margin-bottom: 4px; }
+.defband p { font-size: 17px; } .defband code, .defband .m { font-family: var(--font-mono); color: #FCD34D; }
+.exgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 14px; }
+.exgrid.stack { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 800px) { .exgrid { grid-template-columns: minmax(0, 1fr); } }
+.plain, .example { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; min-width: 0; }
+.plain { background: var(--amber-t); border-color: var(--amber-b); }
+.ph { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--amber-d); }
+.ph .ic { width: 26px; height: 26px; border-radius: 7px; background: #F59E0B; color: #fff; font-size: 13px; }
+.example .ph { color: var(--teal-d); } .example .ph .ic { background: #0D9488; }
+.ex-p { color: var(--muted); margin-top: 8px; font-size: 15px; }
+.exmap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.exmap span { background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 8px; padding: 2px 10px; font-size: 14px; } .exmap b { color: var(--teal-d); margin-right: 4px; }
+.exchips { display: grid; gap: 6px; }
+.exchip { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 10px; background: var(--slate-t); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.exchip b { color: var(--teal-d); font-size: 13px; overflow-wrap: anywhere; }
+.extwo { display: grid; grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr); align-items: center; }
+.exarrow { text-align: center; font-size: 11px; font-weight: 700; color: var(--teal-d); padding: 0 6px; }
+.exarrow i { display: block; height: 3px; background: var(--teal); margin-top: 6px; }
+@media (max-width: 700px) { .extwo { grid-template-columns: minmax(0, 1fr); gap: 8px; } }
+.excmp { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+.excol { border-radius: 10px; padding: 10px 14px; } .excol.no { background: #FEF2F2; border: 1px solid #FECACA; color: #7F1D1D; } .excol.ok { background: var(--teal-t); border: 1px solid var(--teal-b); }
+.exh { font-weight: 700; font-size: 13px; margin-bottom: 6px; } .excol ul { list-style: none; display: grid; gap: 4px; }
+.tbl tr.bad td { background: #FEE2E2 !important; color: #991B1B; text-decoration: line-through; }
+/* quick checks */
+.check { display: flex; flex-direction: column; gap: 10px; }
+.cq { background: #0B1220; color: #fff; border-radius: 12px; padding: 12px 16px; }
+.cq .lab { font-size: 11px; font-weight: 700; letter-spacing: .16em; color: #FCD34D; } .cq p { font-weight: 600; font-size: 18px; }
+.copts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px; }
+.copt { display: flex; gap: 10px; align-items: center; border: 1.5px solid var(--line); border-radius: 10px; padding: 8px 12px; }
+.copt .mono { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--slate-t); display: grid; place-items: center; font-weight: 700; color: var(--teal-d); font-size: 13px; }
+.check.revealed .copt { opacity: .5; } .check.revealed .copt.right { opacity: 1; border-color: #0D9488; background: var(--teal-t); }
+.crow { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.reveal-btn { background: #0D9488; color: #fff; border: 0; border-radius: 999px; padding: 8px 16px; font: 600 14px var(--font-body); cursor: pointer; } .reveal-btn .mono { display: none; }
+.cwhy { display: flex; gap: 10px; align-items: center; background: var(--teal-t); border: 1px solid var(--teal-b); border-radius: 10px; padding: 8px 12px; }
+.cwhy[hidden] { display: none; } .cwhy .ic { color: #0D9488; }
+.snote { display: none; }
+.tbl th.col-fk .badge { color: #FCD34D; }
+.tbl td.col-fk, .tbl tbody tr:nth-child(even) td.col-fk { background: var(--amber-t); font-weight: 600; color: var(--amber-d); }
+.inf { color: var(--teal-d); font-weight: 500; font-size: .9em; white-space: nowrap; }
+.defband .inf, .hero .inf, .cq .inf { color: #5EEAD4; }
+/* --- operations (Part 3) --- */
+.opk { display: inline-block; font-family: var(--font-mono); font-weight: 700; font-size: .85em; letter-spacing: .05em; color: #fff; background: var(--teal); border-radius: 6px; padding: 1px 8px; }
+.opk.delete { background: #DC2626; } .opk.update { background: var(--amber); color: #0B1220; }
+.opcase { display: flex; flex-direction: column; gap: 14px; }
+.opline { background: #0B1220; color: #E2E8F0; border-radius: 12px; padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.opline code { font-family: var(--font-mono); color: #FCD34D; font-size: 14.5px; word-break: break-word; min-width: 0; }
+.opline .optarget { font-family: var(--font-mono); color: #5EEAD4; font-weight: 700; font-size: 14.5px; }
+.optables { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)) !important; gap: 14px; }
+.optables > * { min-width: 0; }
+.opfoot { font-size: 14.5px; color: var(--sub); }
+.tbl tr.newrow td { background: var(--teal-t) !important; font-weight: 600; }
+.tbl tr.newrow td:first-child::before { content: "+ "; color: var(--teal); font-weight: 700; }
+.tbl tr.delrow td, .tbl tr.chgrow td { background: var(--amber-t) !important; font-weight: 600; }
+.tbl tr.delrow td:first-child::before { content: "− "; color: #C2410C; font-weight: 700; }
+.revealed .tbl tr.newrow.isbad td, .revealed .tbl tr.chgrow.isbad td, .revealed .tbl tr.refrow td { background: #FEE2E2 !important; color: #991B1B; }
+.revealed .tbl tr.okrow td, .revealed .tbl tr.newrow.isok td, .revealed .tbl tr.chgrow.isok td { background: #CCFBF1 !important; color: #115E59; }
+.refs { border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; }
+.refs-h { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sub); }
+.ref { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 10px; font-size: 15px; padding: 6px 10px; border-radius: 8px; background: var(--slate-t); }
+.ref b { font-size: 13.5px; color: var(--teal-d); word-break: break-word; }
+.revealed .ref { background: #FEE2E2; color: #7F1D1D; } .revealed .ref b { color: #991B1B; }
+.cwhy.vd { flex-direction: column; align-items: flex-start; gap: 6px; }
+.vb { font-size: 12.5px; font-weight: 700; letter-spacing: .08em; color: #fff; border-radius: 6px; padding: 2px 10px; }
+.vd-ok .vb { background: #0D9488; } .vd-no .vb { background: #DC2626; }
+.matrix td.can b { color: #DC2626; margin-right: 6px; } .matrix td.cannot .no { color: var(--sub); }
+.matrix td { white-space: normal !important; }
+@media (max-width: 560px) { .ref { grid-template-columns: minmax(0, 1fr); } }
+</style></head>
+<body>
+<header class="hero"><div class="hero-in">
+  <div class="mono over">62153 · Introduction to Database Systems · Mohamed Al-Kumati</div>
+  <div class="mono lecno">LECTURE_04 · PART 3 · STUDY NOTES</div>
+  <h1>Update Operations and Constraint Violations</h1><p>Insert, delete and update, and which integrity constraints each operation can violate</p>
+  <div class="hero-actions"><a class="btn" href="Lec 4 - Update Operations (Part 3) - Slides.html">▶ Open the slides</a><a class="btn ghost" href="Lec 4 - Update Operations (Part 3) - Exercises.html">✎ Exercises</a><button class="btn ghost" id="themeBtn" type="button">◐ Theme</button></div>
+</div></header>
+<div class="layout">
+<nav class="toc" aria-label="Contents"><div class="mono toc-h">-- contents</div><ul><li><a href="#overview"><span class="mono">00</span>Overview</a>
+    <ul></ul></li><li><a href="#update-operations"><span class="mono">01</span>Update operations</a>
+    <ul><li><a href="#update-operations-three-operations-change-the-state">Three operations change the state</a></li><li><a href="#update-operations-what-can-each-operation-violate">What can each operation violate?</a></li></ul></li><li><a href="#the-insert-operation"><span class="mono">02</span>The Insert operation</a>
+    <ul><li><a href="#the-insert-operation-insert-can-violate-all-four-constraints">Insert can violate all four constraints</a></li><li><a href="#the-insert-operation-insert-example-1">Insert example 1</a></li><li><a href="#the-insert-operation-insert-example-2">Insert example 2</a></li><li><a href="#the-insert-operation-insert-example-3">Insert example 3</a></li><li><a href="#the-insert-operation-insert-example-4">Insert example 4</a></li><li><a href="#the-insert-operation-quick-check">Quick check</a></li></ul></li><li><a href="#the-delete-operation"><span class="mono">03</span>The Delete operation</a>
+    <ul><li><a href="#the-delete-operation-delete-can-violate-only-referential-integrity">Delete can violate only referential integrity</a></li><li><a href="#the-delete-operation-delete-example-1">Delete example 1</a></li><li><a href="#the-delete-operation-delete-example-2">Delete example 2</a></li><li><a href="#the-delete-operation-delete-example-3">Delete example 3</a></li><li><a href="#the-delete-operation-quick-check">Quick check</a></li></ul></li><li><a href="#the-update-operation"><span class="mono">04</span>The Update operation</a>
+    <ul><li><a href="#the-update-operation-the-update-modify-operation">The Update (Modify) operation</a></li><li><a href="#the-update-operation-update-example-1">Update example 1</a></li><li><a href="#the-update-operation-update-example-2">Update example 2</a></li><li><a href="#the-update-operation-update-example-3">Update example 3</a></li><li><a href="#the-update-operation-update-example-4">Update example 4</a></li><li><a href="#the-update-operation-quick-check">Quick check</a></li></ul></li><li><a href="#handling-a-violation"><span class="mono">05</span>Handling a violation</a>
+    <ul><li><a href="#handling-a-violation-ways-to-enforce-the-constraints">Ways to enforce the constraints</a></li></ul></li><li><a href="#takeaways"><span class="mono">✓</span>Key takeaways</a></li><li><a href="#review"><span class="mono">?</span>Check yourself</a></li></ul></nav>
+<main class="notes">
+<section class="nsec" id="overview"><div class="nsec-h"><span class="mono">--</span><div><h2>Overview</h2></div></div><article class="blk t-agenda" id="overview-outline"><h3>Outline</h3><div class="nbody"><div class="agenda">
+  <div class="tbl rv" style="--d:0"><table class="agenda-t"><thead><tr><th>id</th><th>topic</th></tr></thead><tbody>
+  <tr style="--r:0"><td class="mono id">01</td><td>Update operations: insert, delete, update</td></tr><tr style="--r:1"><td class="mono id">02</td><td>What each operation can violate</td></tr><tr style="--r:2"><td class="mono id">03</td><td>The Insert operation, with examples</td></tr><tr style="--r:3"><td class="mono id">04</td><td>The Delete operation, with examples</td></tr><tr style="--r:4"><td class="mono id">05</td><td>The Update operation, with examples</td></tr><tr style="--r:5"><td class="mono id">06</td><td>Handling a violation</td></tr></tbody></table></div>
+  <div class="sql rv" style="--d:1"><div class="sql-bar"><i></i><i></i><i></i><span>query.sql</span></div>
+  <pre><code><span class="c">-- this lecture</span>
+<span class="k">SELECT</span> id, topic
+<span class="k">FROM</span>   <span class="v">lecture_04_part3</span>
+<span class="k">ORDER BY</span> id;<span class="caret"></span></code></pre>
+  <div class="sql-res">✓ 6 rows returned</div></div></div></div></article></section>
+<section class="nsec" id="update-operations"><div class="nsec-h"><span class="mono">01</span><div><h2>Update operations</h2><p>The three operations that change a database state</p></div></div><article class="blk t-cards" id="update-operations-three-operations-change-the-state"><h3>Three operations change the state</h3><div class="nbody"><p class="rv intro" style="--d:0">The operations of the relational model can be categorized into retrievals and updates. Three basic operations change the states of relations <span class="inf">(tables)</span>:</p><div class="cards roomy" style="--cols:3"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><h4>Insert</h4><span class="num">01</span></div>
+    <div class="card-b"><p>Insert new data: add a new tuple <span class="inf">(row)</span> to a relation.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"></path></svg></span><h4>Delete</h4><span class="num">02</span></div>
+    <div class="card-b"><p>Delete old data: remove one or more tuples.</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg></span><h4>Update (Modify)</h4><span class="num">03</span></div>
+    <div class="card-b"><p>Modify existing data: change attribute <span class="inf">(column)</span> values of existing tuples.</p></div>
+    
+  </div></div><div class="rv callout" style="--d:4"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path></svg></span><span>Whenever these operations are applied, the integrity constraints specified on the relational database schema should not be violated.</span></div></div></article>
+<article class="blk t-matrix" id="update-operations-what-can-each-operation-violate"><h3>What can each operation violate?</h3><div class="nbody"><div class="rv tbl matrix" style="--d:0"><table><thead><tr><th>Operation</th><th>Domain</th><th>Key</th><th>Entity integrity</th><th>Referential integrity</th></tr></thead>
+  <tbody><tr style="--r:0"><td class="mop"><span class="opk insert">INSERT</span></td><td class="can"><b>✓</b><span>can violate</span></td><td class="can"><b>✓</b><span>can violate</span></td><td class="can"><b>✓</b><span>can violate</span></td><td class="can"><b>✓</b><span>can violate</span></td></tr><tr style="--r:1"><td class="mop"><span class="opk delete">DELETE</span></td><td class="cannot"><span class="no">—</span></td><td class="cannot"><span class="no">—</span></td><td class="cannot"><span class="no">—</span></td><td class="can"><b>✓</b><span>can violate</span></td></tr><tr style="--r:2"><td class="mop"><span class="opk update">UPDATE</span></td><td class="can"><b>✓</b><span>if a value is outside its domain</span></td><td class="can"><b>✓</b><span>if a key value changes</span></td><td class="can"><b>✓</b><span>if a primary key becomes NULL</span></td><td class="can"><b>✓</b><span>if a foreign key or a referenced key changes</span></td></tr></tbody></table></div><div class="rv callout" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path></svg></span><span>Insert: all four. Delete: only referential integrity. Update: depends on which attribute <span class="inf">(column)</span> is changed.</span></div></div></article></section>
+<section class="nsec" id="the-insert-operation"><div class="nsec-h"><span class="mono">02</span><div><h2>The Insert operation</h2><p>Adding a new tuple</p></div></div><article class="blk t-list" id="the-insert-operation-insert-can-violate-all-four-constraints"><h3>Insert can violate all four constraints</h3><div class="nbody"><p class="rv intro" style="--d:0">Insert provides a list of attribute <span class="inf">(column)</span> values for a new tuple <span class="inf">(row)</span> t that is to be inserted into a relation <span class="inf">(table)</span>.</p><div class="rows"><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M440.667 182.109l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l14.623-81.891C377.123 38.754 371.468 32 363.997 32h-40.632a12 12 0 0 0-11.813 9.891L296.175 128H197.54l14.623-81.891C213.477 38.754 207.822 32 200.35 32h-40.632a12 12 0 0 0-11.813 9.891L132.528 128H53.432a12 12 0 0 0-11.813 9.891l-7.143 40C33.163 185.246 38.818 192 46.289 192h74.81L98.242 320H19.146a12 12 0 0 0-11.813 9.891l-7.143 40C-1.123 377.246 4.532 384 12.003 384h74.81L72.19 465.891C70.877 473.246 76.532 480 84.003 480h40.632a12 12 0 0 0 11.813-9.891L151.826 384h98.634l-14.623 81.891C234.523 473.246 240.178 480 247.65 480h40.632a12 12 0 0 0 11.813-9.891L315.472 384h79.096a12 12 0 0 0 11.813-9.891l7.143-40c1.313-7.355-4.342-14.109-11.813-14.109h-74.81l22.857-128h79.096a12 12 0 0 0 11.813-9.891zM261.889 320h-98.634l22.857-128h98.634l-22.857 128z"></path></svg></span><h4>Domain <span class="inf">(allowed values)</span></h4><p>An attribute value does not appear in the corresponding domain or is not of the appropriate data type.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M512 176.001C512 273.203 433.202 352 336 352c-11.22 0-22.19-1.062-32.827-3.069l-24.012 27.014A23.999 23.999 0 0 1 261.223 384H224v40c0 13.255-10.745 24-24 24h-40v40c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24v-78.059c0-6.365 2.529-12.47 7.029-16.971l161.802-161.802C163.108 213.814 160 195.271 160 176 160 78.798 238.797.001 335.999 0 433.488-.001 512 78.511 512 176.001zM336 128c0 26.51 21.49 48 48 48s48-21.49 48-48-21.49-48-48-48-48 21.49-48 48z"></path></svg></span><h4>Key</h4><p>A key value in the new tuple t already exists in another tuple in the relation.</p></div><div class="rv row" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M466.5 83.7l-192-80a48.15 48.15 0 0 0-36.9 0l-192 80C27.7 91.1 16 108.6 16 128c0 198.5 114.5 335.7 221.5 380.3 11.8 4.9 25.1 4.9 36.9 0C360.1 472.6 496 349.3 496 128c0-19.4-11.7-36.9-29.5-44.3zM256.1 446.3l-.1-381 175.9 73.3c-3.3 151.4-82.1 261.1-175.8 307.7z"></path></svg></span><h4>Entity integrity</h4><p>Any part of the primary key of the new tuple t is NULL.</p></div><div class="rv row" style="--d:4"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path></svg></span><h4>Referential integrity</h4><p>The value of any foreign key in t refers to a tuple that does not exist in the referenced relation.</p></div></div></div></article>
+<article class="blk t-opcase" id="the-insert-operation-insert-example-1"><h3>Insert example 1</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:1"><span class="opk insert">INSERT</span><code>⟨'Cecilia', 'F', 'Kolonsky', NULL, '1960-04-05', '6357 Windy Lane, Katy, TX', F, 28000, NULL, 4⟩</code><span class="optarget">into EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr)"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td>5</td></tr><tr class="" style="--r:1"><td>Franklin</td><td>Wong</td><td class="col-pk">333445555</td><td>888665555</td><td>5</td></tr><tr class="" style="--r:2"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td>4</td></tr><tr class=" newrow isbad" style="--r:3"><td>Cecilia</td><td>Kolonsky</td><td class="null col-pk">NULL</td><td class="null">NULL</td><td>4</td></tr></tbody></table></div></div>
+  <p class="rv opfoot" style="--d:2">Only Fname, Lname, Ssn, Super_ssn and Dno are shown. Ssn is the primary key.</p>
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · ENTITY INTEGRITY</span><p>The new tuple <span class="inf">(row)</span> has NULL for the primary key Ssn, so the insertion violates entity integrity and is rejected.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-insert-operation-insert-example-2"><h3>Insert example 2</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:1"><span class="opk insert">INSERT</span><code>⟨'Alicia', 'J', 'Zelaya', '999887777', '1960-04-05', '6357 Windy Lane, Katy, TX', F, 28000, '987654321', 4⟩</code><span class="optarget">into EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr)"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td>5</td></tr><tr class="" style="--r:1"><td>Franklin</td><td>Wong</td><td class="col-pk">333445555</td><td>888665555</td><td>5</td></tr><tr class=" refrow" style="--r:2"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td>4</td></tr><tr class="" style="--r:3"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td>4</td></tr><tr class=" newrow isbad" style="--r:4"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td>4</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:2"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · KEY CONSTRAINT</span><p>Another tuple <span class="inf">(row)</span> with the same Ssn value (999887777) already exists in EMPLOYEE, so the insertion violates the key constraint and is rejected.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-insert-operation-insert-example-3"><h3>Insert example 3</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk insert">INSERT</span><code>⟨'Cecilia', 'F', 'Kolonsky', '677678989', '1960-04-05', '6357 Windswept, Katy, TX', F, 28000, '987654321', 7⟩</code><span class="optarget">into EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th class="col-fk"><span class="badge">FOREIGN KEY</span><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td class="col-fk">5</td></tr><tr class="" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td class="col-fk">4</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td class="col-fk">4</td></tr><tr class=" newrow isbad" style="--r:3"><td>Cecilia</td><td>Kolonsky</td><td class="col-pk">677678989</td><td>987654321</td><td class="col-fk">7</td></tr></tbody></table></div><div class="rv tbl" style="--d:1"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td class="col-pk">5</td><td>333445555</td></tr><tr class="" style="--r:1"><td>Administration</td><td class="col-pk">4</td><td>987654321</td></tr><tr class="" style="--r:2"><td>Headquarters</td><td class="col-pk">1</td><td>888665555</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · REFERENTIAL INTEGRITY</span><p>Dno is a foreign key to DEPARTMENT, and no DEPARTMENT tuple <span class="inf">(row)</span> has Dnumber = 7. The insertion violates referential integrity.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-insert-operation-insert-example-4"><h3>Insert example 4</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk insert">INSERT</span><code>⟨'Cecilia', 'F', 'Kolonsky', '677678989', '1960-04-05', '6357 Windy Lane, Katy, TX', F, 28000, NULL, 4⟩</code><span class="optarget">into EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th class="col-fk"><span class="badge">FOREIGN KEY</span><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td class="col-fk">5</td></tr><tr class="" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td class="col-fk">4</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td class="col-fk">4</td></tr><tr class=" newrow isok" style="--r:3"><td>Cecilia</td><td>Kolonsky</td><td class="col-pk">677678989</td><td class="null">NULL</td><td class="col-fk">4</td></tr></tbody></table></div><div class="rv tbl" style="--d:1"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td class="col-pk">5</td><td>333445555</td></tr><tr class=" okrow" style="--r:1"><td>Administration</td><td class="col-pk">4</td><td>987654321</td></tr><tr class="" style="--r:2"><td>Headquarters</td><td class="col-pk">1</td><td>888665555</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-ok" hidden><span class="vb mono">✓ ACCEPTED</span><p>This insertion satisfies all constraints: Ssn is new and not NULL, Dno 4 exists in DEPARTMENT, and the foreign key Super_ssn may be NULL.</p></div></div></div></div></article>
+<article class="blk t-check" id="the-insert-operation-quick-check"><h3>Quick check</h3><div class="nbody"><div class="check" data-answer="1"><div class="rv cq" style="--d:0"><span class="mono lab">QUICK CHECK</span><p>Insert ⟨'Sara', 'M', 'Hadi', '123456789', '1990-02-11', 'Houston, TX', F, 30000, '333445555', 5⟩ into EMPLOYEE. What happens?</p></div>
+  <div class="copts"><div class="rv copt" style="--d:1" data-i="0"><span class="mono">A</span><p>Accepted</p></div><div class="rv copt" style="--d:2" data-i="1"><span class="mono">B</span><p>Rejected: key constraint</p></div><div class="rv copt" style="--d:3" data-i="2"><span class="mono">C</span><p>Rejected: entity integrity</p></div><div class="rv copt" style="--d:4" data-i="3"><span class="mono">D</span><p>Rejected: referential integrity</p></div></div>
+  <div class="crow rv" style="--d:5"><button class="reveal-btn" type="button">Reveal answer <span class="mono">(R)</span></button><div class="cwhy" hidden><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><p><b>B.</b> Ssn 123456789 already belongs to John Smith, so the new tuple <span class="inf">(row)</span> repeats a primary key value.</p></div></div></div></div></article></section>
+<section class="nsec" id="the-delete-operation"><div class="nsec-h"><span class="mono">03</span><div><h2>The Delete operation</h2><p>Removing tuples</p></div></div><article class="blk t-list" id="the-delete-operation-delete-can-violate-only-referential-integrity"><h3>Delete can violate only referential integrity</h3><div class="nbody"><div class="rows"><div class="rv row" style="--d:0"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M326.612 185.391c59.747 59.809 58.927 155.698.36 214.59-.11.12-.24.25-.36.37l-67.2 67.2c-59.27 59.27-155.699 59.262-214.96 0-59.27-59.26-59.27-155.7 0-214.96l37.106-37.106c9.84-9.84 26.786-3.3 27.294 10.606.648 17.722 3.826 35.527 9.69 52.721 1.986 5.822.567 12.262-3.783 16.612l-13.087 13.087c-28.026 28.026-28.905 73.66-1.155 101.96 28.024 28.579 74.086 28.749 102.325.51l67.2-67.19c28.191-28.191 28.073-73.757 0-101.83-3.701-3.694-7.429-6.564-10.341-8.569a16.037 16.037 0 0 1-6.947-12.606c-.396-10.567 3.348-21.456 11.698-29.806l21.054-21.055c5.521-5.521 14.182-6.199 20.584-1.731a152.482 152.482 0 0 1 20.522 17.197zM467.547 44.449c-59.261-59.262-155.69-59.27-214.96 0l-67.2 67.2c-.12.12-.25.25-.36.37-58.566 58.892-59.387 154.781.36 214.59a152.454 152.454 0 0 0 20.521 17.196c6.402 4.468 15.064 3.789 20.584-1.731l21.054-21.055c8.35-8.35 12.094-19.239 11.698-29.806a16.037 16.037 0 0 0-6.947-12.606c-2.912-2.005-6.64-4.875-10.341-8.569-28.073-28.073-28.191-73.639 0-101.83l67.2-67.19c28.239-28.239 74.3-28.069 102.325.51 27.75 28.3 26.872 73.934-1.155 101.96l-13.087 13.087c-4.35 4.35-5.769 10.79-3.783 16.612 5.864 17.194 9.042 34.999 9.69 52.721.509 13.906 17.454 20.446 27.294 10.606l37.106-37.106c59.271-59.259 59.271-155.699.001-214.959z"></path></svg></span><h4>Only referential integrity</h4><p>The Delete operation can violate only referential integrity.</p></div><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg></span><h4>When it happens</h4><p>This occurs if the tuple <span class="inf">(row)</span> being deleted is referenced by foreign keys from other tuples in the database.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></span><h4>How a delete is specified</h4><p>A condition on the attributes <span class="inf">(columns)</span> of the relation <span class="inf">(table)</span> selects the tuple (or tuples) to be deleted.</p></div></div></div></article>
+<article class="blk t-opcase" id="the-delete-operation-delete-example-1"><h3>Delete example 1</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:1"><span class="opk delete">DELETE</span><code>the WORKS_ON tuple with Essn = '999887777' and Pno = 10</code><span class="optarget">from WORKS_ON</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr)"><div class="rv tbl" style="--d:0"><div class="tname">WORKS_ON</div>
+    <table><thead><tr><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Essn</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Pno</span></th><th><span class="hn">Hours</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td class="col-pk">333445555</td><td class="col-pk">20</td><td>10.0</td></tr><tr class="" style="--r:1"><td class="col-pk">999887777</td><td class="col-pk">30</td><td>30.0</td></tr><tr class=" delrow okrow" style="--r:2"><td class="col-pk">999887777</td><td class="col-pk">10</td><td>10.0</td></tr><tr class="" style="--r:3"><td class="col-pk">987987987</td><td class="col-pk">10</td><td>35.0</td></tr><tr class="" style="--r:4"><td class="col-pk">987987987</td><td class="col-pk">30</td><td>5.0</td></tr></tbody></table></div></div>
+  <p class="rv opfoot" style="--d:2">Part of the WORKS_ON state. (Essn, Pno) is the primary key.</p>
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-ok" hidden><span class="vb mono">✓ ACCEPTED</span><p>No foreign key refers to WORKS_ON tuples <span class="inf">(rows)</span>, so removing one cannot break a reference. The deletion is acceptable and deletes exactly one tuple.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-delete-operation-delete-example-2"><h3>Delete example 2</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk delete">DELETE</span><code>the EMPLOYEE tuple with Ssn = '999887777'</code><span class="optarget">from EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td>5</td></tr><tr class=" delrow" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td>4</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td>4</td></tr></tbody></table></div><div class="rv tbl" style="--d:1"><div class="tname">WORKS_ON</div>
+    <table><thead><tr><th class="col-fk"><span class="badge">FOREIGN KEY</span><span class="hn">Essn</span></th><th><span class="hn">Pno</span></th><th><span class="hn">Hours</span></th></tr></thead>
+    <tbody><tr class=" refrow" style="--r:0"><td class="col-fk">999887777</td><td>30</td><td>30.0</td></tr><tr class=" refrow" style="--r:1"><td class="col-fk">999887777</td><td>10</td><td>10.0</td></tr><tr class="" style="--r:2"><td class="col-fk">987987987</td><td>10</td><td>35.0</td></tr><tr class="" style="--r:3"><td class="col-fk">987987987</td><td>30</td><td>5.0</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · REFERENTIAL INTEGRITY</span><p>There are tuples <span class="inf">(rows)</span> in WORKS_ON that refer to this employee. If the EMPLOYEE tuple were deleted, those references would point to a tuple that no longer exists.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-delete-operation-delete-example-3"><h3>Delete example 3</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk delete">DELETE</span><code>the EMPLOYEE tuple with Ssn = '333445555'</code><span class="optarget">from EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,0.8fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td>5</td></tr><tr class=" delrow" style="--r:1"><td>Franklin</td><td>Wong</td><td class="col-pk">333445555</td><td>888665555</td><td>5</td></tr><tr class="" style="--r:2"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td>4</td></tr></tbody></table></div><div class="rv refs" style="--d:1"><div class="mono refs-h">Tuples that reference Ssn 333445555</div><div class="ref"><b class="mono">EMPLOYEE.Super_ssn</b><span>John Smith, Ramesh Narayan, Joyce English</span></div><div class="ref"><b class="mono">DEPARTMENT.Mgr_ssn</b><span>Research (Dnumber 5)</span></div><div class="ref"><b class="mono">WORKS_ON.Essn</b><span>4 tuples (projects 2, 3, 10, 20)</span></div><div class="ref"><b class="mono">DEPENDENT.Essn</b><span>Alice, Theodore, Joy</span></div></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · REFERENTIAL INTEGRITY</span><p>Even worse violations: Franklin Wong is referenced by tuples <span class="inf">(rows)</span> in EMPLOYEE, DEPARTMENT, WORKS_ON and DEPENDENT.</p></div></div></div></div></article>
+<article class="blk t-check" id="the-delete-operation-quick-check"><h3>Quick check</h3><div class="nbody"><div class="check" data-answer="2"><div class="rv cq" style="--d:0"><span class="mono lab">QUICK CHECK</span><p>Delete the DEPARTMENT tuple with Dnumber = 4 (Administration). What happens?</p></div>
+  <div class="copts"><div class="rv copt" style="--d:1" data-i="0"><span class="mono">A</span><p>Accepted</p></div><div class="rv copt" style="--d:2" data-i="1"><span class="mono">B</span><p>Rejected: key constraint</p></div><div class="rv copt" style="--d:3" data-i="2"><span class="mono">C</span><p>Rejected: referential integrity</p></div><div class="rv copt" style="--d:4" data-i="3"><span class="mono">D</span><p>Rejected: entity integrity</p></div></div>
+  <div class="crow rv" style="--d:5"><button class="reveal-btn" type="button">Reveal answer <span class="mono">(R)</span></button><div class="cwhy" hidden><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><p><b>C.</b> Employees (Alicia, Jennifer, Ahmad) have Dno = 4 and projects 10 and 30 have Dnum = 4, so the deletion would leave broken references.</p></div></div></div></div></article></section>
+<section class="nsec" id="the-update-operation"><div class="nsec-h"><span class="mono">04</span><div><h2>The Update operation</h2><p>Changing attribute values</p></div></div><article class="blk t-list" id="the-update-operation-the-update-modify-operation"><h3>The Update (Modify) operation</h3><div class="nbody"><div class="rows"><div class="rv row" style="--d:0"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z"></path></svg></span><h4>What it does</h4><p>Changes the values of one or more attributes <span class="inf">(columns)</span> in a tuple (or tuples <span class="inf">(rows)</span>) of some relation <span class="inf">(table)</span> R.</p></div><div class="rv row" style="--d:1"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg></span><h4>Selecting the tuples</h4><p>A condition on the attributes of the relation selects the tuple (or tuples) to be modified.</p></div><div class="rv row" style="--d:2"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><h4>Ordinary attribute</h4><p>Changing an attribute that is neither a primary key nor a foreign key can only violate its domain <span class="inf">(allowed values)</span>.</p></div><div class="rv row" style="--d:3"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg></span><h4>Key or foreign key</h4><p>Changing a primary key or a foreign key needs the same checks as an insert, plus a delete check for the old key value.</p></div></div></div></article>
+<article class="blk t-opcase" id="the-update-operation-update-example-1"><h3>Update example 1</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:1"><span class="opk update">UPDATE</span><code>the Salary of the EMPLOYEE tuple with Ssn = '999887777' to 28000</code><span class="optarget">EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr)"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Salary</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>30000</td><td>5</td></tr><tr class=" chgrow isok" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>25000 → 28000</td><td>4</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>43000</td><td>4</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:2"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-ok" hidden><span class="vb mono">✓ ACCEPTED</span><p>Salary is neither a key nor a foreign key, and 28000 is in its domain <span class="inf">(allowed values)</span>. The update is acceptable.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-update-operation-update-example-2"><h3>Update example 2</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk update">UPDATE</span><code>the Dno of the EMPLOYEE tuple with Ssn = '999887777' to 1</code><span class="optarget">EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th class="col-fk"><span class="badge">FOREIGN KEY</span><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td class="col-fk">5</td></tr><tr class=" chgrow isok" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td class="col-fk">4 → 1</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td class="col-fk">4</td></tr></tbody></table></div><div class="rv tbl" style="--d:1"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td class="col-pk">5</td><td>333445555</td></tr><tr class="" style="--r:1"><td>Administration</td><td class="col-pk">4</td><td>987654321</td></tr><tr class=" okrow" style="--r:2"><td>Headquarters</td><td class="col-pk">1</td><td>888665555</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-ok" hidden><span class="vb mono">✓ ACCEPTED</span><p>Dno is a foreign key and Dnumber 1 (Headquarters) exists in DEPARTMENT. The update is acceptable.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-update-operation-update-example-3"><h3>Update example 3</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk update">UPDATE</span><code>the Dno of the EMPLOYEE tuple with Ssn = '999887777' to 7</code><span class="optarget">EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th class="col-fk"><span class="badge">FOREIGN KEY</span><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td class="col-fk">5</td></tr><tr class=" chgrow isbad" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777</td><td>987654321</td><td class="col-fk">4 → 7</td></tr><tr class="" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td class="col-fk">4</td></tr></tbody></table></div><div class="rv tbl" style="--d:1"><div class="tname">DEPARTMENT</div>
+    <table><thead><tr><th><span class="hn">Dname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Dnumber</span></th><th><span class="hn">Mgr_ssn</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>Research</td><td class="col-pk">5</td><td>333445555</td></tr><tr class="" style="--r:1"><td>Administration</td><td class="col-pk">4</td><td>987654321</td></tr><tr class="" style="--r:2"><td>Headquarters</td><td class="col-pk">1</td><td>888665555</td></tr></tbody></table></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · REFERENTIAL INTEGRITY</span><p>No DEPARTMENT tuple <span class="inf">(row)</span> has Dnumber = 7, so the new foreign key value refers to nothing. Unacceptable.</p></div></div></div></div></article>
+<article class="blk t-opcase" id="the-update-operation-update-example-4"><h3>Update example 4</h3><div class="nbody"><div class="check opcase" data-answer="-1"><div class="rv opline" style="--d:2"><span class="opk update">UPDATE</span><code>the Ssn of the EMPLOYEE tuple with Ssn = '999887777' to '987654321'</code><span class="optarget">EMPLOYEE</span></div>
+  <div class="optables" style="grid-template-columns:minmax(0,1.4fr) repeat(1, minmax(0,1fr))"><div class="rv tbl" style="--d:0"><div class="tname">EMPLOYEE</div>
+    <table><thead><tr><th><span class="hn">Fname</span></th><th><span class="hn">Lname</span></th><th class="col-pk"><span class="badge">PRIMARY KEY</span><span class="hn">Ssn</span></th><th><span class="hn">Super_ssn</span></th><th><span class="hn">Dno</span></th></tr></thead>
+    <tbody><tr class="" style="--r:0"><td>John</td><td>Smith</td><td class="col-pk">123456789</td><td>333445555</td><td>5</td></tr><tr class=" chgrow isbad" style="--r:1"><td>Alicia</td><td>Zelaya</td><td class="col-pk">999887777 → 987654321</td><td>987654321</td><td>4</td></tr><tr class=" refrow" style="--r:2"><td>Jennifer</td><td>Wallace</td><td class="col-pk">987654321</td><td>888665555</td><td>4</td></tr></tbody></table></div><div class="rv refs" style="--d:1"><div class="mono refs-h">Tuples that reference Ssn 999887777</div><div class="ref"><b class="mono">WORKS_ON.Essn</b><span>2 tuples (projects 30 and 10)</span></div></div></div>
+  
+  <div class="crow rv" style="--d:3"><button class="reveal-btn" type="button">Accepted or rejected? <span class="mono">(R)</span></button><div class="cwhy vd vd-no" hidden><span class="vb mono">✗ REJECTED · KEY + REFERENTIAL INTEGRITY</span><p>987654321 already exists as Jennifer Wallace’s primary key, so the key constraint is violated. The WORKS_ON tuples <span class="inf">(rows)</span> that refer to the old value 999887777 would also be left pointing at nothing.</p></div></div></div></div></article>
+<article class="blk t-check" id="the-update-operation-quick-check"><h3>Quick check</h3><div class="nbody"><div class="check" data-answer="0"><div class="rv cq" style="--d:0"><span class="mono lab">QUICK CHECK</span><p>Update the Super_ssn of John Smith (Ssn 123456789) to '888665555'. What happens?</p></div>
+  <div class="copts"><div class="rv copt" style="--d:1" data-i="0"><span class="mono">A</span><p>Accepted</p></div><div class="rv copt" style="--d:2" data-i="1"><span class="mono">B</span><p>Rejected: key constraint</p></div><div class="rv copt" style="--d:3" data-i="2"><span class="mono">C</span><p>Rejected: entity integrity</p></div><div class="rv copt" style="--d:4" data-i="3"><span class="mono">D</span><p>Rejected: referential integrity</p></div></div>
+  <div class="crow rv" style="--d:5"><button class="reveal-btn" type="button">Reveal answer <span class="mono">(R)</span></button><div class="cwhy" hidden><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"></path></svg></span><p><b>A.</b> Super_ssn is a foreign key to EMPLOYEE.Ssn, and 888665555 (James Borg) exists. Super_ssn is not a key, so uniqueness doesn’t matter.</p></div></div></div></div></article></section>
+<section class="nsec" id="handling-a-violation"><div class="nsec-h"><span class="mono">05</span><div><h2>Handling a violation</h2><p>What the DBMS can do</p></div></div><article class="blk t-cards" id="handling-a-violation-ways-to-enforce-the-constraints"><h3>Ways to enforce the constraints</h3><div class="nbody"><p class="rv intro" style="--d:0">When an operation would violate a constraint, the DBMS (or the user) can respond in several ways (Elmasri &amp; Navathe, Section 5.3):</p><div class="cards roomy" style="--cols:4"><div class="rv card" style="--d:1">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"></path></svg></span><h4>Reject (restrict)</h4></div>
+    <div class="card-b"><p>Refuse the operation and explain why. This is the default.</p></div>
+    
+  </div><div class="rv card" style="--d:2">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12.41 148.02l232.94 105.67c6.8 3.09 14.49 3.09 21.29 0l232.94-105.67c16.55-7.51 16.55-32.52 0-40.03L266.65 2.31a25.607 25.607 0 0 0-21.29 0L12.41 107.98c-16.55 7.51-16.55 32.53 0 40.04zm487.18 88.28l-58.09-26.33-161.64 73.27c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.51 209.97l-58.1 26.33c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 276.3c16.55-7.5 16.55-32.5 0-40zm0 127.8l-57.87-26.23-161.86 73.37c-7.56 3.43-15.59 5.17-23.86 5.17s-16.29-1.74-23.86-5.17L70.29 337.87 12.41 364.1c-16.55 7.5-16.55 32.5 0 40l232.94 105.59c6.8 3.08 14.49 3.08 21.29 0L499.59 404.1c16.55-7.5 16.55-32.5 0-40z"></path></svg></span><h4>Cascade</h4></div>
+    <div class="card-b"><p>Also delete or update the tuples <span class="inf">(rows)</span> that reference the one being deleted or changed.</p></div>
+    
+  </div><div class="rv card" style="--d:3">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg></span><h4>Set NULL / default</h4></div>
+    <div class="card-b"><p>Set the referencing foreign keys to NULL or a default value (not allowed if the FK is part of a primary key).</p></div>
+    
+  </div><div class="rv card" style="--d:4">
+    <div class="card-h"><span class="ic" aria-hidden="true"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" color="currentColor" style="color:currentColor" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M497.9 142.1l-46.1 46.1c-4.7 4.7-12.3 4.7-17 0l-111-111c-4.7-4.7-4.7-12.3 0-17l46.1-46.1c18.7-18.7 49.1-18.7 67.9 0l60.1 60.1c18.8 18.7 18.8 49.1 0 67.9zM284.2 99.8L21.6 362.4.4 483.9c-2.9 16.4 11.4 30.6 27.8 27.8l121.5-21.3 262.6-262.6c4.7-4.7 4.7-12.3 0-17l-111-111c-4.8-4.7-12.4-4.7-17.1 0zM124.1 339.9c-5.5-5.5-5.5-14.3 0-19.8l154-154c5.5-5.5 14.3-5.5 19.8 0s5.5 14.3 0 19.8l-154 154c-5.5 5.5-14.3 5.5-19.8 0zM88 424h48v36.3l-64.5 11.3-31.1-31.1L51.7 376H88v48z"></path></svg></span><h4>Correct it</h4></div>
+    <div class="card-b"><p>Ask the user to fix the operation, e.g. insert the missing DEPARTMENT 7 first.</p></div>
+    
+  </div></div></div></article></section>
+<section class="nsec" id="takeaways"><div class="nsec-h"><span class="mono">✓</span><div><h2>Key takeaways</h2></div></div>
+<ol class="takeaways"><li><span class="mono">01</span><p>Three basic operations change a database state: Insert, Delete and Update (Modify).</p></li><li><span class="mono">02</span><p>Insert can violate all four constraints: domain <span class="inf">(allowed values)</span>, key, entity integrity and referential integrity.</p></li><li><span class="mono">03</span><p>Delete can violate only referential integrity, when other tuples <span class="inf">(rows)</span> reference the deleted tuple.</p></li><li><span class="mono">04</span><p>Update can violate any constraint, depending on whether an ordinary attribute <span class="inf">(column)</span>, a foreign key or a primary key is changed.</p></li><li><span class="mono">05</span><p>A violation can be handled by rejecting, cascading, setting NULL or a default, or correcting the data.</p></li></ol></section>
+<section class="nsec" id="review"><div class="nsec-h"><span class="mono">?</span><div><h2>Check yourself</h2><p>Try to answer, then tap a question to reveal the answer.</p></div></div>
+<details class="qa"><summary><span class="mono">Q1</span>Name the three basic operations that change the state of a relation.</summary><p>Insert, Delete and Update (Modify).</p></details><details class="qa"><summary><span class="mono">Q2</span>Which constraints can an Insert violate?</summary><p>All four: domain <span class="inf">(allowed values)</span>, key, entity integrity and referential integrity.</p></details><details class="qa"><summary><span class="mono">Q3</span>Which constraint can a Delete violate, and when?</summary><p>Only referential integrity, when the deleted tuple <span class="inf">(row)</span> is referenced by foreign keys from other tuples.</p></details><details class="qa"><summary><span class="mono">Q4</span>Why is updating Alicia’s Ssn from 999887777 to 987654321 unacceptable?</summary><p>987654321 already exists as a primary key (key constraint), and WORKS_ON tuples <span class="inf">(rows)</span> still refer to 999887777 (referential integrity).</p></details><details class="qa"><summary><span class="mono">Q5</span>Give two ways to enforce referential integrity when deleting a referenced tuple.</summary><p>Reject the delete, or cascade it to the referencing tuples <span class="inf">(rows)</span>. Setting the references to NULL is a third option when the foreign key is not part of a primary key.</p></details></section>
+<footer class="nfoot mono">-- based on the lecture slides for 62153 by Mohamed Al-Kumati · Elmasri &amp; Navathe, Fundamentals of Database Systems</footer>
+</main></div>
+<script>/* Theme toggle (remembered per browser), scroll reveal, and contents highlighting */
+(function () {
+  const root = document.documentElement;
+  try { const t = localStorage.getItem('db-notes-theme'); if (t) root.dataset.theme = t; } catch (e) {}
+  document.getElementById('themeBtn').addEventListener('click', () => {
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme = dark ? 'light' : 'dark';
+    try { localStorage.setItem('db-notes-theme', root.dataset.theme); } catch (e) {}
+  });
+  const blocks = document.querySelectorAll('.blk');
+  if ('IntersectionObserver' in window) {
+    root.classList.add('js');
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    blocks.forEach((b) => io.observe(b));
+    const links = [...document.querySelectorAll('.toc > ul > li > a')];
+    const map = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+    const so = new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting) { links.forEach((l) => l.classList.remove('on')); const a = map.get(e.target.id); if (a) a.classList.add('on'); }
+    }), { rootMargin: '-20% 0px -70% 0px' });
+    document.querySelectorAll('.nsec').forEach((s) => so.observe(s));
+  }
+  window.addEventListener('beforeprint', () => document.querySelectorAll('.qa').forEach((d) => (d.open = true)));
+})();
+/* quick-check reveal buttons */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('.reveal-btn'); if (!b) return;
+  const box = b.closest('.check'); box.classList.add('revealed');
+  box.querySelectorAll('.copt').forEach((o) => o.classList.toggle('right', o.dataset.i === box.dataset.answer));
+  box.querySelector('.cwhy').hidden = false; b.hidden = true;
+});
+</script>
+</body></html>
